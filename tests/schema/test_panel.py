@@ -13,6 +13,7 @@
 # under the License.
 
 import os
+import re
 import yaml
 
 from testtools import TestCase
@@ -21,12 +22,22 @@ from grafana_dashboards.schema import panel
 
 FIXTURE_DIR = os.path.join(os.path.dirname(__file__),
                            'fixtures')
+LAYOUT_RE = re.compile(r'^(dashlist|text)-.*\.yaml$')
 
 
 class TestCaseSchemaPanel(TestCase):
     def test_layouts(self):
         for fn in os.listdir(os.path.join(FIXTURE_DIR)):
+            schema = None
+            m = LAYOUT_RE.match(fn)
+            if not m:
+                continue
             layout = os.path.join(FIXTURE_DIR, fn)
             data = yaml.load(open(layout))
-            schema = panel.Text()
+
+            if m.group(1) == 'dashlist':
+                schema = panel.Dashlist()
+            elif m.group(1) == 'text':
+                schema = panel.Text()
+
             schema.validate(data)

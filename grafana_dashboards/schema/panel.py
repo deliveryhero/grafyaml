@@ -34,6 +34,15 @@ class BasePanel(object):
         return schema(data)
 
 
+class Dashlist(BasePanel):
+    fields = {
+        v.Required('limit', default=10): v.All(int),
+        v.Required('mode'): v.All(str),
+        v.Required('tag', default=''): v.All(str),
+        v.Required('query', default=''): v.All(str),
+    }
+
+
 class Text(BasePanel):
     fields = {
         v.Required('content'): v.All(str),
