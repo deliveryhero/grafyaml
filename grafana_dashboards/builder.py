@@ -42,5 +42,5 @@ class Builder(object):
     def update_dashboard(self, path):
         data = yaml.load(open(path))
         schema = Dashboard()
-        schema.validate(data)
-        self.grafana.create_dashboard(data, overwrite=True)
+        result = schema.validate(data)
+        self.grafana.create_dashboard(result, overwrite=True)
