@@ -12,11 +12,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import json
-import requests
 import yaml
 
 from oslo_config import cfg
+
+from grafana_dashboards.grafana import Grafana
 
 grafana_opts = [
     cfg.StrOpt(
@@ -32,24 +32,6 @@ list_opts = lambda: [(grafana_group, grafana_opts), ]
 
 CONF = cfg.CONF
 CONF.register_opts(grafana_opts)
-
-
-class Grafana(object):
-    def __init__(self, url, key):
-        self.url = url
-        self.session = requests.Session()
-        self.session.headers.update({
-            'Authorization': 'Bearer %s' % key,
-        })
-
-    def create_dashboard(self, data, overwrite=False):
-        data['overwrite'] = overwrite
-        headers = {
-            'Content-Type': 'application/json',
-        }
-        res = self.session.post(
-            self.url, data=json.dumps(data), headers=headers)
-        res.raise_for_status()
 
 
 class Builder(object):
