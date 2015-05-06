@@ -17,6 +17,7 @@ import yaml
 from oslo_config import cfg
 
 from grafana_dashboards.grafana import Grafana
+from grafana_dashboards.schema.dashboard import Dashboard
 
 grafana_opts = [
     cfg.StrOpt(
@@ -40,4 +41,6 @@ class Builder(object):
 
     def update_dashboard(self, path):
         data = yaml.load(open(path))
+        schema = Dashboard()
+        schema.validate(data)
         self.grafana.create_dashboard(data, overwrite=True)
