@@ -4,3 +4,4 @@ rows:
       editable: true
       collapse: false
       panels: []
+      showTitle: false
