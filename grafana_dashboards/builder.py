@@ -28,11 +28,13 @@ grafana_opts = [
         help='API key for access grafana.'),
 ]
 
-grafana_group = None
+grafana_group = cfg.OptGroup(
+    name='grafana', title='Grafana options')
 list_opts = lambda: [(grafana_group, grafana_opts), ]
 
 CONF = cfg.CONF
-CONF.register_opts(grafana_opts)
+CONF.register_group(grafana_group)
+CONF.register_opts(grafana_opts, group='grafana')
 
 
 class Builder(object):
