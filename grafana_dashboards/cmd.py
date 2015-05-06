@@ -16,11 +16,13 @@ import inspect
 import sys
 
 from oslo_config import cfg
+from oslo_log import log as logging
 
 from grafana_dashboards.builder import Builder
 from grafana_dashboards import config
 
 CONF = cfg.CONF
+LOG = logging.getLogger(__name__)
 
 
 class Commands(object):
@@ -51,6 +53,8 @@ def main():
 
     CONF.register_cli_opt(
         cfg.SubCommandOpt('action', handler=add_command_parsers))
+    logging.register_options(CONF)
+    logging.setup(CONF, 'grafana-dashboard')
     config.prepare_args(sys.argv)
 
     Commands().execute()
