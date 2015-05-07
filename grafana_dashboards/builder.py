@@ -39,7 +39,7 @@ CONF.register_opts(grafana_opts, group='grafana')
 
 class Builder(object):
     def __init__(self):
-        self.grafana = Grafana(CONF.url, CONF.apikey)
+        self.grafana = Grafana(CONF.grafana.url, CONF.grafana.apikey)
 
     def update_dashboard(self, path):
         data = yaml.load(open(path))
