@@ -14,6 +14,8 @@
 
 import voluptuous as v
 
+from grafana_dashboards.schema.panel import Panel
+
 
 class Row(object):
 
@@ -22,17 +24,13 @@ class Row(object):
             v.Required('collapse', default=False): v.All(bool),
             v.Required('editable', default=True): v.All(bool),
             v.Required('height'): v.All(str),
-            v.Required('panels', default=[]): list,
             v.Required('showTitle', default=False): v.All(bool),
             v.Required('title'): v.All(str, v.Length(min=1)),
         }
+        panels = Panel().get_schema()
+        row.update(panels.schema)
         schema = v.Schema({
             v.Required('rows', default=[]): [row],
         })
 
         return schema
-
-    def validate(self, data):
-        schema = self.get_schema()
-
-        return schema(data)
