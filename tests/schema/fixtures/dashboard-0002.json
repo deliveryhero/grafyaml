@@ -1,0 +1,15 @@
+{
+    "dashboard": {
+        "rows": [
+            {
+                "collapse": false,
+                "editable": true,
+                "height": "250px",
+                "panels": [],
+                "showTitle": false,
+                "title": "New row"
+            }
+        ],
+        "title": "New dashboard"
+    }
+}
