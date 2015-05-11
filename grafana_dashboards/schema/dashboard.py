@@ -27,7 +27,7 @@ class Dashboard(object):
         rows = Row().get_schema()
         dashboard.update(rows.schema)
         schema = v.Schema({
-            'dashboard': dashboard,
+            v.Required('dashboard'): dashboard,
         })
 
         return schema(data)

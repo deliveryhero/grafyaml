@@ -13,29 +13,14 @@
 # under the License.
 
 import os
-import re
-import yaml
 
+from testscenarios.testcase import TestWithScenarios
 from testtools import TestCase
 
-from grafana_dashboards.schema import dashboard
-
-FIXTURE_DIR = os.path.join(os.path.dirname(__file__),
-                           'fixtures')
-LAYOUT_RE = re.compile(r'^(dashboard)-.*\.yaml$')
+from tests.base import get_scenarios
+from tests.base import TestCase as BaseTestCase
 
 
-class TestCaseSchemaDashboard(TestCase):
-    def test_layouts(self):
-        for fn in os.listdir(os.path.join(FIXTURE_DIR)):
-            schema = None
-            m = LAYOUT_RE.match(fn)
-            if not m:
-                continue
-            layout = os.path.join(FIXTURE_DIR, fn)
-            data = yaml.load(open(layout))
-
-            if m.group(1) == 'dashboard':
-                schema = dashboard.Dashboard()
-
-            schema.validate(data)
+class TestCaseSchemaDashboard(TestWithScenarios, TestCase, BaseTestCase):
+    fixtures_path = os.path.join(os.path.dirname(__file__), 'fixtures')
+    scenarios = get_scenarios(fixtures_path)

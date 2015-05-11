@@ -1,22 +1,2 @@
 dashboard:
   title: New dashboard
-  rows:
-    - title: New row
-      height: 250px
-      panels:
-        - type: text
-          title: no title (click here)
-          error: false
-          editable: true
-          span: 12
-          mode: markdown
-          content: ''
-          style: {}
-        - type: dashlist
-          title: Starred Dashboards
-          error: false
-          editable: true
-          span: 12
-          mode: starred
-          query: ''
-          limit: 1
