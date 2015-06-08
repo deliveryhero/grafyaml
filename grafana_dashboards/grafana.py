@@ -14,12 +14,15 @@
 
 import json
 import requests
-import urlparse
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 
 class Grafana(object):
     def __init__(self, url, key):
-        self.url = urlparse.urljoin(url, 'api/dashboards/db')
+        self.url = urljoin(url, 'api/dashboards/db')
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': 'Bearer %s' % key,
