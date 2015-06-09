@@ -19,4 +19,5 @@ from grafana_dashboards import version
 
 def prepare_args(argv):
     cfg.CONF(
-        argv[1:], project='grafana_dashboards', version=version.version_info)
+        argv[1:], project='grafana_dashboards',
+        version=version.version_info.release_string())
