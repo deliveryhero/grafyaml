@@ -12,11 +12,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import yaml
-
 from oslo_config import cfg
 
 from grafana_dashboards.grafana import Grafana
+from grafana_dashboards.parser import YamlParser
 from grafana_dashboards.schema.dashboard import Dashboard
 
 grafana_opts = [
@@ -40,9 +39,10 @@ CONF.register_opts(grafana_opts, group='grafana')
 class Builder(object):
     def __init__(self):
         self.grafana = Grafana(CONF.grafana.url, CONF.grafana.apikey)
+        self.parser = YamlParser()
 
     def update_dashboard(self, path):
-        data = yaml.load(open(path))
+        data = self.parser.load(path)
         schema = Dashboard()
         result = schema.validate(data)
         self.grafana.create_dashboard(result, overwrite=True)
