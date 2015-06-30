@@ -21,8 +21,8 @@ import json
 import os
 import re
 import testtools
-import yaml
 
+from grafana_dashboards.parser import YamlParser
 from grafana_dashboards.schema import dashboard
 
 
@@ -49,8 +49,8 @@ def get_scenarios(fixtures_path, in_ext='yaml', out_ext='json'):
 
 
 class TestCase(object):
-
     """Test case base class for all unit tests."""
+    parser = YamlParser()
 
     def _read_raw_content(self):
         # if None assume empty file
@@ -61,15 +61,9 @@ class TestCase(object):
 
         return content
 
-    def _read_yaml_content(self, filename):
-        with open(filename, 'r') as yaml_file:
-            content = yaml.load(yaml_file)
-
-        return content
-
     def test_yaml_snippet(self):
         expected_json = self._read_raw_content()
-        yaml_content = self._read_yaml_content(self.in_filename)
+        yaml_content = self.parser.load(self.in_filename)
 
         schema = dashboard.Dashboard()
         valid_yaml = schema.validate(yaml_content)
