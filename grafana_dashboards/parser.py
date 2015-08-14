@@ -18,4 +18,4 @@ import yaml
 class YamlParser(object):
 
     def load(self, path):
-        return yaml.load(open(path))
+        return yaml.safe_load(open(path))
