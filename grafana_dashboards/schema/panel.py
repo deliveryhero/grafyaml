@@ -23,7 +23,7 @@ class Panel(object):
             v.Required('error', default=False): v.All(bool),
             v.Required('span', default=12): v.All(int, v.Range(min=0, max=12)),
             v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Required('type'): v.Any('dashlist', 'text'),
+            v.Required('type'): v.Any('dashlist', 'graph', 'text'),
             v.Optional('id'): int,
         }
 
@@ -34,6 +34,22 @@ class Panel(object):
             v.Required('query', default=''): v.All(str),
         }
         self.dashlist.update(self.base)
+
+        self.graph = {
+            v.Required('bars', default=False): v.All(bool),
+            v.Required('fill', default=1): v.All(int),
+            v.Required('lines', default=True): v.All(bool),
+            v.Required('linewidth', default=2): v.All(int),
+            v.Required('percentage', default=False): v.All(bool),
+            v.Required('pointradius', default=5): v.All(int),
+            v.Required('points', default=False): v.All(bool),
+            v.Required('stack', default=False): v.All(bool),
+            v.Required('steppedLine', default=False): v.All(bool),
+            v.Required('targets', default=[]): v.All(list),
+            v.Required('x-axis', default=True): v.All(bool),
+            v.Required('y-axis', default=True): v.All(bool),
+        }
+        self.graph.update(self.base)
 
         self.text = {
             v.Required('content'): v.All(str),
@@ -57,6 +73,8 @@ class Panel(object):
                     panel = v.Schema(self.text)
                 elif x['type'] == 'dashlist':
                     panel = v.Schema(self.dashlist)
+                elif x['type'] == 'graph':
+                    panel = v.Schema(self.graph)
 
                 res.append(panel(x))
 
