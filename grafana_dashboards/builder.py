@@ -23,7 +23,7 @@ grafana_opts = [
         'url', default='http://grafana.example.org',
         help='URL for grafana server.'),
     cfg.StrOpt(
-        'apikey', default='',
+        'apikey', default=None,
         help='API key for access grafana.'),
 ]
 

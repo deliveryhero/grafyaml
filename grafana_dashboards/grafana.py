@@ -21,12 +21,15 @@ except ImportError:
 
 
 class Grafana(object):
-    def __init__(self, url, key):
+    def __init__(self, url, key=None):
         self.url = urljoin(url, 'api/dashboards/db')
         self.session = requests.Session()
-        self.session.headers.update({
-            'Authorization': 'Bearer %s' % key,
-        })
+        # NOTE(pabelanger): Grafana 2.1.0 added basic auth support so now the
+        # api key is optional.
+        if key:
+            self.session.headers.update({
+                'Authorization': 'Bearer %s' % key,
+            })
 
     def create_dashboard(self, data, overwrite=False):
         data['overwrite'] = overwrite
