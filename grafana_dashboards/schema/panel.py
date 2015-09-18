@@ -44,9 +44,9 @@ class Panel(object):
         self.text.update(self.base)
 
     def _validate(self):
-        res = []
 
         def f(data):
+            res = []
             if not isinstance(data, list):
                 raise v.Invalid('Should be a list')
 
