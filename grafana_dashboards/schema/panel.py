@@ -23,7 +23,8 @@ class Panel(object):
             v.Required('error', default=False): v.All(bool),
             v.Required('span', default=12): v.All(int, v.Range(min=0, max=12)),
             v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Required('type'): v.Any('dashlist', 'graph', 'text'),
+            v.Required('type'): v.Any(
+                'dashlist', 'graph', 'singlestat', 'text'),
             v.Optional('id'): int,
         }
 
@@ -51,6 +52,37 @@ class Panel(object):
         }
         self.graph.update(self.base)
 
+        # TODO(pabelanger): This is pretty ugly, there much be a better way to
+        # set default values.
+        sparkline_defaults = {
+            'fillColor': 'rgba(31, 118, 189, 0.18)',
+            'full': False,
+            'lineColor': 'rgb(31, 120, 193)',
+            'show': False,
+        }
+        sparkline = {
+            v.Required(
+                'fillColor', default=sparkline_defaults['fillColor']
+            ): v.All(str),
+            v.Required('full', default=False): v.All(bool),
+            v.Required(
+                'lineColor', default=sparkline_defaults['lineColor']
+            ): v.All(str),
+            v.Required('show', default=False): v.All(bool),
+        }
+
+        self.singlestat = {
+            v.Required('colorBackground', default=False): v.All(bool),
+            v.Required('colorValue', default=False): v.All(bool),
+            v.Required('maxDataPoints', default=100): v.All(int),
+            v.Required('sparkline', default=sparkline_defaults): sparkline,
+            v.Required('targets', default=[]): v.All(list),
+            v.Required('thresholds', default=''): v.All(str),
+            v.Required('valueName', default='avg'): v.All(
+                'avg', 'current', 'max', 'min', 'total'),
+        }
+        self.singlestat.update(self.base)
+
         self.text = {
             v.Required('content'): v.All(str),
             v.Required('mode', default='markdown'): v.Any(
@@ -66,17 +98,20 @@ class Panel(object):
             if not isinstance(data, list):
                 raise v.Invalid('Should be a list')
 
-            for x in data:
-                schema = v.Schema(self.base, extra=True)
-                schema(x)
-                if x['type'] == 'text':
-                    panel = v.Schema(self.text)
-                elif x['type'] == 'dashlist':
-                    panel = v.Schema(self.dashlist)
-                elif x['type'] == 'graph':
-                    panel = v.Schema(self.graph)
+            for panel in data:
+                validate = v.Schema(self.base, extra=True)
+                validate(panel)
 
-                res.append(panel(x))
+                if panel['type'] == 'dashlist':
+                    schema = v.Schema(self.dashlist)
+                elif panel['type'] == 'graph':
+                    schema = v.Schema(self.graph)
+                elif panel['type'] == 'singlestat':
+                    schema = v.Schema(self.singlestat)
+                elif panel['type'] == 'text':
+                    schema = v.Schema(self.text)
+
+                res.append(schema(panel))
 
             return res
 
