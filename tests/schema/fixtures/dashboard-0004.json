@@ -1,25 +1,27 @@
 {
     "dashboard": {
-        "rows": [
-            {
-                "collapse": false,
-                "editable": true,
-                "height": "250px",
-                "panels": [
-                    {
-                        "content": "Some example text is required.",
-                        "editable": true,
-                        "error": false,
-                        "mode": "markdown",
-                        "span": 12,
-                        "title": "no title (click here)",
-                        "type": "text"
-                    }
-                ],
-                "showTitle": false,
-                "title": "New row"
-            }
-        ],
-        "title": "New dashboard"
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "content": "Some example text is required.",
+                            "editable": true,
+                            "error": false,
+                            "mode": "markdown",
+                            "span": 12,
+                            "title": "no title (click here)",
+                            "type": "text"
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "title": "New dashboard"
+        }
     }
 }

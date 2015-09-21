@@ -1,0 +1,5 @@
+dashboard:
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
