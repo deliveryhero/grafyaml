@@ -4,4 +4,4 @@ source = grafana_dashboards
 omit = grafana_dashboards/openstack/*
 
 [report]
-ignore-errors = True
+ignore_errors = True
