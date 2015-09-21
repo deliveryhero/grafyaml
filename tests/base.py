@@ -71,5 +71,4 @@ class TestCase(object):
             valid_yaml, indent=4, separators=(',', ': '), sort_keys=True)
 
         self.assertThat(pretty_json, testtools.matchers.DocTestMatches(
-            expected_json, doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
-            doctest.REPORT_NDIFF))
+            expected_json, doctest.ELLIPSIS | doctest.REPORT_NDIFF))
