@@ -12,15 +12,27 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
+import shutil
+import tempfile
 
-from testscenarios.testcase import TestWithScenarios
-from testtools import TestCase
+import fixtures
+from oslo_config import cfg
 
-from tests.schema.base import get_scenarios
-from tests.schema.base import TestCase as BaseTestCase
+from grafana_dashboards import config
+
+CONF = cfg.CONF
 
 
-class TestCaseSchemaDashboard(TestWithScenarios, TestCase, BaseTestCase):
-    fixtures_path = os.path.join(os.path.dirname(__file__), 'fixtures')
-    scenarios = get_scenarios(fixtures_path)
+class ConfFixture(fixtures.Fixture):
+    """Fixture to manage global conf settings."""
+
+    def setUp(self):
+        super(ConfFixture, self).setUp()
+        config.prepare_args([])
+        self.path = tempfile.mkdtemp()
+        CONF.cache.cachedir = self.path
+        self.addCleanup(self._cachedir)
+        self.addCleanup(CONF.reset)
+
+    def _cachedir(self):
+        shutil.rmtree(self.path)

@@ -43,16 +43,18 @@ class Commands(object):
         self.builder.update_dashboard(path)
 
 
+def add_command_parsers(subparsers):
+    parser_update = subparsers.add_parser('update')
+    parser_update.add_argument(
+        'path', help='colon-separated list of paths to YAML files or'
+        ' directories')
+
+
+command_opt = cfg.SubCommandOpt('action', handler=add_command_parsers)
+
+
 def main():
-
-    def add_command_parsers(subparsers):
-        parser_update = subparsers.add_parser('update')
-        parser_update.add_argument(
-            'path', help='colon-separated list of paths to YAML files or'
-            ' directories')
-
-    CONF.register_cli_opt(
-        cfg.SubCommandOpt('action', handler=add_command_parsers))
+    CONF.register_cli_opt(command_opt)
     logging.register_options(CONF)
     logging.setup(CONF, 'grafana-dashboard')
     config.prepare_args(sys.argv)

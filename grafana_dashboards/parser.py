@@ -12,7 +12,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import hashlib
 import io
+import json
 import yaml
 
 from slugify import slugify
@@ -26,7 +28,13 @@ class YamlParser(object):
         self.data = {}
 
     def get_dashboard(self, slug):
-        return self.data.get('dashboard', {}).get(slug, None)
+        data = self.data.get('dashboard', {}).get(slug, None)
+        md5 = None
+        if data:
+            content = json.dumps(data)
+            md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+
+        return data, md5
 
     def parse(self, fn):
         with io.open(fn, 'r', encoding='utf-8') as fp:
