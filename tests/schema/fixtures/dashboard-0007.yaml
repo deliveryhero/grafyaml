@@ -1,0 +1,16 @@
+dashboard:
+  title: New dashboard
+  rows:
+    - title: foo
+      height: 250px
+      panels:
+        - title: Starred Dashboards
+          type: dashlist
+          mode: starred
+    - title: bar
+      height: 250px
+      panels:
+        - title: no title (click here)
+          type: text
+          mode: markdown
+          content: Some example text is required.

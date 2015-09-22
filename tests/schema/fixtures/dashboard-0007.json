@@ -1,0 +1,45 @@
+{
+    "dashboard": {
+        "rows": [
+            {
+                "collapse": false,
+                "editable": true,
+                "height": "250px",
+                "panels": [
+                    {
+                        "editable": true,
+                        "error": false,
+                        "limit": 10,
+                        "mode": "starred",
+                        "query": "",
+                        "span": 12,
+                        "tag": "",
+                        "title": "Starred Dashboards",
+                        "type": "dashlist"
+                    }
+                ],
+                "showTitle": false,
+                "title": "foo"
+            },
+            {
+                "collapse": false,
+                "editable": true,
+                "height": "250px",
+                "panels": [
+                    {
+                        "content": "Some example text is required.",
+                        "editable": true,
+                        "error": false,
+                        "mode": "markdown",
+                        "span": 12,
+                        "title": "no title (click here)",
+                        "type": "text"
+                    }
+                ],
+                "showTitle": false,
+                "title": "bar"
+            }
+        ],
+        "title": "New dashboard"
+    }
+}
