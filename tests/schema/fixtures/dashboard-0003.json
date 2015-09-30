@@ -1,27 +1,29 @@
 {
     "dashboard": {
-        "rows": [
-            {
-                "collapse": false,
-                "editable": true,
-                "height": "250px",
-                "panels": [
-                    {
-                        "editable": true,
-                        "error": false,
-                        "limit": 10,
-                        "mode": "starred",
-                        "query": "",
-                        "span": 12,
-                        "tag": "",
-                        "title": "Starred Dashboards",
-                        "type": "dashlist"
-                    }
-                ],
-                "showTitle": false,
-                "title": "New row"
-            }
-        ],
-        "title": "New dashboard"
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "editable": true,
+                            "error": false,
+                            "limit": 10,
+                            "mode": "starred",
+                            "query": "",
+                            "span": 12,
+                            "tag": "",
+                            "title": "Starred Dashboards",
+                            "type": "dashlist"
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "title": "New dashboard"
+        }
     }
 }

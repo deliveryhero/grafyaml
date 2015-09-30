@@ -12,10 +12,41 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import io
 import yaml
+
+from slugify import slugify
+
+from grafana_dashboards.schema.dashboard import Dashboard
 
 
 class YamlParser(object):
 
-    def load(self, path):
-        return yaml.safe_load(open(path))
+    def __init__(self):
+        self.data = {}
+
+    def get_dashboard(self, slug):
+        return self.data.get('dashboard', {}).get(slug, None)
+
+    def parse(self, fn):
+        with io.open(fn, 'r', encoding='utf-8') as fp:
+            self.parse_fp(fp)
+
+    def parse_fp(self, fp):
+        data = yaml.safe_load(fp)
+        result = self.validate(data)
+        for item in result.items():
+            group = self.data.get(item[0], {})
+            # Create slug to make it easier to find dashboards.
+            title = item[1]['title']
+            slug = slugify(title)
+            if slug in group:
+                raise Exception(
+                    "Duplicate dashboard found in '{0}: '{1}' "
+                    "already defined".format(fp.name, title))
+            group[slug] = item[1]
+            self.data[item[0]] = group
+
+    def validate(self, data):
+        schema = Dashboard()
+        return schema.validate(data)

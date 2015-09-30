@@ -16,7 +16,6 @@ from oslo_config import cfg
 
 from grafana_dashboards.grafana import Grafana
 from grafana_dashboards.parser import YamlParser
-from grafana_dashboards.schema.dashboard import Dashboard
 
 grafana_opts = [
     cfg.StrOpt(
@@ -42,7 +41,8 @@ class Builder(object):
         self.parser = YamlParser()
 
     def update_dashboard(self, path):
-        data = self.parser.load(path)
-        schema = Dashboard()
-        result = schema.validate(data)
-        self.grafana.create_dashboard(result, overwrite=True)
+        self.parser.parse(path)
+        dashboards = self.parser.data.get('dashboard', {})
+        for item in dashboards:
+            data = self.parser.get_dashboard(item)
+            self.grafana.create_dashboard(data, overwrite=True)

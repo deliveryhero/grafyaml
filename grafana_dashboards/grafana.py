@@ -32,10 +32,13 @@ class Grafana(object):
             })
 
     def create_dashboard(self, data, overwrite=False):
-        data['overwrite'] = overwrite
+        dashboard = {
+            'dashboard': data,
+            'overwrite': overwrite,
+        }
         headers = {
             'Content-Type': 'application/json',
         }
         res = self.session.post(
-            self.url, data=json.dumps(data), headers=headers)
+            self.url, data=json.dumps(dashboard), headers=headers)
         res.raise_for_status()
