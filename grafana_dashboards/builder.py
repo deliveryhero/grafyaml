@@ -13,7 +13,9 @@
 # under the License.
 
 from oslo_config import cfg
+from oslo_log import log as logging
 
+from grafana_dashboards.cache import Cache
 from grafana_dashboards.grafana import Grafana
 from grafana_dashboards.parser import YamlParser
 
@@ -34,9 +36,12 @@ CONF = cfg.CONF
 CONF.register_group(grafana_group)
 CONF.register_opts(grafana_opts, group='grafana')
 
+LOG = logging.getLogger(__name__)
+
 
 class Builder(object):
     def __init__(self):
+        self.cache = Cache()
         self.grafana = Grafana(CONF.grafana.url, CONF.grafana.apikey)
         self.parser = YamlParser()
 
@@ -44,5 +49,9 @@ class Builder(object):
         self.parser.parse(path)
         dashboards = self.parser.data.get('dashboard', {})
         for item in dashboards:
-            data = self.parser.get_dashboard(item)
-            self.grafana.create_dashboard(data, overwrite=True)
+            data, md5 = self.parser.get_dashboard(item)
+            if self.cache.has_changed(item, md5):
+                self.grafana.create_dashboard(data, overwrite=True)
+                self.cache.set(item, md5)
+            else:
+                LOG.debug("'%s' has not changed" % item)

@@ -18,15 +18,16 @@ import sys
 import fixtures
 import six
 from testtools import matchers
-from testtools import TestCase
 
 from grafana_dashboards import cmd
+from tests.base import TestCase
 
 
 class TestCaseCmd(TestCase):
 
     def setUp(self):
         super(TestCaseCmd, self).setUp()
+        cmd.CONF.reset()
 
     def shell(self, argstr, exitcodes=(0,)):
         orig = sys.stdout

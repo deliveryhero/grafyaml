@@ -38,7 +38,7 @@ class TestCaseParser(TestCase):
         }
 
         # Get parsed dashboard
-        res = self.parser.get_dashboard('new-dashboard')
+        res, md5 = self.parser.get_dashboard('new-dashboard')
         self.assertEqual(res, dashboard['new-dashboard'])
 
         # Check for a dashboard that does not exist
@@ -49,11 +49,11 @@ class TestCaseParser(TestCase):
             os.path.dirname(__file__), 'fixtures/parser/dashboard-0002.yaml')
         self.parser.parse(path)
 
-        res = self.parser.get_dashboard('foobar')
+        res, md5 = self.parser.get_dashboard('foobar')
         self.assertEqual(res, dashboard['foobar'])
 
         # Ensure our first dashboard still exists.
-        res = self.parser.get_dashboard('new-dashboard')
+        res, md5 = self.parser.get_dashboard('new-dashboard')
         self.assertEqual(res, dashboard['new-dashboard'])
 
     def test_parse_duplicate(self):
@@ -65,7 +65,7 @@ class TestCaseParser(TestCase):
         }
 
         # Get parsed dashboard
-        res = self.parser.get_dashboard('new-dashboard')
+        res, md5 = self.parser.get_dashboard('new-dashboard')
         self.assertEqual(res, dashboard['new-dashboard'])
 
         path = os.path.join(
@@ -74,5 +74,5 @@ class TestCaseParser(TestCase):
         self.assertRaises(Exception, self.parser.parse, path)
 
     def _get_empty_dashboard(self, name):
-        res = self.parser.get_dashboard(name)
+        res, md5 = self.parser.get_dashboard(name)
         self.assertEqual(res, None)
