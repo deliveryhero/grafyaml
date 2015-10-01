@@ -12,6 +12,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import os
+
 from oslo_config import cfg
 from oslo_log import log as logging
 
@@ -46,7 +48,17 @@ class Builder(object):
         self.parser = YamlParser()
 
     def load_files(self, path):
-        self.parser.parse(path)
+        files_to_process = []
+        if os.path.isdir(path):
+            files_to_process.extend([os.path.join(path, f)
+                                     for f in os.listdir(path)
+                                     if (f.endswith('.yaml')
+                                         or f.endswith('.yml'))])
+        else:
+            files_to_process.append(path)
+
+        for fn in files_to_process:
+            self.parser.parse(fn)
 
     def update_dashboard(self, path):
         self.load_files(path)
