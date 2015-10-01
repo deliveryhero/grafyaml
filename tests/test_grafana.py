@@ -12,35 +12,40 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from requests_mock.contrib import fixture as rm_fixture
+import requests_mock
 from testtools import TestCase
 
-from grafana_dashboards import grafana
+from grafana_dashboards.grafana import Grafana
 
 
 class TestCaseGrafana(TestCase):
 
     def setUp(self):
         super(TestCaseGrafana, self).setUp()
-        self.apikey = 'eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk'
         self.url = 'http://localhost'
-        self.grafana = grafana.Grafana(self.url, self.apikey)
 
-    def test_create_dashboard(self):
-        mock_requests = self.useFixture(rm_fixture.Fixture())
-        mock_requests.post('/api/dashboards/db')
+    def test_init(self):
+        grafana = Grafana(self.url)
+        self.assertNotIn('Authorization', grafana.session.headers)
+
+    def test_init_apikey(self):
+        apikey = 'eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk'
+        grafana = Grafana(self.url, apikey)
+        headers = grafana.session.headers
+        self.assertIn('Authorization', headers)
+        self.assertEqual(headers['Authorization'], 'Bearer %s' % apikey)
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_apikey(self, mock_requests):
+        grafana = Grafana(self.url)
+        mock_requests.register_uri('POST', '/api/dashboards/db')
         data = {
             "dashboard": {
                 "title": "New dashboard",
             }
         }
-        self.grafana.create_dashboard(data)
+        grafana.create_dashboard(data)
         self.assertEqual(mock_requests.call_count, 1)
         headers = mock_requests.last_request.headers
-        self._test_headers(headers)
-
-    def _test_headers(self, headers):
-        self.assertIn('Authorization', headers)
-        self.assertEqual(headers['Authorization'], 'Bearer %s' % self.apikey)
         self.assertIn('Content-Type', headers)
         self.assertEqual(headers['Content-Type'], 'application/json')
