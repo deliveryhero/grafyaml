@@ -45,8 +45,11 @@ class Builder(object):
         self.grafana = Grafana(CONF.grafana.url, CONF.grafana.apikey)
         self.parser = YamlParser()
 
-    def update_dashboard(self, path):
+    def load_files(self, path):
         self.parser.parse(path)
+
+    def update_dashboard(self, path):
+        self.load_files(path)
         dashboards = self.parser.data.get('dashboard', {})
         for item in dashboards:
             data, md5 = self.parser.get_dashboard(item)

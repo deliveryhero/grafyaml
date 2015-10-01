@@ -42,10 +42,23 @@ class Commands(object):
     def update(self, path):
         self.builder.update_dashboard(path)
 
+    def validate(self, path):
+        try:
+            self.builder.load_files(path)
+            print('SUCCESS!')
+        except Exception as e:
+            print('%s: ERROR: %s' % (path, e))
+            sys.exit(1)
+
 
 def add_command_parsers(subparsers):
     parser_update = subparsers.add_parser('update')
     parser_update.add_argument(
+        'path', help='colon-separated list of paths to YAML files or'
+        ' directories')
+
+    parser_validate = subparsers.add_parser('validate')
+    parser_validate.add_argument(
         'path', help='colon-separated list of paths to YAML files or'
         ' directories')
 
