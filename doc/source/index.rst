@@ -13,6 +13,7 @@ Contents
    usage
    contributing
    grafana-dashboard
+   api
 
 Indices and tables
 ==================

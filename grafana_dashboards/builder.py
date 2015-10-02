@@ -48,10 +48,10 @@ class Builder(object):
     def update_dashboard(self, path):
         self.parser.parse(path)
         dashboards = self.parser.data.get('dashboard', {})
-        for item in dashboards:
-            data, md5 = self.parser.get_dashboard(item)
-            if self.cache.has_changed(item, md5):
-                self.grafana.create_dashboard(data, overwrite=True)
-                self.cache.set(item, md5)
+        for name in dashboards:
+            data, md5 = self.parser.get_dashboard(name)
+            if self.cache.has_changed(name, md5):
+                self.grafana.create_dashboard(name, data, overwrite=True)
+                self.cache.set(name, md5)
             else:
-                LOG.debug("'%s' has not changed" % item)
+                LOG.debug("'%s' has not changed" % name)
