@@ -17,12 +17,35 @@ from testtools import TestCase
 
 from grafana_dashboards.grafana import Grafana
 
+CREATE_NEW_DASHBOARD = {
+    "meta": {
+        "canSave": True,
+        "created": "0001-01-01T00:00:00Z",
+        "canStar": True,
+        "expires": "0001-01-01T00:00:00Z",
+        "slug": "new-dashboard",
+        "type": "db",
+        "canEdit": True
+    },
+    "dashboard": {
+        "rows": [],
+        "id": 1,
+        "version": 0,
+        "title": "New dashboard"
+    }
+}
+
+DASHBOARD_NOT_FOUND = {
+    "message": "Dashboard not found"
+}
+
 
 class TestCaseGrafana(TestCase):
 
     def setUp(self):
         super(TestCaseGrafana, self).setUp()
         self.url = 'http://localhost'
+        self.grafana = Grafana(self.url)
 
     def test_init(self):
         grafana = Grafana(self.url)
@@ -36,16 +59,63 @@ class TestCaseGrafana(TestCase):
         self.assertEqual(headers['Authorization'], 'Bearer %s' % apikey)
 
     @requests_mock.Mocker()
-    def test_create_dashboard_apikey(self, mock_requests):
-        grafana = Grafana(self.url)
-        mock_requests.register_uri('POST', '/api/dashboards/db')
+    def test_assert_dashboard_exists_failure(self, mock_requests):
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=DASHBOARD_NOT_FOUND,
+            status_code=404)
+        self.assertRaises(
+            Exception, self.grafana.assert_dashboard_exists, 'new-dashboard')
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_new(self, mock_requests):
+        def post_callback(request, context):
+            mock_requests.get(
+                '/api/dashboards/db/new-dashboard', json=CREATE_NEW_DASHBOARD)
+            return True
+
+        mock_requests.post('/api/dashboards/db/', json=post_callback)
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=DASHBOARD_NOT_FOUND,
+            status_code=404)
+
         data = {
             "dashboard": {
                 "title": "New dashboard",
-            }
+            },
+            "slug": 'new-dashboard',
         }
-        grafana.create_dashboard(data)
+        self.grafana.create_dashboard(
+            name=data['slug'], data=data['dashboard'])
+        self.assertEqual(mock_requests.call_count, 3)
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_overwrite(self, mock_requests):
+        mock_requests.post('/api/dashboards/db/')
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=CREATE_NEW_DASHBOARD)
+        data = {
+            "dashboard": {
+                "title": "New dashboard",
+            },
+            "slug": 'new-dashboard',
+        }
+        self.grafana.create_dashboard(
+            name=data['slug'], data=data['dashboard'], overwrite=True)
+        self.assertEqual(mock_requests.call_count, 2)
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_existing(self, mock_requests):
+        mock_requests.post('/api/dashboards/db/')
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=CREATE_NEW_DASHBOARD)
+        data = {
+            "dashboard": {
+                "title": "New dashboard",
+            },
+            "slug": 'new-dashboard',
+        }
+        self.assertRaises(
+            Exception, self.grafana.create_dashboard, name=data['slug'],
+            data=data['dashboard'], overwrite=False)
+
         self.assertEqual(mock_requests.call_count, 1)
-        headers = mock_requests.last_request.headers
-        self.assertIn('Content-Type', headers)
-        self.assertEqual(headers['Content-Type'], 'application/json')
