@@ -17,7 +17,7 @@ import os
 from testscenarios.testcase import TestWithScenarios
 from testtools import TestCase
 
-from tests.schema.base import get_scenarios
+from tests.base import get_scenarios
 from tests.schema.base import TestCase as BaseTestCase
 
 

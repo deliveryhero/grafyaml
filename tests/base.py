@@ -16,10 +16,35 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import os
+import re
+
 import fixtures
 import testtools
 
 from tests import conf_fixture
+
+
+def get_scenarios(fixtures_path, in_ext='yaml', out_ext='json'):
+    scenarios = []
+    files = []
+    for dirpath, dirs, fs in os.walk(fixtures_path):
+        files.extend([os.path.join(dirpath, f) for f in fs])
+
+    input_files = [f for f in files if re.match(r'.*\.{0}$'.format(in_ext), f)]
+
+    for input_filename in input_files:
+        output_candidate = re.sub(
+            r'\.{0}$'.format(in_ext), '.{0}'.format(out_ext), input_filename)
+        if output_candidate not in files:
+            output_candidate = None
+
+        scenarios.append((input_filename, {
+            'in_filename': input_filename,
+            'out_filename': output_candidate,
+        }))
+
+    return scenarios
 
 
 class TestCase(testtools.TestCase):
