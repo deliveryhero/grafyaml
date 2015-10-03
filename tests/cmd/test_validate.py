@@ -58,6 +58,40 @@ class TestCaseValidateScenarios(TestWithScenarios, TestCase):
 
 class TestCaseValidate(TestCase):
 
+    def test_validate_directory_success(self):
+        path = os.path.join(
+            os.path.dirname(__file__), '../fixtures/cmd/validate/test0001')
+        required = [
+            'SUCCESS!',
+        ]
+        stdout, stderr = self.shell(
+            'validate %s' % path, exitcodes=[0])
+        for r in required:
+            self.assertThat(
+                (stdout + stderr),
+                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+
+    def test_validate_directory_invalid(self):
+        path = os.path.join(
+            os.path.dirname(__file__), '../fixtures/cmd/validate/__invalid__')
+        self._validate_invalid_file_or_directory(path)
+
+    def test_validate_file_invalid(self):
+        path = os.path.join(
+            os.path.dirname(__file__), '../fixtures/cmd/validate/invalid.yaml')
+        self._validate_invalid_file_or_directory(path)
+
+    def _validate_invalid_file_or_directory(self, path):
+        required = [
+            '%s: ERROR: \[Errno 2\] No such file or directory:' % path,
+        ]
+        stdout, stderr = self.shell(
+            'validate %s' % path, exitcodes=[1])
+        for r in required:
+            self.assertThat(
+                (stdout + stderr),
+                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+
     def test_validate_without_path(self):
         required = [
             '.*?^usage: grafana-dashboards validate \[-h\] path',
