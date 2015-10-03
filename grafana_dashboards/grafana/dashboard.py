@@ -28,17 +28,6 @@ class Dashboard(object):
         self.url = url
         self.session = session
 
-    def assert_dashboard_exists(self, name):
-        """Raise an exception if dashboard does not exist
-
-        :param name: URL friendly title of the dashboard
-        :type name: str
-        :raises Exception: if dashboard does not exist
-
-        """
-        if not self.is_dashboard(name):
-            raise Exception('dashboard[%s] does not exist' % name)
-
     def create(self, name, data, overwrite=False):
         """Create a new dashboard
 
@@ -62,9 +51,23 @@ class Dashboard(object):
 
         res = self.session.post(
             self.url, data=json.dumps(dashboard))
-
         res.raise_for_status()
-        self.assert_dashboard_exists(name)
+        if not self.is_dashboard(name):
+            raise Exception('dashboard[%s] does not exist' % name)
+
+    def delete(self, name):
+        """Delete a dashboard
+
+        :param name: URL friendly title of the dashboard
+        :type name: str
+
+        :raises Exception: if dashboard failed to delete
+
+        """
+        url = urljoin(self.url, name)
+        self.session.delete(url)
+        if self.is_dashboard(name):
+            raise Exception('dashboard[%s] failed to delete' % name)
 
     def get(self, name):
         """Get a dashboard

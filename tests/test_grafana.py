@@ -59,15 +59,6 @@ class TestCaseGrafana(TestCase):
         self.assertEqual(headers['Authorization'], 'Bearer %s' % apikey)
 
     @requests_mock.Mocker()
-    def test_assert_dashboard_exists_failure(self, mock_requests):
-        mock_requests.get(
-            '/api/dashboards/db/new-dashboard', json=DASHBOARD_NOT_FOUND,
-            status_code=404)
-        self.assertRaises(
-            Exception, self.grafana.dashboard.assert_dashboard_exists,
-            'new-dashboard')
-
-    @requests_mock.Mocker()
     def test_create_dashboard_new(self, mock_requests):
         def post_callback(request, context):
             mock_requests.get(
@@ -120,3 +111,19 @@ class TestCaseGrafana(TestCase):
             data=data['dashboard'], overwrite=False)
 
         self.assertEqual(mock_requests.call_count, 1)
+
+    @requests_mock.Mocker()
+    def test_delete_dashboard(self, mock_requests):
+        mock_requests.delete('/api/dashboards/db/new-dashboard')
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=DASHBOARD_NOT_FOUND,
+            status_code=404)
+        self.grafana.dashboard.delete('new-dashboard')
+
+    @requests_mock.Mocker()
+    def test_delete_dashboard_failure(self, mock_requests):
+        mock_requests.delete('/api/dashboards/db/new-dashboard')
+        mock_requests.get(
+            '/api/dashboards/db/new-dashboard', json=CREATE_NEW_DASHBOARD)
+        self.assertRaises(
+            Exception, self.grafana.dashboard.delete, name='new-dashboard')

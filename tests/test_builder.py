@@ -26,17 +26,34 @@ class TestCaseBuilder(TestCase):
         super(TestCaseBuilder, self).setUp()
         self.builder = builder.Builder(self.config)
 
-    @mock.patch('grafana_dashboards.grafana.Dashboard.create')
-    def test_update_dashboard(self, mock_grafana):
-        dashboard = os.path.join(
+    @mock.patch('grafana_dashboards.grafana.Dashboard.delete')
+    def test_delete_dashboard(self, mock_grafana):
+        path = os.path.join(
             os.path.dirname(__file__), 'fixtures/builder/dashboard-0001.yaml')
 
-        self.builder.update_dashboard(dashboard)
-        # Cache is empty, so we should update grafana.
+        # Create a dashboard.
+        self._update_dashboard(path)
+        # Create a new builder to avoid duplicate dashboards.
+        builder2 = builder.Builder(self.config)
+        # Delete same dashboard, ensure we delete it from grafana.
+        builder2.delete_dashboard(path)
         self.assertEqual(mock_grafana.call_count, 1)
 
+    @mock.patch('grafana_dashboards.grafana.Dashboard.create')
+    def test_update_dashboard(self, mock_grafana):
+        path = os.path.join(
+            os.path.dirname(__file__), 'fixtures/builder/dashboard-0001.yaml')
+
+        # Create a dashboard.
+        self._update_dashboard(path)
         # Create a new builder to avoid duplicate dashboards.
         builder2 = builder.Builder(self.config)
         # Update again with same dashboard, ensure we don't update grafana.
-        builder2.update_dashboard(dashboard)
+        builder2.update_dashboard(path)
+        self.assertEqual(mock_grafana.call_count, 0)
+
+    @mock.patch('grafana_dashboards.grafana.Dashboard.create')
+    def _update_dashboard(self, path, mock_grafana):
+        self.builder.update_dashboard(path)
+        # Cache is empty, so we should update grafana.
         self.assertEqual(mock_grafana.call_count, 1)
