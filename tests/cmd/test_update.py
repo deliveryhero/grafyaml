@@ -19,7 +19,7 @@ from testtools import matchers
 from tests.cmd.base import TestCase
 
 
-class TestCaseCmd(TestCase):
+class TestCaseUpdate(TestCase):
 
     def test_update_without_path(self):
         required = [
@@ -32,9 +32,3 @@ class TestCaseCmd(TestCase):
             self.assertThat(
                 (stdout + stderr),
                 matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
-
-    def test_version(self):
-        stdout, stderr = self.shell('--version')
-        self.assertThat(
-            (stdout + stderr),
-            matchers.MatchesRegex('.*?^(\d+)\.(\d+)\.(\d+)'))
