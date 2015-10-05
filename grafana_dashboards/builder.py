@@ -63,6 +63,7 @@ class Builder(object):
     def update_dashboard(self, path):
         self.load_files(path)
         dashboards = self.parser.data.get('dashboard', {})
+        LOG.info('Number of dashboards generated: %d', len(dashboards))
         for name in dashboards:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):

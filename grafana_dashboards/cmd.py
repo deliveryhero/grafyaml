@@ -40,9 +40,11 @@ class Commands(object):
         exec_method(**kwargs)
 
     def update(self, path):
+        LOG.info('Updating dashboards in %s', path)
         self.builder.update_dashboard(path)
 
     def validate(self, path):
+        LOG.info('Validating dashboards in %s', path)
         try:
             self.builder.load_files(path)
             print('SUCCESS!')
@@ -69,8 +71,8 @@ command_opt = cfg.SubCommandOpt('action', handler=add_command_parsers)
 def main():
     CONF.register_cli_opt(command_opt)
     logging.register_options(CONF)
-    logging.setup(CONF, 'grafana-dashboard')
     config.prepare_args(sys.argv)
+    logging.setup(CONF, 'grafana-dashboard')
 
     Commands().execute()
     sys.exit(0)
