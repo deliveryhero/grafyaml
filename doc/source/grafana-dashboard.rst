@@ -26,10 +26,9 @@ OPTIONS
 --config-file PATH  Path to a config file to use. Multiple config files can be
                     specified, with values in later files taking precedence. The
                     default files used are: None.
--d, --debug         Print debugging output(set logging level to DEBUG
-                    instead of default WARNING level).
--v, --verbose       Print more verbose output (set logging level to INFO
-                    instead of default WARNING level).
+--debug             Print debugging output(set logging level to DEBUG instead
+                    of default INFO level).
+--nodebug           The inverse of --debug.
 --version           Show program's version number and exit.
 
 COMMANDS

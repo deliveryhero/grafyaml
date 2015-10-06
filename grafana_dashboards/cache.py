@@ -12,11 +12,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import logging
 import os
 
 from dogpile.cache.region import make_region
 from oslo_config import cfg
-from oslo_log import log as logging
 
 cache_opts = [
     cfg.StrOpt(

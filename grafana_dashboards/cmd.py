@@ -13,10 +13,10 @@
 # under the License.
 
 import inspect
+import logging
 import sys
 
 from oslo_config import cfg
-from oslo_log import log as logging
 
 from grafana_dashboards.builder import Builder
 from grafana_dashboards import config
@@ -66,13 +66,19 @@ def add_command_parsers(subparsers):
 
 
 command_opt = cfg.SubCommandOpt('action', handler=add_command_parsers)
+logging_opts = cfg.BoolOpt(
+    'debug', default=False, help='Print debugging output (set logging level '
+    'to DEBUG instead of default INFO level).')
 
 
 def main():
     CONF.register_cli_opt(command_opt)
-    logging.register_options(CONF)
+    CONF.register_cli_opt(logging_opts)
     config.prepare_args(sys.argv)
-    logging.setup(CONF, 'grafana-dashboard')
+    if CONF.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
 
     Commands().execute()
     sys.exit(0)
