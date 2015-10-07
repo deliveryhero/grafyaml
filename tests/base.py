@@ -16,13 +16,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import logging
 import os
 import re
+import shutil
+import tempfile
 
 import fixtures
+from six.moves import configparser as ConfigParser
 import testtools
 
-from tests import conf_fixture
+FIXTURE_DIR = os.path.join(
+    os.path.dirname(__file__), 'fixtures')
 
 
 def get_scenarios(fixtures_path, in_ext='yaml', out_ext='json'):
@@ -52,5 +57,16 @@ class TestCase(testtools.TestCase):
 
     def setUp(self):
         super(TestCase, self).setUp()
-        self.log_fixture = self.useFixture(fixtures.FakeLogger())
-        self.useFixture(conf_fixture.ConfFixture())
+        self.log_fixture = self.useFixture(fixtures.FakeLogger(
+            level=logging.DEBUG))
+        self.setup_config()
+        self.cachedir = tempfile.mkdtemp()
+        self.config.set('cache', 'cachedir', self.cachedir)
+        self.addCleanup(self.cleanup_cachedir)
+
+    def setup_config(self):
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(os.path.join(FIXTURE_DIR, 'grafyaml.conf'))
+
+    def cleanup_cachedir(self):
+        shutil.rmtree(self.cachedir)

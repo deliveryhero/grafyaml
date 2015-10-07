@@ -12,73 +12,90 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import inspect
+import argparse
 import logging
+import os
 import sys
 
-from oslo_config import cfg
+from six.moves import configparser as ConfigParser
 
 from grafana_dashboards.builder import Builder
-from grafana_dashboards import config
+from grafana_dashboards import version
 
-CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 
 
-class Commands(object):
+class Client(object):
 
-    def __init__(self):
-        self.builder = Builder()
+    def main(self):
+        self.parse_arguments()
+        self.read_config()
+        self.setup_logging()
 
-    def execute(self):
-        exec_method = getattr(self, CONF.action.name)
-        args = inspect.getargspec(exec_method)
-        args.args.remove('self')
-        kwargs = {}
-        for arg in args.args:
-            kwargs[arg] = getattr(CONF.action, arg)
-        exec_method(**kwargs)
+        self.args.func()
 
-    def update(self, path):
-        LOG.info('Updating dashboards in %s', path)
-        self.builder.update_dashboard(path)
+    def parse_arguments(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--config-file', dest='config', help='Path to a config file to '
+            'use. The default file used is: /etc/grafyaml/grafyaml.conf')
+        parser.add_argument(
+            '--debug', dest='debug', action='store_true',
+            help='Print debugging output (set logging level to DEBUG instead '
+            ' of default INFO level)')
+        parser.add_argument(
+            '--version', dest='version', action='version',
+            version=version.version_info.release_string(), help="show "
+            "program's version number and exit")
 
-    def validate(self, path):
-        LOG.info('Validating dashboards in %s', path)
+        subparsers = parser.add_subparsers(
+            title='commands')
+
+        parser_update = subparsers.add_parser('update')
+        parser_update.add_argument(
+            'path', help='colon-separated list of paths to YAML files or'
+            ' directories')
+        parser_update.set_defaults(func=self.update)
+
+        parser_validate = subparsers.add_parser('validate')
+        parser_validate.add_argument(
+            'path', help='colon-separated list of paths to YAML files or'
+            ' directories')
+        parser_validate.set_defaults(func=self.validate)
+
+        self.args = parser.parse_args()
+
+    def read_config(self):
+        self.config = ConfigParser.ConfigParser()
+        if self.args.config:
+            fp = self.args.config
+        else:
+            fp = '/etc/grafyaml/grafyaml.conf'
+        self.config.read(os.path.expanduser(fp))
+
+    def setup_logging(self):
+        if self.args.debug:
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.INFO)
+
+    def update(self):
+        LOG.info('Updating dashboards in %s', self.args.path)
+        builder = Builder(self.config)
+        builder.update_dashboard(self.args.path)
+
+    def validate(self):
+        LOG.info('Validating dashboards in %s', self.args.path)
+        builder = Builder(self.config)
         try:
-            self.builder.load_files(path)
+            builder.load_files(self.args.path)
             print('SUCCESS!')
         except Exception as e:
-            print('%s: ERROR: %s' % (path, e))
+            print('%s: ERROR: %s' % (self.args.path, e))
             sys.exit(1)
 
 
-def add_command_parsers(subparsers):
-    parser_update = subparsers.add_parser('update')
-    parser_update.add_argument(
-        'path', help='colon-separated list of paths to YAML files or'
-        ' directories')
-
-    parser_validate = subparsers.add_parser('validate')
-    parser_validate.add_argument(
-        'path', help='colon-separated list of paths to YAML files or'
-        ' directories')
-
-
-command_opt = cfg.SubCommandOpt('action', handler=add_command_parsers)
-logging_opts = cfg.BoolOpt(
-    'debug', default=False, help='Print debugging output (set logging level '
-    'to DEBUG instead of default INFO level).')
-
-
 def main():
-    CONF.register_cli_opt(command_opt)
-    CONF.register_cli_opt(logging_opts)
-    config.prepare_args(sys.argv)
-    if CONF.debug:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.INFO)
-
-    Commands().execute()
+    client = Client()
+    client.main()
     sys.exit(0)

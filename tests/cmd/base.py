@@ -23,15 +23,6 @@ from tests.base import TestCase
 
 class TestCase(TestCase):
 
-    def setUp(self):
-        super(TestCase, self).setUp()
-
-        def clear():
-            cmd.CONF.reset()
-            cmd.CONF.unregister_opt(cmd.command_opt)
-        cmd.CONF.reset()
-        self.addCleanup(clear)
-
     def shell(self, argstr, exitcodes=(0,)):
         orig = sys.stdout
         orig_stderr = sys.stderr

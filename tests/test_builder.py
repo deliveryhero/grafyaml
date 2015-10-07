@@ -24,7 +24,7 @@ class TestCaseBuilder(TestCase):
 
     def setUp(self):
         super(TestCaseBuilder, self).setUp()
-        self.builder = builder.Builder()
+        self.builder = builder.Builder(self.config)
 
     @mock.patch('grafana_dashboards.grafana.Grafana.create_dashboard')
     def test_update_dashboard(self, mock_grafana):
@@ -36,7 +36,7 @@ class TestCaseBuilder(TestCase):
         self.assertEqual(mock_grafana.call_count, 1)
 
         # Create a new builder to avoid duplicate dashboards.
-        builder2 = builder.Builder()
+        builder2 = builder.Builder(self.config)
         # Update again with same dashboard, ensure we don't update grafana.
         builder2.update_dashboard(dashboard)
         self.assertEqual(mock_grafana.call_count, 1)

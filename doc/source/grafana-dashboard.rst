@@ -16,20 +16,12 @@ files.
 OPTIONS
 =======
 
--h, --help          Show the help.
---config-dir DIR    Path to a config directory to pull \*.conf files from. This
-                    file set is sorted, so as to provide a predictable parse
-                    order if individual options are over-ridden. The set is
-                    parsed after the file(s) specified via previous
-                    --config-file, arguments hence over-ridden options in the
-                    directory take precedence.
---config-file PATH  Path to a config file to use. Multiple config files can be
-                    specified, with values in later files taking precedence. The
-                    default files used are: None.
---debug             Print debugging output(set logging level to DEBUG instead
-                    of default INFO level).
---nodebug           The inverse of --debug.
---version           Show program's version number and exit.
+-h, --help            Show this help message and exit
+--config-file CONFIG  Path to a config file to use. The default files used
+                      is: /etc/grafyaml/grafyaml.conf
+--debug               Print debugging output (set logging level to DEBUG
+                      instead of default INFO level)
+--version             Show program's version number and exit
 
 COMMANDS
 ========

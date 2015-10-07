@@ -15,37 +15,44 @@
 import logging
 import os
 
-from oslo_config import cfg
-
 from grafana_dashboards.cache import Cache
 from grafana_dashboards.grafana import Grafana
 from grafana_dashboards.parser import YamlParser
-
-grafana_opts = [
-    cfg.StrOpt(
-        'url', default='http://grafana.example.org',
-        help='URL for grafana server.'),
-    cfg.StrOpt(
-        'apikey', default=None,
-        help='API key for access grafana.'),
-]
-
-grafana_group = cfg.OptGroup(
-    name='grafana', title='Grafana options')
-list_opts = lambda: [(grafana_group, grafana_opts), ]
-
-CONF = cfg.CONF
-CONF.register_group(grafana_group)
-CONF.register_opts(grafana_opts, group='grafana')
 
 LOG = logging.getLogger(__name__)
 
 
 class Builder(object):
-    def __init__(self):
-        self.cache = Cache()
-        self.grafana = Grafana(CONF.grafana.url, CONF.grafana.apikey)
+
+    def __init__(self, config):
+        self.grafana = self._setup_grafana(config)
         self.parser = YamlParser()
+        self.cache = self._setup_cache(config)
+
+    def _setup_cache(self, config):
+        if config.has_option('cache', 'enabled'):
+            self.cache_enabled = config.getboolean('cache', 'enabled')
+        else:
+            self.cache_enabled = True
+
+        if config.has_option('cache', 'cachedir'):
+            cachedir = config.get('cache', 'cachedir')
+        else:
+            cachedir = '~/.cache/grafyaml'
+
+        return Cache(cachedir)
+
+    def _setup_grafana(self, config):
+        if config.has_option('grafana', 'apikey'):
+            key = config.get('grafana', 'apikey')
+        else:
+            key = None
+
+        if config.has_option('grafana', 'url'):
+            url = config.get('grafana', 'url')
+        else:
+            url = 'http://localhost:8080'
+        return Grafana(url, key)
 
     def load_files(self, path):
         files_to_process = []
@@ -66,7 +73,7 @@ class Builder(object):
         LOG.info('Number of dashboards generated: %d', len(dashboards))
         for name in dashboards:
             data, md5 = self.parser.get_dashboard(name)
-            if self.cache.has_changed(name, md5):
+            if self.cache.has_changed(name, md5) or not self.cache_enabled:
                 self.grafana.create_dashboard(name, data, overwrite=True)
                 self.cache.set(name, md5)
             else:

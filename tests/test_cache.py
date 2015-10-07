@@ -12,12 +12,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo_config import cfg
-
 from grafana_dashboards import cache
 from tests.base import TestCase
-
-CONF = cfg.CONF
 
 
 class TestCaseCache(TestCase):
@@ -28,10 +24,10 @@ class TestCaseCache(TestCase):
 
     def setUp(self):
         super(TestCaseCache, self).setUp()
-        self.storage = None
+        cachedir = self.config.get('cache', 'cachedir')
+        self.storage = cache.Cache(cachedir)
 
     def test_cache_has_changed(self):
-        self.storage = cache.Cache()
         res = self.storage.has_changed(
             'hello-world', self.dashboard['hello-world'])
         self.assertTrue(res)
@@ -40,28 +36,10 @@ class TestCaseCache(TestCase):
             'hello-world', self.dashboard['hello-world'])
         self.assertFalse(res)
 
-    def test_cache_disabled_has_changed(self):
-        CONF.cache.enabled = False
-        self.storage = cache.Cache()
-        res = self.storage.has_changed(
-            'hello-world', self.dashboard['hello-world'])
-        self.assertTrue(res)
-        self.storage.set('hello-world', self.dashboard['hello-world'])
-        res = self.storage.has_changed(
-            'hello-world', self.dashboard['hello-world'])
-        self.assertTrue(res)
-
     def test_cache_get_empty(self):
-        self.storage = cache.Cache()
         self.assertEqual(self.storage.get('empty'), None)
 
-    def test_cache_disabled_get_empty(self):
-        CONF.cache.enabled = False
-        self.storage = cache.Cache()
-        self.assertEqual(self.storage.get('disabled'), None)
-
     def test_cache_set_multiple(self):
-        self.storage = cache.Cache()
         self.storage.set('hello-world', self.dashboard['hello-world'])
         self.assertEqual(
             self.storage.get('hello-world'), self.dashboard['hello-world'])
@@ -77,15 +55,6 @@ class TestCaseCache(TestCase):
             self.storage.get('hello-world'), self.dashboard['hello-world'])
 
     def test_cache_set_single(self):
-        self.storage = cache.Cache()
         self.storage.set('hello-world', self.dashboard['hello-world'])
         self.assertEqual(
             self.storage.get('hello-world'), self.dashboard['hello-world'])
-
-    def test_cache_disabled_set_single(self):
-        CONF.cache.enabled = False
-        self.storage = cache.Cache()
-        self.storage.set('hello-world', self.dashboard['hello-world'])
-        # Make sure cache is empty.
-        self.assertEqual(
-            self.storage.get('hello-world'), None)
