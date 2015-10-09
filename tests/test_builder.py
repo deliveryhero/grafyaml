@@ -26,7 +26,7 @@ class TestCaseBuilder(TestCase):
         super(TestCaseBuilder, self).setUp()
         self.builder = builder.Builder(self.config)
 
-    @mock.patch('grafana_dashboards.grafana.Grafana.create_dashboard')
+    @mock.patch('grafana_dashboards.grafana.Dashboard.create')
     def test_update_dashboard(self, mock_grafana):
         dashboard = os.path.join(
             os.path.dirname(__file__), 'fixtures/builder/dashboard-0001.yaml')

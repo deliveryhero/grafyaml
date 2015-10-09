@@ -49,12 +49,12 @@ class TestCaseGrafana(TestCase):
 
     def test_init(self):
         grafana = Grafana(self.url)
-        self.assertNotIn('Authorization', grafana.session.headers)
+        self.assertNotIn('Authorization', grafana.dashboard.session.headers)
 
     def test_init_apikey(self):
         apikey = 'eyJrIjoiT0tTcG1pUlY2RnVKZTFVaDFsNFZXdE9ZWmNrMkZYbk'
         grafana = Grafana(self.url, apikey)
-        headers = grafana.session.headers
+        headers = grafana.dashboard.session.headers
         self.assertIn('Authorization', headers)
         self.assertEqual(headers['Authorization'], 'Bearer %s' % apikey)
 
@@ -64,7 +64,8 @@ class TestCaseGrafana(TestCase):
             '/api/dashboards/db/new-dashboard', json=DASHBOARD_NOT_FOUND,
             status_code=404)
         self.assertRaises(
-            Exception, self.grafana.assert_dashboard_exists, 'new-dashboard')
+            Exception, self.grafana.dashboard.assert_dashboard_exists,
+            'new-dashboard')
 
     @requests_mock.Mocker()
     def test_create_dashboard_new(self, mock_requests):
@@ -84,7 +85,7 @@ class TestCaseGrafana(TestCase):
             },
             "slug": 'new-dashboard',
         }
-        self.grafana.create_dashboard(
+        self.grafana.dashboard.create(
             name=data['slug'], data=data['dashboard'])
         self.assertEqual(mock_requests.call_count, 3)
 
@@ -99,7 +100,7 @@ class TestCaseGrafana(TestCase):
             },
             "slug": 'new-dashboard',
         }
-        self.grafana.create_dashboard(
+        self.grafana.dashboard.create(
             name=data['slug'], data=data['dashboard'], overwrite=True)
         self.assertEqual(mock_requests.call_count, 2)
 
@@ -115,7 +116,7 @@ class TestCaseGrafana(TestCase):
             "slug": 'new-dashboard',
         }
         self.assertRaises(
-            Exception, self.grafana.create_dashboard, name=data['slug'],
+            Exception, self.grafana.dashboard.create, name=data['slug'],
             data=data['dashboard'], overwrite=False)
 
         self.assertEqual(mock_requests.call_count, 1)

@@ -19,33 +19,14 @@ try:
 except ImportError:
     from urlparse import urljoin
 
-import requests
 from requests import exceptions
 
 
-class Grafana(object):
+class Dashboard(object):
 
-    def __init__(self, url, key=None):
-        """Create object for grafana instance
-
-        :param url: URL for Grafana server
-        :type url: str
-        :param key: API token used for authenticate
-        :type key: str
-
-        """
-
-        self.url = urljoin(url, 'api/dashboards/db/')
-        self.session = requests.Session()
-        self.session.headers.update({
-            'Content-Type': 'application/json',
-        })
-        # NOTE(pabelanger): Grafana 2.1.0 added basic auth support so now the
-        # api key is optional.
-        if key:
-            self.session.headers.update({
-                'Authorization': 'Bearer %s' % key,
-            })
+    def __init__(self, url, session):
+        self.url = url
+        self.session = session
 
     def assert_dashboard_exists(self, name):
         """Raise an exception if dashboard does not exist
@@ -58,7 +39,7 @@ class Grafana(object):
         if not self.is_dashboard(name):
             raise Exception('dashboard[%s] does not exist' % name)
 
-    def create_dashboard(self, name, data, overwrite=False):
+    def create(self, name, data, overwrite=False):
         """Create a new dashboard
 
         :param name: URL friendly title of the dashboard
@@ -85,7 +66,7 @@ class Grafana(object):
         res.raise_for_status()
         self.assert_dashboard_exists(name)
 
-    def get_dashboard(self, name):
+    def get(self, name):
         """Get a dashboard
 
         :param name: URL friendly title of the dashboard
@@ -113,7 +94,7 @@ class Grafana(object):
         :rtype: bool
 
         """
-        res = self.get_dashboard(name)
+        res = self.get(name)
         if res and res['meta']['slug'] == name:
             return True
         return False

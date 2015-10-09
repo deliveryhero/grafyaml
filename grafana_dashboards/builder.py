@@ -74,7 +74,7 @@ class Builder(object):
         for name in dashboards:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5) or not self.cache_enabled:
-                self.grafana.create_dashboard(name, data, overwrite=True)
+                self.grafana.dashboard.create(name, data, overwrite=True)
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)
