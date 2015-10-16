@@ -33,13 +33,14 @@ class Builder(object):
             key=config.get('grafana', 'apikey'))
         self.parser = YamlParser()
 
-    def delete_dashboard(self, path):
+    def delete(self, path):
         self.load_files(path)
+        datasources = self.parser.data.get('datasource', {})
+        LOG.info('Number of datasources to be deleted: %d', len(datasources))
+        self._delete_datasource(datasources)
         dashboards = self.parser.data.get('dashboard', {})
-        for name in dashboards:
-            LOG.debug('Deleting grafana dashboard %s', name)
-            self.grafana.dashboard.delete(name)
-            self.cache.set(name, '')
+        LOG.info('Number of dashboards to be deleted: %d', len(dashboards))
+        self._delete_dashboard(dashboards)
 
     def load_files(self, path):
         files_to_process = []
@@ -54,14 +55,49 @@ class Builder(object):
         for fn in files_to_process:
             self.parser.parse(fn)
 
-    def update_dashboard(self, path):
+    def update(self, path):
         self.load_files(path)
+        datasources = self.parser.data.get('datasource', {})
+        LOG.info('Number of datasources to be updated: %d', len(datasources))
+        self._update_datasource(datasources)
         dashboards = self.parser.data.get('dashboard', {})
-        LOG.info('Number of dashboards generated: %d', len(dashboards))
-        for name in dashboards:
+        LOG.info('Number of dashboards to be updated: %d', len(dashboards))
+        self._update_dashboard(dashboards)
+
+    def _delete_dashboard(self, data):
+        for name in data:
+            LOG.debug('Deleting grafana dashboard %s', name)
+            self.grafana.dashboard.delete(name)
+            self.cache.set(name, '')
+
+    def _delete_datasource(self, data):
+        for name in data:
+            LOG.debug('Deleting grafana datasource %s', name)
+            datasource_id = self.grafana.datasource.is_datasource(name)
+            if datasource_id:
+                self.grafana.datasource.delete(datasource_id)
+                self.cache.set(name, '')
+
+    def _update_dashboard(self, data):
+        for name in data:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):
                 self.grafana.dashboard.create(name, data, overwrite=True)
+                self.cache.set(name, md5)
+            else:
+                LOG.debug("'%s' has not changed" % name)
+
+    def _update_datasource(self, data):
+        for name in data:
+            data, md5 = self.parser.get_datasource(name)
+            if self.cache.has_changed(name, md5):
+                # Check for existing datasource so we can find the
+                # datasource_id.
+                datasource_id = self.grafana.datasource.is_datasource(name)
+                if datasource_id:
+                    self.grafana.datasource.update(datasource_id, data)
+                else:
+                    self.grafana.datasource.create(name, data)
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)

@@ -20,7 +20,9 @@ import yaml
 
 from slugify import slugify
 
-from grafana_dashboards.schema.dashboard import Dashboard
+from grafana_dashboards.schema import Schema
+
+LOG = logging.getLogger(__name__)
 
 LOG = logging.getLogger(__name__)
 
@@ -32,12 +34,15 @@ class YamlParser(object):
 
     def get_dashboard(self, slug):
         data = self.data.get('dashboard', {}).get(slug, None)
-        md5 = None
-        if data:
-            # Sort json keys to help our md5 hash are constant.
-            content = json.dumps(data, sort_keys=True)
-            md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+        md5 = self._generate_md5(data)
         LOG.debug('Dashboard %s: %s' % (slug, md5))
+
+        return data, md5
+
+    def get_datasource(self, slug):
+        data = self.data.get('datasource', {}).get(slug, None)
+        md5 = self._generate_md5(data)
+        LOG.debug('Datasource %s: %s' % (slug, md5))
 
         return data, md5
 
@@ -51,15 +56,26 @@ class YamlParser(object):
         for item in result.items():
             group = self.data.get(item[0], {})
             # Create slug to make it easier to find dashboards.
-            title = item[1]['title']
-            slug = slugify(title)
+            if item[0] == 'dashboard':
+                name = item[1]['title']
+            else:
+                name = item[1]['name']
+            slug = slugify(name)
             if slug in group:
                 raise Exception(
-                    "Duplicate dashboard found in '{0}: '{1}' "
-                    "already defined".format(fp.name, title))
+                    "Duplicate {0} found in '{1}: '{2}' "
+                    "already defined".format(item[0], fp.name, name))
             group[slug] = item[1]
             self.data[item[0]] = group
 
     def validate(self, data):
-        schema = Dashboard()
+        schema = Schema()
         return schema.validate(data)
+
+    def _generate_md5(self, data):
+        md5 = None
+        if data:
+            # Sort json keys to help our md5 hash are constant.
+            content = json.dumps(data, sort_keys=True)
+            md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+        return md5

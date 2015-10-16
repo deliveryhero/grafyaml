@@ -12,15 +12,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
-
-from testscenarios.testcase import TestWithScenarios
-from testtools import TestCase
-
-from tests.base import get_scenarios
-from tests.schema.base import TestCase as BaseTestCase
+import voluptuous as v
 
 
-class TestCaseSchemaDashboard(TestWithScenarios, TestCase, BaseTestCase):
-    fixtures_path = os.path.join(os.path.dirname(__file__), 'fixtures')
-    scenarios = get_scenarios(fixtures_path)
+class Datasource(object):
+
+    def get_schema(self):
+        datasource = {
+            v.Required('access', default='direct'): v.Any('direct', 'proxy'),
+            v.Required('isDefault', default=False): v.All(bool),
+            v.Required('name'): v.All(str, v.Length(min=1)),
+            v.Required('type', default='graphite'): v.Any('graphite'),
+            v.Required('url'): v.All(str, v.Length(min=1)),
+            v.Optional('orgId'): int,
+        }
+        return datasource

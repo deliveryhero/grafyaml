@@ -12,18 +12,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import voluptuous as v
+import os
 
-from grafana_dashboards.schema.row import Row
+from testscenarios.testcase import TestWithScenarios
+from testtools import TestCase
+
+from tests.base import get_scenarios
+from tests.schema.base import TestCase as BaseTestCase
 
 
-class Dashboard(object):
-
-    def get_schema(self):
-        dashboard = {
-            v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Optional('id'): int,
-        }
-        rows = Row().get_schema()
-        dashboard.update(rows.schema)
-        return dashboard
+class TestCaseSchema(TestWithScenarios, TestCase, BaseTestCase):
+    fixtures_path = os.path.join(os.path.dirname(__file__), 'fixtures')
+    scenarios = get_scenarios(fixtures_path)

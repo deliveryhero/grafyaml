@@ -12,14 +12,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
-
 import requests
 
 from grafana_dashboards.grafana.dashboard import Dashboard
+from grafana_dashboards.grafana.datasource import Datasource
 
 
 class Grafana(object):
@@ -36,7 +32,6 @@ class Grafana(object):
         self.server = url
         self.auth = None
 
-        base_url = urljoin(self.server, 'api/dashboards/db/')
         session = requests.Session()
         session.headers.update({
             'Content-Type': 'application/json',
@@ -47,4 +42,5 @@ class Grafana(object):
             self.auth = {'Authorization': 'Bearer %s' % key}
             session.headers.update(self.auth)
 
-        self.dashboard = Dashboard(base_url, session)
+        self.dashboard = Dashboard(self.server, session)
+        self.datasource = Datasource(self.server, session)

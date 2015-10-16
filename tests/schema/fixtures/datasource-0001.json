@@ -1,0 +1,11 @@
+{
+    "datasource": {
+        "new-datasource": {
+            "access": "direct",
+            "isDefault": false,
+            "name": "New datasource",
+            "type": "graphite",
+            "url": "http://example.org"
+        }
+    }
+}

@@ -27,9 +27,9 @@ LOG = logging.getLogger(__name__)
 class Client(object):
 
     def delete(self):
-        LOG.info('Deleting dashboards in %s', self.args.path)
+        LOG.info('Deleting schema in %s', self.args.path)
         builder = Builder(self.config)
-        builder.delete_dashboard(self.args.path)
+        builder.delete(self.args.path)
 
     def main(self):
         self.parse_arguments()
@@ -90,12 +90,12 @@ class Client(object):
             logging.basicConfig(level=logging.INFO)
 
     def update(self):
-        LOG.info('Updating dashboards in %s', self.args.path)
+        LOG.info('Updating schema in %s', self.args.path)
         builder = Builder(self.config)
-        builder.update_dashboard(self.args.path)
+        builder.update(self.args.path)
 
     def validate(self):
-        LOG.info('Validating dashboards in %s', self.args.path)
+        LOG.info('Validating schema in %s', self.args.path)
         # NOTE(pabelanger): Disable caching support by default, in an effort
         # to improve performance.
         self.config.set('cache', 'enabled', 'false')

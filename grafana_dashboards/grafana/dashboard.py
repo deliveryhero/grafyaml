@@ -14,18 +14,15 @@
 
 import json
 
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
-
 from requests import exceptions
+
+from grafana_dashboards.grafana import utils
 
 
 class Dashboard(object):
 
     def __init__(self, url, session):
-        self.url = url
+        self.url = utils.urljoin(url, 'api/dashboards/db/')
         self.session = session
 
     def create(self, name, data, overwrite=False):
@@ -64,7 +61,7 @@ class Dashboard(object):
         :raises Exception: if dashboard failed to delete
 
         """
-        url = urljoin(self.url, name)
+        url = utils.urljoin(self.url, name)
         self.session.delete(url)
         if self.is_dashboard(name):
             raise Exception('dashboard[%s] failed to delete' % name)
@@ -78,7 +75,7 @@ class Dashboard(object):
         :rtype: dict or None
 
         """
-        url = urljoin(self.url, name)
+        url = utils.urljoin(self.url, name)
         try:
             res = self.session.get(url)
             res.raise_for_status()

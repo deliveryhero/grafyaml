@@ -12,18 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import voluptuous as v
-
-from grafana_dashboards.schema.row import Row
-
-
-class Dashboard(object):
-
-    def get_schema(self):
-        dashboard = {
-            v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Optional('id'): int,
-        }
-        rows = Row().get_schema()
-        dashboard.update(rows.schema)
-        return dashboard
+try:
+    from urllib.parse import urljoin  # noqa
+except ImportError:
+    from urlparse import urljoin  # noqa

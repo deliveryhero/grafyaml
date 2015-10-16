@@ -36,7 +36,7 @@ class TestCaseBuilder(TestCase):
         # Create a new builder to avoid duplicate dashboards.
         builder2 = builder.Builder(self.config)
         # Delete same dashboard, ensure we delete it from grafana.
-        builder2.delete_dashboard(path)
+        builder2.delete(path)
         self.assertEqual(mock_grafana.call_count, 1)
 
     def test_grafana_defaults(self):
@@ -54,11 +54,56 @@ class TestCaseBuilder(TestCase):
         # Create a new builder to avoid duplicate dashboards.
         builder2 = builder.Builder(self.config)
         # Update again with same dashboard, ensure we don't update grafana.
-        builder2.update_dashboard(path)
+        builder2.update(path)
         self.assertEqual(mock_grafana.call_count, 0)
 
+    @mock.patch('grafana_dashboards.grafana.Datasource.create')
+    def test_create_datasource(self, mock_grafana):
+        path = os.path.join(
+            os.path.dirname(__file__), 'fixtures/builder/datasource-0001.yaml')
+
+        # Create a datasource.
+        self._create_datasource(path)
+        # Create a new builder to avoid duplicate datasources.
+        builder2 = builder.Builder(self.config)
+        # Update again with same datasource, ensure we don't update grafana.
+        builder2.update(path)
+        self.assertEqual(mock_grafana.call_count, 0)
+
+    @mock.patch(
+        'grafana_dashboards.grafana.Datasource.is_datasource',
+        return_value=True)
+    @mock.patch('grafana_dashboards.grafana.Datasource.update')
+    def test_update_datasource(self, mock_is_datasource, mock_update):
+        path = os.path.join(
+            os.path.dirname(__file__), 'fixtures/builder/datasource-0001.yaml')
+
+        # Create a datasource.
+        self._create_datasource(path)
+        # Create a new builder to avoid duplicate datasources.
+        builder2 = builder.Builder(self.config)
+
+        # Same datasource name, different content.
+        path = os.path.join(
+            os.path.dirname(__file__), 'fixtures/builder/datasource-0002.yaml')
+
+        # Update again with same datasource, ensure we update grafana.
+        builder2.update(path)
+        self.assertEqual(mock_is_datasource.call_count, 1)
+        self.assertEqual(mock_update.call_count, 1)
+
     @mock.patch('grafana_dashboards.grafana.Dashboard.create')
-    def _update_dashboard(self, path, mock_grafana):
-        self.builder.update_dashboard(path)
+    def _update_dashboard(self, path, mock_create):
+        self.builder.update(path)
         # Cache is empty, so we should update grafana.
-        self.assertEqual(mock_grafana.call_count, 1)
+        self.assertEqual(mock_create.call_count, 1)
+
+    @mock.patch(
+        'grafana_dashboards.grafana.Datasource.is_datasource',
+        return_value=False)
+    @mock.patch('grafana_dashboards.grafana.Datasource.create')
+    def _create_datasource(self, path, mock_is_datasource, mock_create):
+        self.builder.update(path)
+        # Cache is empty, so we should update grafana.
+        self.assertEqual(mock_is_datasource.call_count, 1)
+        self.assertEqual(mock_create.call_count, 1)
