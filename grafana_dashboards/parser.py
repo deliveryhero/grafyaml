@@ -15,11 +15,14 @@
 import hashlib
 import io
 import json
+import logging
 import yaml
 
 from slugify import slugify
 
 from grafana_dashboards.schema.dashboard import Dashboard
+
+LOG = logging.getLogger(__name__)
 
 
 class YamlParser(object):
@@ -31,8 +34,10 @@ class YamlParser(object):
         data = self.data.get('dashboard', {}).get(slug, None)
         md5 = None
         if data:
-            content = json.dumps(data)
+            # Sort json keys to help our md5 hash are constant.
+            content = json.dumps(data, sort_keys=True)
             md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+        LOG.debug('Dashboard %s: %s' % (slug, md5))
 
         return data, md5
 
