@@ -8,3 +8,7 @@ AUTHORS
 ChangeLog
 cover/
 doc/build/
+
+# Editors
+*~
+.*.swp
