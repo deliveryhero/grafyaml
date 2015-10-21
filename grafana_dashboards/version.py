@@ -14,4 +14,4 @@
 
 from pbr.version import VersionInfo
 
-version_info = VersionInfo('grafana-dashboards')
+version_info = VersionInfo('grafyaml')
