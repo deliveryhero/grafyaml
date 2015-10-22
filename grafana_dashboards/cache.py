@@ -22,16 +22,19 @@ LOG = logging.getLogger(__name__)
 
 class Cache(object):
 
-    def __init__(self, cachedir):
-        cache_dir = self._get_cache_dir(cachedir)
-        filename = os.path.join(cache_dir, 'cache.dbm')
-        LOG.debug('Using cache: %s' % filename)
-        self.region = make_region().configure(
-            'dogpile.cache.dbm',
-            arguments={
+    def __init__(self, cachedir, enabled=True):
+        if enabled:
+            backend = 'dogpile.cache.dbm'
+            cache_dir = self._get_cache_dir(cachedir)
+            filename = os.path.join(cache_dir, 'cache.dbm')
+            LOG.debug('Using cache: %s' % filename)
+            arguments = {
                 'filename': filename,
             }
-        )
+        else:
+            backend = 'dogpile.cache.null'
+            arguments = {}
+        self.region = make_region().configure(backend, arguments=arguments)
 
     def get(self, title):
         res = self.region.get(title)
