@@ -24,10 +24,12 @@ class Cache(object):
 
     def __init__(self, cachedir):
         cache_dir = self._get_cache_dir(cachedir)
+        filename = os.path.join(cache_dir, 'cache.dbm')
+        LOG.debug('Using cache: %s' % filename)
         self.region = make_region().configure(
             'dogpile.cache.dbm',
             arguments={
-                'filename': os.path.join(cache_dir, 'cache.dbm')
+                'filename': filename,
             }
         )
 
