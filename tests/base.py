@@ -23,8 +23,9 @@ import shutil
 import tempfile
 
 import fixtures
-from six.moves import configparser as ConfigParser
 import testtools
+
+from grafana_dashboards.config import Config
 
 FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), 'fixtures')
@@ -65,7 +66,7 @@ class TestCase(testtools.TestCase):
         self.addCleanup(self.cleanup_cachedir)
 
     def setup_config(self):
-        self.config = ConfigParser.ConfigParser()
+        self.config = Config()
         self.config.read(os.path.join(FIXTURE_DIR, 'grafyaml.conf'))
 
     def cleanup_cachedir(self):

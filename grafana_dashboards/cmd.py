@@ -17,9 +17,8 @@ import logging
 import os
 import sys
 
-from six.moves import configparser as ConfigParser
-
 from grafana_dashboards.builder import Builder
+from grafana_dashboards.config import Config
 from grafana_dashboards import version
 
 LOG = logging.getLogger(__name__)
@@ -77,7 +76,7 @@ class Client(object):
         self.args = parser.parse_args()
 
     def read_config(self):
-        self.config = ConfigParser.ConfigParser()
+        self.config = Config()
         if self.args.config:
             fp = self.args.config
         else:

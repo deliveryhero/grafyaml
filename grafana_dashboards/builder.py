@@ -25,34 +25,11 @@ LOG = logging.getLogger(__name__)
 class Builder(object):
 
     def __init__(self, config):
-        self.grafana = self._setup_grafana(config)
+        self.grafana = Grafana(
+            config.get('grafana', 'apikey'), config.get('grafana', 'url'))
         self.parser = YamlParser()
-        self.cache = self._setup_cache(config)
-
-    def _setup_cache(self, config):
-        if config.has_option('cache', 'enabled'):
-            self.cache_enabled = config.getboolean('cache', 'enabled')
-        else:
-            self.cache_enabled = True
-
-        if config.has_option('cache', 'cachedir'):
-            cachedir = config.get('cache', 'cachedir')
-        else:
-            cachedir = '~/.cache/grafyaml'
-
-        return Cache(cachedir)
-
-    def _setup_grafana(self, config):
-        if config.has_option('grafana', 'apikey'):
-            key = config.get('grafana', 'apikey')
-        else:
-            key = None
-
-        if config.has_option('grafana', 'url'):
-            url = config.get('grafana', 'url')
-        else:
-            url = 'http://localhost:8080'
-        return Grafana(url, key)
+        self.cache_enabled = config.getboolean('cache', 'enabled')
+        self.cache = Cache(config.get('cache', 'cachedir'))
 
     def delete_dashboard(self, path):
         self.load_files(path)
