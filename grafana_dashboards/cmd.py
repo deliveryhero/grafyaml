@@ -96,6 +96,9 @@ class Client(object):
 
     def validate(self):
         LOG.info('Validating dashboards in %s', self.args.path)
+        # NOTE(pabelanger): Disable caching support by default, in an effort
+        # to improve performance.
+        self.config.set('cache', 'enabled', 'false')
         builder = Builder(self.config)
 
         try:
