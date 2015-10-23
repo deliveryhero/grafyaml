@@ -27,6 +27,11 @@ LOG = logging.getLogger(__name__)
 
 class Client(object):
 
+    def delete(self):
+        LOG.info('Deleting dashboards in %s', self.args.path)
+        builder = Builder(self.config)
+        builder.delete_dashboard(self.args.path)
+
     def main(self):
         self.parse_arguments()
         self.read_config()
@@ -50,6 +55,12 @@ class Client(object):
 
         subparsers = parser.add_subparsers(
             title='commands')
+
+        parser_delete = subparsers.add_parser('delete')
+        parser_delete.add_argument(
+            'path', help='colon-separated list of paths to YAML files or'
+            ' directories')
+        parser_delete.set_defaults(func=self.delete)
 
         parser_update = subparsers.add_parser('update')
         parser_update.add_argument(
@@ -87,6 +98,7 @@ class Client(object):
     def validate(self):
         LOG.info('Validating dashboards in %s', self.args.path)
         builder = Builder(self.config)
+
         try:
             builder.load_files(self.args.path)
             print('SUCCESS!')

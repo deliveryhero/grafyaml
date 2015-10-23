@@ -54,6 +54,14 @@ class Builder(object):
             url = 'http://localhost:8080'
         return Grafana(url, key)
 
+    def delete_dashboard(self, path):
+        self.load_files(path)
+        dashboards = self.parser.data.get('dashboard', {})
+        for name in dashboards:
+            LOG.debug('Deleting grafana dashboard %s', name)
+            self.grafana.dashboard.delete(name)
+            self.cache.set(name, '')
+
     def load_files(self, path):
         files_to_process = []
         if os.path.isdir(path):

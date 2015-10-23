@@ -26,6 +26,13 @@ OPTIONS
 COMMANDS
 ========
 
+Delete Command
+--------------
+
+``grafana-dashboard`` [options] delete <path>
+
+Delete each specified dashboard from the parsed yaml files.
+
 Update Command
 --------------
 
