@@ -39,6 +39,11 @@ class TestCaseBuilder(TestCase):
         builder2.delete_dashboard(path)
         self.assertEqual(mock_grafana.call_count, 1)
 
+    def test_grafana_defaults(self):
+        self.assertEqual(
+            self.builder.grafana.server, 'http://grafana.example.org')
+        self.assertEqual(self.builder.grafana.auth, None)
+
     @mock.patch('grafana_dashboards.grafana.Dashboard.create')
     def test_update_dashboard(self, mock_grafana):
         path = os.path.join(

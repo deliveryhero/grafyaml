@@ -33,8 +33,10 @@ class Grafana(object):
         :type key: str
 
         """
+        self.server = url
+        self.auth = None
 
-        base_url = urljoin(url, 'api/dashboards/db/')
+        base_url = urljoin(self.server, 'api/dashboards/db/')
         session = requests.Session()
         session.headers.update({
             'Content-Type': 'application/json',
@@ -42,8 +44,7 @@ class Grafana(object):
         # NOTE(pabelanger): Grafana 2.1.0 added basic auth support so now the
         # api key is optional.
         if key:
-            session.headers.update({
-                'Authorization': 'Bearer %s' % key,
-            })
+            self.auth = {'Authorization': 'Bearer %s' % key}
+            session.headers.update(self.auth)
 
         self.dashboard = Dashboard(base_url, session)

@@ -29,7 +29,8 @@ class Builder(object):
             config.get('cache', 'cachedir'),
             config.getboolean('cache', 'enabled'))
         self.grafana = Grafana(
-            config.get('grafana', 'apikey'), config.get('grafana', 'url'))
+            url=config.get('grafana', 'url'),
+            key=config.get('grafana', 'apikey'))
         self.parser = YamlParser()
 
     def delete_dashboard(self, path):
