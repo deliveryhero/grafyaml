@@ -13,6 +13,10 @@
                             "editable": true,
                             "error": false,
                             "maxDataPoints": 100,
+                            "postfix": "",
+                            "postfixFontSize": "50%",
+                            "prefix": "",
+                            "prefixFontSize": "50%",
                             "span": 12,
                             "sparkline": {
                                 "fillColor": "rgba(31, 118, 189, 0.18)",
@@ -24,6 +28,7 @@
                             "thresholds": "",
                             "title": "no title (click here)",
                             "type": "singlestat",
+                            "valueFontSize": "80%",
                             "valueName": "avg"
                         }
                     ],
