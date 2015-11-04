@@ -60,7 +60,7 @@ class Singlestat(Base):
             v.Required(
                 'valueFontSize', default='80%'): v.All(
                     v.Match(r'^[1-9]?[0]{1}%$|^1[0-9]?[0]{1}%$|^200%$')),
-            v.Required('valueName', default='avg'): v.All(
+            v.Required('valueName', default='avg'): v.Any(
                 'avg', 'current', 'max', 'min', 'total'),
             v.Optional('decimals'): v.All(int, v.Range(min=0, max=12)),
         }
