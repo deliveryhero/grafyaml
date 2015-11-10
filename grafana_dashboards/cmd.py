@@ -17,9 +17,9 @@ import logging
 import os
 import sys
 
+from grafana_dashboards import __version__
 from grafana_dashboards.builder import Builder
 from grafana_dashboards.config import Config
-from grafana_dashboards import version
 
 LOG = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class Client(object):
             ' of default INFO level)')
         parser.add_argument(
             '--version', dest='version', action='version',
-            version=version.version_info.release_string(), help="show "
+            version=__version__, help="show "
             "program's version number and exit")
 
         subparsers = parser.add_subparsers(
