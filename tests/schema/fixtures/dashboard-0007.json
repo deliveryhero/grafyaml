@@ -41,6 +41,7 @@
                     "title": "bar"
                 }
             ],
+            "timezone": "utc",
             "title": "New dashboard"
         }
     }

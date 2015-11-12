@@ -21,6 +21,7 @@
                     "title": "New row"
                 }
             ],
+            "timezone": "utc",
             "title": "New dashboard"
         }
     }
