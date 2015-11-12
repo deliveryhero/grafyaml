@@ -24,8 +24,6 @@ from grafana_dashboards.schema import Schema
 
 LOG = logging.getLogger(__name__)
 
-LOG = logging.getLogger(__name__)
-
 
 class YamlParser(object):
 
