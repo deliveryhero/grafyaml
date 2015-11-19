@@ -33,8 +33,16 @@ class TestCaseParser(TestCase):
             os.path.dirname(__file__), 'fixtures/parser/dashboard-0001.yaml')
         self.parser.parse(path)
         dashboard = {
-            'foobar': {'rows': [], 'title': 'foobar'},
-            'new-dashboard': {'rows': [], 'title': 'New dashboard'},
+            'foobar': {
+                'rows': [],
+                'timezone': 'utc',
+                'title': 'foobar',
+            },
+            'new-dashboard': {
+                'rows': [],
+                'timezone': 'utc',
+                'title': 'New dashboard',
+            },
         }
 
         # Get parsed dashboard
@@ -61,7 +69,11 @@ class TestCaseParser(TestCase):
             os.path.dirname(__file__), 'fixtures/parser/dashboard-0001.yaml')
         self.parser.parse(path)
         dashboard = {
-            'new-dashboard': {'rows': [], 'title': 'New dashboard'},
+            'new-dashboard': {
+                'rows': [],
+                'timezone': 'utc',
+                'title': 'New dashboard',
+            },
         }
 
         # Get parsed dashboard
