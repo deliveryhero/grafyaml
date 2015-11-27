@@ -35,11 +35,19 @@ class TestCaseParser(TestCase):
         dashboard = {
             'foobar': {
                 'rows': [],
+                'templating': {
+                    'enabled': False,
+                    'list': [],
+                },
                 'timezone': 'utc',
                 'title': 'foobar',
             },
             'new-dashboard': {
                 'rows': [],
+                'templating': {
+                    'enabled': False,
+                    'list': [],
+                },
                 'timezone': 'utc',
                 'title': 'New dashboard',
             },
@@ -71,6 +79,10 @@ class TestCaseParser(TestCase):
         dashboard = {
             'new-dashboard': {
                 'rows': [],
+                'templating': {
+                    'enabled': False,
+                    'list': [],
+                },
                 'timezone': 'utc',
                 'title': 'New dashboard',
             },

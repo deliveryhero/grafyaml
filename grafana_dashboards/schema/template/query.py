@@ -14,21 +14,17 @@
 
 import voluptuous as v
 
-from grafana_dashboards.schema.row import Row
-from grafana_dashboards.schema.template import Template
+from grafana_dashboards.schema.template.base import Base
 
 
-class Dashboard(object):
+class Query(Base):
 
     def get_schema(self):
-        dashboard = {
-            v.Required('timezone', default='utc'): v.Any('browser', 'utc'),
-            v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Optional('id'): int,
+        query = {
+            v.Required('includeAll', default=False): v.All(bool),
+            v.Required('multi', default=False): v.All(bool),
+            v.Required('query', default=''): v.All(str),
+            v.Required('refresh', default=False): v.All(bool),
         }
-        rows = Row().get_schema()
-        dashboard.update(rows.schema)
-        templating = Template().get_schema()
-        dashboard.update(templating.schema)
-
-        return dashboard
+        query.update(self.base)
+        return v.Schema(query)

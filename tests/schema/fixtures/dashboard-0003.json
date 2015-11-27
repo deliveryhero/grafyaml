@@ -23,6 +23,10 @@
                     "title": "New row"
                 }
             ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
             "timezone": "utc",
             "title": "New dashboard"
         }

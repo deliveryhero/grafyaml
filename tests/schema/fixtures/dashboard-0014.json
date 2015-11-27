@@ -1,0 +1,22 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "includeAll": false,
+                        "multi": false,
+                        "name": "foobar",
+                        "query": "foobar.*",
+                        "refresh": false,
+                        "type": "query"
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

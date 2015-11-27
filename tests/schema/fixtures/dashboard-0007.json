@@ -41,6 +41,10 @@
                     "title": "bar"
                 }
             ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
             "timezone": "utc",
             "title": "New dashboard"
         }

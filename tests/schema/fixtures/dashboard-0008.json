@@ -2,6 +2,10 @@
     "dashboard": {
         "new-dashboard": {
             "rows": [],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
             "timezone": "browser",
             "title": "New dashboard"
         }
