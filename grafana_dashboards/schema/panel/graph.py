@@ -33,6 +33,8 @@ class Graph(Base):
             v.Required('targets', default=[]): v.All(list),
             v.Required('x-axis', default=True): v.All(bool),
             v.Required('y-axis', default=True): v.All(bool),
+            v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
+            v.Optional('rightYAxisLabel'): v.All(str, v.Length(min=1)),
         }
         graph.update(self.base)
         return v.Schema(graph)
