@@ -1,0 +1,43 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "bars": false,
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "lines": true,
+                            "linewidth": 2,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [],
+                            "title": "no title (click here)",
+                            "tooltip": {
+                                "query_as_alias": true,
+                                "shared": true,
+                                "value_type": "individual"
+                            },
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

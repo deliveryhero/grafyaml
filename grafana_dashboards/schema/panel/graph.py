@@ -85,23 +85,31 @@ class Graph(Base):
         y_formats = [y_format]
 
         null_point_modes = v.Any('connected', 'null', 'null as zero')
+        value_types = v.Any('individual', 'cumulative')
+
+        tooltip = {
+            v.Required('query_as_alias', default=True): v.All(bool),
+            v.Required('shared', default=True): v.All(bool),
+            v.Required('value_type', default='cumulative'): v.All(value_types),
+        }
 
         graph = {
             v.Required('bars', default=False): v.All(bool),
             v.Required('fill', default=1): v.All(int),
+            v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
             v.Required('lines', default=True): v.All(bool),
             v.Required('linewidth', default=2): v.All(int),
+            v.Optional('nullPointMode'): v.All(null_point_modes),
             v.Required('percentage', default=False): v.All(bool),
             v.Required('pointradius', default=5): v.All(int),
             v.Required('points', default=False): v.All(bool),
+            v.Optional('rightYAxisLabel'): v.All(str, v.Length(min=1)),
             v.Required('stack', default=False): v.All(bool),
             v.Required('steppedLine', default=False): v.All(bool),
             v.Required('targets', default=[]): v.All(list),
+            v.Optional('tooltip'): v.All(tooltip),
             v.Required('x-axis', default=True): v.All(bool),
             v.Required('y-axis', default=True): v.All(bool),
-            v.Optional('nullPointMode'): v.All(null_point_modes),
-            v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
-            v.Optional('rightYAxisLabel'): v.All(str, v.Length(min=1)),
             v.Optional('y_formats'): v.All(y_formats, v.Length(min=2, max=2)),
         }
         graph.update(self.base)
