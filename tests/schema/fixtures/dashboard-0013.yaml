@@ -1,0 +1,27 @@
+dashboard:
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
+            seriesOverrides:
+              - alias: foo
+                bars: True
+                lines: True
+                fill: 5
+                width: 5
+                nullPointMode: null as zero
+                fillBelowTo: something
+                steppedLine: True
+                points: True
+                pointsradius: 3
+                stack: True
+                color: '#ff00ff'
+                yaxis: 2
+                zindex: 1
+                transform: negative-Y
+                legend: True
+              - alias: bar
+                stack: A

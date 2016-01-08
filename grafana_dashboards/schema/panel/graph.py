@@ -93,6 +93,26 @@ class Graph(Base):
             v.Required('value_type', default='cumulative'): v.All(value_types),
         }
 
+        series_override = {
+            v.Required('alias'): v.All(str, v.Length(min=1)),
+            v.Optional('bars'): v.All(bool),
+            v.Optional('lines'): v.All(bool),
+            v.Optional('fill'): v.All(int, v.Range(min=1, max=10)),
+            v.Optional('width'): v.All(int, v.Range(min=1, max=10)),
+            v.Optional('nullPointMode'): v.All(null_point_modes),
+            v.Optional('fillBelowTo'): v.All(str),
+            v.Optional('steppedLine'): v.All(bool),
+            v.Optional('points'): v.All(bool),
+            v.Optional('pointsradius'): v.All(int, v.Range(min=1, max=5)),
+            v.Optional('stack'): v.All(v.Any(bool, 'A', 'B', 'C', 'D')),
+            v.Optional('color'): v.All(str),
+            v.Optional('yaxis'): v.All(int, v.Range(min=1, max=2)),
+            v.Optional('zindex'): v.All(int, v.Range(min=-3, max=3)),
+            v.Optional('transform'): v.All(v.Any('negative-Y')),
+            v.Optional('legend'): v.All(bool),
+        }
+        series_overrides = [series_override]
+
         graph = {
             v.Required('bars', default=False): v.All(bool),
             v.Required('fill', default=1): v.All(int),
@@ -104,6 +124,8 @@ class Graph(Base):
             v.Required('pointradius', default=5): v.All(int),
             v.Required('points', default=False): v.All(bool),
             v.Optional('rightYAxisLabel'): v.All(str, v.Length(min=1)),
+            v.Optional('seriesOverrides'): v.All(series_overrides,
+                                                 v.Length(min=1)),
             v.Required('stack', default=False): v.All(bool),
             v.Required('steppedLine', default=False): v.All(bool),
             v.Required('targets', default=[]): v.All(list),

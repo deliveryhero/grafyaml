@@ -1,0 +1,62 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "bars": false,
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "lines": true,
+                            "linewidth": 2,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "seriesOverrides": [
+                                {
+                                    "alias": "foo",
+                                    "bars": true,
+                                    "color": "#ff00ff",
+                                    "fill": 5,
+                                    "fillBelowTo": "something",
+                                    "legend": true,
+                                    "lines": true,
+                                    "nullPointMode": "null as zero",
+                                    "points": true,
+                                    "pointsradius": 3,
+                                    "stack": true,
+                                    "steppedLine": true,
+                                    "transform": "negative-Y",
+                                    "width": 5,
+                                    "yaxis": 2,
+                                    "zindex": 1
+                                },
+                                {
+                                    "alias": "bar",
+                                    "stack": "A"
+                                }
+                            ],
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [],
+                            "title": "no title (click here)",
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
