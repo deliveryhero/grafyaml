@@ -1,0 +1,91 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "allFormat": "glob",
+                        "auto": true,
+                        "auto_count": 10,
+                        "current": {
+                            "text": "auto",
+                            "value": "$__auto_interval"
+                        },
+                        "datasource": null,
+                        "hideLabel": false,
+                        "includeAll": false,
+                        "label": "",
+                        "multi": false,
+                        "multiFormat": "glob",
+                        "name": "auto_summarize",
+                        "options": [
+                            {
+                                "selected": true,
+                                "text": "auto",
+                                "value": "$__auto_interval"
+                            },
+                            {
+                                "selected": false,
+                                "text": "1m",
+                                "value": "1m"
+                            },
+                            {
+                                "selected": false,
+                                "text": "1h",
+                                "value": "1h"
+                            },
+                            {
+                                "selected": false,
+                                "text": "1d",
+                                "value": "1d"
+                            }
+                        ],
+                        "query": "1m,1h,1d",
+                        "refresh": false,
+                        "type": "interval"
+                    },
+                    {
+                        "allFormat": "glob",
+                        "auto": false,
+                        "auto_count": 10,
+                        "current": {
+                            "text": "1m",
+                            "value": "1m"
+                        },
+                        "datasource": null,
+                        "hideLabel": false,
+                        "includeAll": false,
+                        "label": "",
+                        "multi": false,
+                        "multiFormat": "glob",
+                        "name": "summarize",
+                        "options": [
+                            {
+                                "selected": true,
+                                "text": "1m",
+                                "value": "1m"
+                            },
+                            {
+                                "selected": false,
+                                "text": "1h",
+                                "value": "1h"
+                            },
+                            {
+                                "selected": false,
+                                "text": "1d",
+                                "value": "1d"
+                            }
+                        ],
+                        "query": "1m,1h,1d",
+                        "refresh": false,
+                        "type": "interval"
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

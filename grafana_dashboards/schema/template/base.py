@@ -20,7 +20,7 @@ class Base(object):
     def __init__(self):
         self.base = {
             v.Required('name'): v.All(str, v.Length(min=1)),
-            v.Required('type'): v.Any('query'),
+            v.Required('type'): v.Any('query', 'interval'),
         }
 
     def get_schema(self):

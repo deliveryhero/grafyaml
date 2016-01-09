@@ -1,0 +1,16 @@
+dashboard:
+  templating:
+    - name: auto_summarize
+      type: interval
+      options:
+        - auto
+        - 1m
+        - 1h
+        - 1d
+    - name: summarize
+      type: interval
+      options:
+        - 1m
+        - 1h
+        - 1d
+  title: New dashboard
