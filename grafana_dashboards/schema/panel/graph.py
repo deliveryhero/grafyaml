@@ -97,7 +97,7 @@ class Graph(Base):
             v.Required('alias'): v.All(str, v.Length(min=1)),
             v.Optional('bars'): v.All(bool),
             v.Optional('lines'): v.All(bool),
-            v.Optional('fill'): v.All(int, v.Range(min=1, max=10)),
+            v.Optional('fill'): v.All(int, v.Range(min=0, max=10)),
             v.Optional('width'): v.All(int, v.Range(min=1, max=10)),
             v.Optional('nullPointMode'): v.All(null_point_modes),
             v.Optional('fillBelowTo'): v.All(str),

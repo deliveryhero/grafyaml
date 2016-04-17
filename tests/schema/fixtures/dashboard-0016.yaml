@@ -1,0 +1,12 @@
+dashboard:
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
+            seriesOverrides:
+              - alias: foo
+                fill: 0
+                lines: True
