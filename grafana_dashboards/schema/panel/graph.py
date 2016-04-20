@@ -116,6 +116,7 @@ class Graph(Base):
         graph = {
             v.Required('bars', default=False): v.All(bool),
             v.Required('fill', default=1): v.All(int),
+            v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
             v.Required('lines', default=True): v.All(bool),
             v.Required('linewidth', default=2): v.All(int),
@@ -129,6 +130,8 @@ class Graph(Base):
             v.Required('stack', default=False): v.All(bool),
             v.Required('steppedLine', default=False): v.All(bool),
             v.Required('targets', default=[]): v.All(list),
+            v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
+            v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('tooltip'): v.All(tooltip),
             v.Required('x-axis', default=True): v.All(bool),
             v.Required('y-axis', default=True): v.All(bool),
