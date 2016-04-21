@@ -1,0 +1,48 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "colorBackground": false,
+                            "colorValue": false,
+                            "datasource": "graphite",
+                            "editable": true,
+                            "error": false,
+                            "maxDataPoints": 100,
+                            "postfix": "",
+                            "postfixFontSize": "50%",
+                            "prefix": "",
+                            "prefixFontSize": "50%",
+                            "span": 12,
+                            "sparkline": {
+                                "fillColor": "rgba(31, 118, 189, 0.18)",
+                                "full": false,
+                                "lineColor": "rgb(31, 120, 193)",
+                                "show": false
+                            },
+                            "targets": [],
+                            "thresholds": "",
+                            "title": "no title (click here)",
+                            "type": "singlestat",
+                            "valueFontSize": "80%",
+                            "valueName": "avg"
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

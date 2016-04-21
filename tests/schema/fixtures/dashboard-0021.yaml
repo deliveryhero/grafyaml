@@ -1,0 +1,17 @@
+dashboard:
+  templating:
+    - name: hostname
+      type: query
+      datasource: graphite
+      query: node*
+      refresh: true
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
+            datasource: graphite
+            targets:
+              - target: $hostname.Cpu.cpu_prct_used

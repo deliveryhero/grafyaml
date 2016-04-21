@@ -115,6 +115,7 @@ class Graph(Base):
 
         graph = {
             v.Required('bars', default=False): v.All(bool),
+            v.Optional('datasource'): v.All(str),
             v.Required('fill', default=1): v.All(int),
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),

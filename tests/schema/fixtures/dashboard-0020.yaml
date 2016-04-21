@@ -1,0 +1,9 @@
+dashboard:
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: singlestat
+            datasource: graphite

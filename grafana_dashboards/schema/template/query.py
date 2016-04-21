@@ -25,6 +25,7 @@ class Query(Base):
             v.Required('multi', default=False): v.All(bool),
             v.Required('query', default=''): v.All(str),
             v.Required('refresh', default=False): v.All(bool),
+            v.Optional('datasource'): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)
