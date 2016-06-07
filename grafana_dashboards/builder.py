@@ -44,13 +44,15 @@ class Builder(object):
 
     def load_files(self, path):
         files_to_process = []
-        if os.path.isdir(path):
-            files_to_process.extend([os.path.join(path, f)
-                                     for f in os.listdir(path)
-                                     if (f.endswith('.yaml')
-                                         or f.endswith('.yml'))])
-        else:
-            files_to_process.append(path)
+        paths = path.split(':')
+        for path in paths:
+            if os.path.isdir(path):
+                files_to_process.extend([os.path.join(path, f)
+                                         for f in os.listdir(path)
+                                         if (f.endswith('.yaml')
+                                             or f.endswith('.yml'))])
+            else:
+                files_to_process.append(path)
 
         for fn in files_to_process:
             self.parser.parse(fn)

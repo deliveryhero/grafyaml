@@ -71,6 +71,25 @@ class TestCaseValidate(TestCase):
                 (stdout + stderr),
                 matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
 
+    def test_validate_mutiple_directories_success(self):
+        paths = [
+            os.path.join(
+                os.path.dirname(__file__),
+                '../fixtures/cmd/validate/test0001'),
+            os.path.join(
+                os.path.dirname(__file__),
+                '../fixtures/cmd/validate/test0002'),
+        ]
+        required = [
+            'SUCCESS!',
+        ]
+        stdout, stderr = self.shell(
+            'validate %s' % ':'.join(paths), exitcodes=[0])
+        for r in required:
+            self.assertThat(
+                (stdout + stderr),
+                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+
     def test_validate_directory_invalid(self):
         path = os.path.join(
             os.path.dirname(__file__), '../fixtures/cmd/validate/__invalid__')
