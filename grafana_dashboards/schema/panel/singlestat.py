@@ -62,6 +62,7 @@ class Singlestat(Base):
                     v.Match(r'^[1-9]?[0]{1}%$|^1[0-9]?[0]{1}%$|^200%$')),
             v.Required('valueName', default='avg'): v.Any(
                 'avg', 'current', 'max', 'min', 'total'),
+            v.Optional('datasource'): v.All(str),
             v.Optional('decimals'): v.All(int, v.Range(min=0, max=12)),
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
