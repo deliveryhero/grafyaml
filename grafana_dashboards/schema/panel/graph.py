@@ -84,6 +84,18 @@ class Graph(Base):
 
         y_formats = [y_format]
 
+        legend = {
+            v.Optional('alignAsTable', default=False): v.All(bool),
+            v.Optional('avg', default=False): v.All(bool),
+            v.Optional('current', default=False): v.All(bool),
+            v.Optional('max', default=False): v.All(bool),
+            v.Optional('min', default=False): v.All(bool),
+            v.Optional('rightSide', default=False): v.All(bool),
+            v.Optional('show', default=False): v.All(bool),
+            v.Optional('total', default=False): v.All(bool),
+            v.Optional('values', default=False): v.All(bool),
+        }
+
         null_point_modes = v.Any('connected', 'null', 'null as zero')
         value_types = v.Any('individual', 'cumulative')
 
@@ -119,6 +131,7 @@ class Graph(Base):
             v.Required('fill', default=1): v.All(int),
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
+            v.Optional('legend'): v.All(legend),
             v.Required('lines', default=True): v.All(bool),
             v.Required('linewidth', default=2): v.All(int),
             v.Optional('nullPointMode'): v.All(null_point_modes),
