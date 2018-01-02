@@ -9,7 +9,6 @@
                     "panels": [
                         {
                             "bars": false,
-                            "datasource": "graphite",
                             "editable": true,
                             "error": false,
                             "fill": 1,
@@ -21,11 +20,7 @@
                             "span": 12,
                             "stack": false,
                             "steppedLine": false,
-                            "targets": [
-                                {
-                                    "target": "$hostname.Cpu.cpu_prct_used"
-                                }
-                            ],
+                            "targets": [],
                             "title": "no title (click here)",
                             "type": "graph",
                             "x-axis": true,
@@ -37,22 +32,12 @@
                 }
             ],
             "templating": {
-                "enabled": true,
-                "list": [
-                    {
-                        "datasource": "graphite",
-                        "includeAll": false,
-                        "multi": false,
-                        "name": "hostname",
-                        "query": "node*",
-                        "refresh": true,
-                        "type": "query"
-                    }
-                ]
+                "enabled": false,
+                "list": []
             },
             "time": {
-                "from": "2018-02-07T08:42:27.000Z",
-                "to": "2018-02-07T13:48:32.000Z"
+                "from": "now-1h",
+                "to": "now"
             },
             "timezone": "utc",
             "title": "New dashboard"

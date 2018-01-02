@@ -1,0 +1,11 @@
+dashboard:
+  title: New dashboard
+  time:
+    from: now-1h
+    to: now
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
