@@ -33,8 +33,8 @@ class Client(object):
 
     def main(self):
         self.parse_arguments()
-        self.read_config()
         self.setup_logging()
+        self.read_config()
 
         self.args.func()
 
@@ -47,6 +47,12 @@ class Client(object):
             '--debug', dest='debug', action='store_true',
             help='Print debugging output (set logging level to DEBUG instead '
             ' of default INFO level)')
+        parser.add_argument(
+            '--grafana-url', dest='grafana_url', help='URL for grafana '
+            'server. The default used is: http://localhost:8080')
+        parser.add_argument(
+            '--grafana-apikey', dest='grafana_apikey',
+            help='API key to access grafana.')
         parser.add_argument(
             '--version', dest='version', action='version',
             version=__version__, help="show "
@@ -82,6 +88,12 @@ class Client(object):
         else:
             fp = '/etc/grafyaml/grafyaml.conf'
         self.config.read(os.path.expanduser(fp))
+        if self.args.grafana_url:
+            self.config.set('grafana', 'url', self.args.grafana_url)
+            LOG.debug('Grafana URL override: {}'.format(self.args.grafana_url))
+        if self.args.grafana_apikey:
+            self.config.set('grafana', 'apikey', self.args.grafana_apikey)
+            LOG.debug('Grafana APIKey overridden')
 
     def setup_logging(self):
         if self.args.debug:
