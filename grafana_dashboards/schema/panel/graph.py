@@ -81,8 +81,17 @@ class Graph(Base):
             u'pressurehg',
             u'pressurepsi',
         )
-
-        y_formats = [y_format]
+        yaxes_format = [
+            {
+                v.Optional('decimals'): int,
+                v.Optional('format', default='short'): y_format,
+                v.Optional('label', default=''): v.All(str),
+                v.Optional('logBase', default=1): v.All(int, v.Range(min=1)),
+                v.Optional('max'): v.All(int, v.Range(min=1)),
+                v.Optional('min'): v.All(int, v.Range(min=1)),
+                v.Optional('show', default=True): v.All(bool),
+            }
+        ]
 
         legend = {
             v.Optional('alignAsTable', default=False): v.All(bool),
@@ -149,7 +158,8 @@ class Graph(Base):
             v.Optional('tooltip'): v.All(tooltip),
             v.Required('x-axis', default=True): v.All(bool),
             v.Required('y-axis', default=True): v.All(bool),
-            v.Optional('y_formats'): v.All(y_formats, v.Length(min=2, max=2)),
+            v.Optional('y_formats'): v.All([y_format], v.Length(min=2, max=2)),
+            v.Optional('yaxes'): v.All(yaxes_format, v.Length(min=2, max=2)),
         }
         graph.update(self.base)
         return v.Schema(graph)

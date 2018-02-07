@@ -1,0 +1,58 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "bars": false,
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "leftYAxisLabel": "left label",
+                            "lines": true,
+                            "linewidth": 2,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "rightYAxisLabel": "right label",
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [],
+                            "title": "no title (click here)",
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true,
+                            "yaxes": [
+                                {
+                                    "format": "hertz",
+                                    "label": "",
+                                    "logBase": 1,
+                                    "show": true
+                                },
+                                {
+                                    "format": "\u00b5s",
+                                    "label": "",
+                                    "logBase": 1,
+                                    "show": true
+                                }
+                            ]
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
