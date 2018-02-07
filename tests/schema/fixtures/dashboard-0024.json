@@ -1,0 +1,16 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [],
+            "tags": [
+                "test_tag"
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
