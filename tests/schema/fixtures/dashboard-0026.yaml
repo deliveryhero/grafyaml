@@ -1,0 +1,23 @@
+dashboard:
+  title: Dashboard with links
+  links:
+    - type: dashboards
+      title: test_link_title
+      asDropdown: true
+      tags:
+        - test_tag
+      includeVars: true
+      keepTime: true
+      targetBlank: true
+    - type: link
+      title: test_link_title
+      icon: cloud
+      url: http://grafana.com
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: text
+            mode: markdown
+            content: Some example text is required.

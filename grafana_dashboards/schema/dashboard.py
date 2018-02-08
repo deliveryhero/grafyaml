@@ -14,6 +14,7 @@
 
 import voluptuous as v
 
+from grafana_dashboards.schema.links import Links
 from grafana_dashboards.schema.row import Row
 from grafana_dashboards.schema.template import Template
 
@@ -21,6 +22,7 @@ from grafana_dashboards.schema.template import Template
 class Dashboard(object):
 
     def get_schema(self):
+
         dashboard = {
             v.Required('timezone', default='utc'): v.Any('browser', 'utc'),
             v.Required('title'): v.All(str, v.Length(min=1)),
@@ -31,6 +33,8 @@ class Dashboard(object):
                 v.Required('to'): v.Any(v.Datetime(), str),
             },
         }
+        links = Links().get_schema()
+        dashboard.update(links.schema)
         rows = Row().get_schema()
         dashboard.update(rows.schema)
         templating = Template().get_schema()

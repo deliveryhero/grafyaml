@@ -1,0 +1,55 @@
+{
+    "dashboard": {
+        "dashboard-with-links": {
+            "links": [
+                {
+                    "asDropdown": true,
+                    "icon": "external link",
+                    "includeVars": true,
+                    "keepTime": true,
+                    "tags": [
+                        "test_tag"
+                    ],
+                    "targetBlank": true,
+                    "title": "test_link_title",
+                    "type": "dashboards"
+                },
+                {
+                    "icon": "cloud",
+                    "includeVars": false,
+                    "keepTime": false,
+                    "targetBlank": false,
+                    "title": "test_link_title",
+                    "type": "link",
+                    "url": "http://grafana.com"
+                }
+            ],
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "content": "Some example text is required.",
+                            "editable": true,
+                            "error": false,
+                            "mode": "markdown",
+                            "span": 12,
+                            "title": "no title (click here)",
+                            "type": "text"
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "Dashboard with links"
+        }
+    }
+}
