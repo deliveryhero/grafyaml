@@ -1,0 +1,159 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "bars": false,
+                            "datasource": "graphite",
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "lines": true,
+                            "linewidth": 2,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [
+                                {
+                                    "target": "$hostname.Cpu.cpu_prct_used"
+                                }
+                            ],
+                            "title": "no title (click here)",
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "includeAll": false,
+                        "multi": false,
+                        "name": "hostname",
+                        "query": "*",
+                        "refresh": 2,
+                        "type": "query"
+                    },
+                    {
+                        "current": {
+                            "text": "undercloud",
+                            "value": [
+                                "undercloud"
+                            ]
+                        },
+                        "includeAll": false,
+                        "label": "",
+                        "multi": false,
+                        "name": "test_custom_1",
+                        "options": [
+                            {
+                                "selected": true,
+                                "text": "undercloud",
+                                "value": "undercloud"
+                            },
+                            {
+                                "selected": false,
+                                "text": "controller",
+                                "value": "controller"
+                            },
+                            {
+                                "selected": false,
+                                "text": "*",
+                                "value": "*"
+                            }
+                        ],
+                        "query": "undercloud,controller,*",
+                        "type": "custom"
+                    },
+                    {
+                        "current": {
+                            "text": "undercloud+controller",
+                            "value": [
+                                "undercloud",
+                                "controller"
+                            ]
+                        },
+                        "includeAll": false,
+                        "label": "",
+                        "multi": true,
+                        "name": "test_custom_2",
+                        "options": [
+                            {
+                                "selected": true,
+                                "text": "undercloud",
+                                "value": "undercloud"
+                            },
+                            {
+                                "selected": true,
+                                "text": "controller",
+                                "value": "controller"
+                            },
+                            {
+                                "selected": false,
+                                "text": "*",
+                                "value": "*"
+                            }
+                        ],
+                        "query": "undercloud,controller,*",
+                        "type": "custom"
+                    },
+                    {
+                        "current": {
+                            "text": "All",
+                            "value": [
+                                "All"
+                            ]
+                        },
+                        "includeAll": true,
+                        "label": "",
+                        "multi": true,
+                        "name": "test_custom_include_all",
+                        "options": [
+                            {
+                                "selected": true,
+                                "text": "All",
+                                "value": "All"
+                            },
+                            {
+                                "selected": false,
+                                "text": "undercloud",
+                                "value": "undercloud"
+                            },
+                            {
+                                "selected": false,
+                                "text": "controller",
+                                "value": "controller"
+                            },
+                            {
+                                "selected": false,
+                                "text": "*",
+                                "value": "*"
+                            }
+                        ],
+                        "query": "undercloud,controller,*",
+                        "type": "custom"
+                    }
+                ]
+            },
+            "time": {
+                "from": "2018-02-07T08:42:27.000Z",
+                "to": "2018-02-07T13:48:32.000Z"
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

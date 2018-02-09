@@ -10,7 +10,7 @@
                         "multi": false,
                         "name": "foobar",
                         "query": "foobar.*",
-                        "refresh": false,
+                        "refresh": 0,
                         "type": "query"
                     }
                 ]

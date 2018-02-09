@@ -1,0 +1,44 @@
+dashboard:
+  time:
+    from: "2018-02-07T08:42:27.000Z"
+    to: "2018-02-07T13:48:32.000Z"
+  templating:
+    - name: hostname
+      type: query
+      query: "*"
+      refresh: 2
+    - name: test_custom_1
+      type: custom
+      options:
+        - undercloud
+        - controller
+        - "*"
+    - name: test_custom_2
+      type: custom
+      multi: true
+      options:
+        - text: undercloud
+          selected: true
+        - text: controller
+          selected: true
+        - text: "*"
+    - name: test_custom_include_all
+      type: custom
+      includeAll: true
+      multi: true
+      options:
+        - text: All
+          selected: true
+        - text: undercloud
+        - text: controller
+        - text: "*"
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
+            datasource: graphite
+            targets:
+              - target: $hostname.Cpu.cpu_prct_used

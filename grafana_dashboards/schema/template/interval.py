@@ -14,57 +14,18 @@
 
 import voluptuous as v
 
+from grafana_dashboards.schema.template.base import AUTO_INTERVAL
 from grafana_dashboards.schema.template.base import Base
 
 
-AUTO_INTERVAL = '$__auto_interval'
-
-
 class Interval(Base):
-    option = {
-        v.Required('text'): v.All(str, v.Length(min=1)),
-        v.Required('value'): v.All(str, v.Length(min=1)),
-        v.Required('selected', default=False): v.All(bool),
-    }
-    options = [option]
-
     current = {
         v.Required('text'): v.All(str, v.Length(min=1)),
         v.Required('value'): v.All(str, v.Length(min=1)),
     }
 
     def validate_options(self, options):
-        # Most of the time this is going to be a simple list, so if
-        # the user supplied a list of strings, let's turn that into
-        # the requisite list of dicts.
-        try:
-            v.Schema([str])(options)
-            options = [dict(text=o) for o in options]
-        except v.Invalid:
-            pass
-
-        # Ensure this is a list of dicts before we start messing with
-        # them.
-        v.Schema([dict])(options)
-
-        # This performs some automatic cleanup to make things easier.
-        for option in options:
-            # Let's not make our users type "$__auto_interval".  Instead,
-            # if they specify an option name of 'auto' with no value,
-            # supply it for them.  NB: if a user wants 'auto' with value
-            # 'foobar', they can just override this by simply including
-            # 'value: foobar'.
-            if option.get('text') == 'auto' and 'value' not in option:
-                option['value'] = AUTO_INTERVAL
-
-            # Let's also not make our users type every option twice.  For
-            # each option with a text entry but no value, copy the next
-            # entry to that value.
-            if option.get('text') and 'value' not in option:
-                option['value'] = option['text']
-
-        # Now we should have something that matches our actual schema.
-        options = v.Schema(self.options)(options)
+        options = self._validate_options(options)
 
         if len(options):
             selected_options = [x for x in options if x.get('selected')]
