@@ -87,8 +87,8 @@ class Graph(Base):
                 v.Optional('format', default='short'): y_format,
                 v.Optional('label', default=''): v.All(str),
                 v.Optional('logBase', default=1): v.All(int, v.Range(min=1)),
-                v.Optional('max'): v.All(int, v.Range(min=1)),
-                v.Optional('min'): v.All(int, v.Range(min=1)),
+                v.Optional('max'): v.All(int),
+                v.Optional('min'): v.All(int),
                 v.Optional('show', default=True): v.All(bool),
             }
         ]
