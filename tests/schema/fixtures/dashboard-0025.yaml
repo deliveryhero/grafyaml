@@ -6,6 +6,7 @@ dashboard:
       panels:
           - title: no title (click here)
             type: graph
+            decimals: 2
             leftYAxisLabel: left label
             rightYAxisLabel: right label
             yaxes:

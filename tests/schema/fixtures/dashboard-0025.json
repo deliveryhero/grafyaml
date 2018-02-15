@@ -9,6 +9,7 @@
                     "panels": [
                         {
                             "bars": false,
+                            "decimals": 2,
                             "editable": true,
                             "error": false,
                             "fill": 1,
