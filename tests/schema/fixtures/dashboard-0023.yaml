@@ -13,6 +13,8 @@ dashboard:
           - title: no title (click here)
             type: graph
             datasource: graphite
+            minSpan: 4
+            repeat: $hostname
             targets:
               - target: $hostname.Cpu.cpu_prct_used
             legend:
