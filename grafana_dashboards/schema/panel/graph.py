@@ -83,7 +83,7 @@ class Graph(Base):
         )
         yaxes_format = [
             {
-                v.Optional('decimals'): int,
+                v.Optional('decimals'): v.All(int),
                 v.Optional('format', default='short'): y_format,
                 v.Optional('label', default=''): v.All(str),
                 v.Optional('logBase', default=1): v.All(int, v.Range(min=1)),
@@ -137,6 +137,7 @@ class Graph(Base):
         graph = {
             v.Required('bars', default=False): v.All(bool),
             v.Optional('datasource'): v.All(str),
+            v.Optional('decimals'): v.All(int),
             v.Required('fill', default=1): v.All(int),
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
