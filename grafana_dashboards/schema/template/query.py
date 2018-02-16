@@ -26,6 +26,7 @@ class Query(Base):
             v.Required('query', default=''): v.All(str),
             v.Required('refresh', default=False): v.All(bool),
             v.Optional('datasource'): v.All(str),
+            v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
         }
         query.update(self.base)
         return v.Schema(query)

@@ -54,6 +54,7 @@
                 "list": [
                     {
                         "datasource": "graphite",
+                        "hide": 0,
                         "includeAll": false,
                         "multi": false,
                         "name": "hostname",
