@@ -1,0 +1,9 @@
+dashboard:
+  templating:
+    - name: foobar
+      query: prometheus
+      type: datasource
+      current:
+        value: prometheus
+        text: prometheus
+  title: New dashboard

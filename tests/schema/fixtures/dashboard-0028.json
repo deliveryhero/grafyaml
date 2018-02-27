@@ -1,0 +1,23 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "current": {
+                            "text": "prometheus",
+                            "value": "prometheus"
+                        },
+                        "name": "foobar",
+                        "query": "prometheus",
+                        "type": "datasource"
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
