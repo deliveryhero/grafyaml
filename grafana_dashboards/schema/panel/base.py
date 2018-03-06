@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Copyright 2015 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +18,21 @@ import voluptuous as v
 
 
 class Base(object):
+    formats = v.Any(u'none', u'short', u'percent', u'percentunit',
+                    u'humidity', u'ppm', u'dB', u'currencyUSD',
+                    u'currencyGBP', u'currencyEUR', u'currencyJPY', u'hertz',
+                    u'ns', u'µs', u'ms', u's', u'm', u'h', u'd', u'bits',
+                    u'bytes', u'kbytes', u'mbytes', u'gbytes', u'decbits',
+                    u'decbytes', u'deckbytes', u'decmbytes', u'decgbytes',
+                    u'pps', u'bps', u'Bps', u'Kbits', u'KBs', u'Mbits',
+                    u'MBs', u'GBs', u'Gbits', u'ops', u'rps', u'wps', u'iops',
+                    u'opm', u'rpm', u'wpm', u'lengthmm', u'lengthm',
+                    u'lengthkm', u'lengthmi', u'velocityms', u'velocitykmh',
+                    u'velocitymph', u'velocityknot', u'mlitre', u'litre',
+                    u'm3', u'watt', u'kwatt', u'watth', u'kwatth', u'joule',
+                    u'ev', u'amp', u'volt', u'celsius', u'farenheit',
+                    u'kelvin', u'pressurembar', u'pressurehpa', u'pressurehg',
+                    u'pressurepsi')
 
     def __init__(self):
         self.base = {
@@ -26,6 +43,7 @@ class Base(object):
             v.Required('type'): v.Any(
                 'dashlist', 'graph', 'singlestat', 'text'),
             v.Optional('id'): int,
+            v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
         }
 
     def get_schema(self):
