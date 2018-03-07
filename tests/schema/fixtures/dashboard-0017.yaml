@@ -9,3 +9,9 @@ dashboard:
             timeFrom: 10d
             timeShift: 1h
             hideTimeOverride: true
+            gauge:
+               maxValue: 100
+               minValue: 0
+               show: true
+               thresholdLabels: false
+               thresholdMarkers: true

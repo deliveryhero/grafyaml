@@ -12,6 +12,13 @@
                             "colorValue": false,
                             "editable": true,
                             "error": false,
+                            "gauge": {
+                                "maxValue": 100,
+                                "minValue": 0,
+                                "show": true,
+                                "thresholdLabels": false,
+                                "thresholdMarkers": true
+                            },
                             "hideTimeOverride": true,
                             "maxDataPoints": 100,
                             "postfix": "",
