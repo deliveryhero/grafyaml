@@ -39,6 +39,14 @@ class Singlestat(Base):
             v.Required('show', default=False): v.All(bool),
         }
 
+        gauge = {
+            v.Required('maxValue'): v.All(int),
+            v.Required('minValue'): v.Any(int),
+            v.Required('show', default=False): v.All(bool),
+            v.Required('thresholdLabels', default=False): v.All(bool),
+            v.Required('thresholdMarkers', default=False): v.All(bool),
+        }
+
         singlestat = {
             v.Required('colorBackground', default=False): v.All(bool),
             v.Required('colorValue', default=False): v.All(bool),
@@ -64,6 +72,7 @@ class Singlestat(Base):
                 'avg', 'current', 'max', 'min', 'total'),
             v.Optional('datasource'): v.All(str),
             v.Optional('decimals'): v.All(int, v.Range(min=0, max=12)),
+            v.Optional('gauge'): gauge,
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
