@@ -1,0 +1,12 @@
+{
+    "datasource": {
+        "new-datasource": {
+            "access": "direct",
+            "database": "foodb",
+            "isDefault": false,
+            "name": "New datasource",
+            "type": "influxdb",
+            "url": "http://example.org"
+        }
+    }
+}
