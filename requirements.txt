@@ -1,5 +1,5 @@
 dogpile.cache
-pbr>=1.6
+pbr!=2.1.0,>=2.0.0
 python-slugify
 PyYAML>=3.1.0
 requests

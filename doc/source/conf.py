@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'oslosphinx'
+    'openstackdocstheme',
 ]
 
 # Also document __init__
@@ -47,6 +47,9 @@ add_module_names = True
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+# openstackdocstheme options
+repository_name = 'openstack-infra/grafyaml'
+
 # -- Options for HTML output --------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
@@ -54,6 +57,8 @@ pygments_style = 'sphinx'
 # html_theme_path = ["."]
 # html_theme = '_theme'
 # html_static_path = ['static']
+
+html_theme = 'openstackdocs'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
