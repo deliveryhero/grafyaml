@@ -44,6 +44,7 @@ class Base(object):
                 'dashlist', 'graph', 'singlestat', 'text'),
             v.Optional('id'): int,
             v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
+            v.Optional('transparent'): v.All(bool),
         }
 
     def get_schema(self):
