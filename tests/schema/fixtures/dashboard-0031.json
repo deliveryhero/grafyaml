@@ -1,0 +1,90 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "alert": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.85
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C",
+                                                "5m",
+                                                "now"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "executionErrorState": "alerting",
+                                "frequency": "60s",
+                                "name": "A test alert",
+                                "noDataState": "no_data",
+                                "notifications": []
+                            },
+                            "bars": false,
+                            "datasource": "graphite",
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "lines": true,
+                            "linewidth": 2,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [
+                                {
+                                    "hide": true,
+                                    "refId": "A",
+                                    "target": "stats.gauges.afs.afs01_dfw_openstack_org.part.vicepa.total"
+                                },
+                                {
+                                    "hide": false,
+                                    "refId": "B",
+                                    "target": "divideSeries(stats.gauges.afs.afs01_dfw_openstack_org.part.vicpa.used, #A)"
+                                }
+                            ],
+                            "title": "no title (click here)",
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "time": {
+                "from": "2018-02-07T08:42:27.000Z",
+                "to": "2018-02-07T13:48:32.000Z"
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

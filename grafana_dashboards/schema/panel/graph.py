@@ -22,6 +22,19 @@ from grafana_dashboards.schema.panel.base import Base
 class Graph(Base):
 
     def get_schema(self):
+
+        alert_format = {
+            # could enforce "evaulator"/"operator"/"query" on this...
+            v.Required('conditions'): v.All(list),
+            v.Required('frequency', default='60s'): v.All(str),
+            v.Required('name'): v.All(str),
+            v.Required('executionErrorState', default='alerting'): (
+                v.Any('alerting', 'keep_state')),
+            v.Required('noDataState', default='no_data'): (
+                v.Any('no_data', 'alerting', 'ok', 'keep_state')),
+            v.Optional('notifications', default=[]): v.All(list),
+        }
+
         yaxes_format = [
             {
                 v.Optional('decimals'): v.All(int),
@@ -76,6 +89,7 @@ class Graph(Base):
         series_overrides = [series_override]
 
         graph = {
+            v.Optional('alert'): v.All(alert_format),
             v.Required('bars', default=False): v.All(bool),
             v.Optional('datasource'): v.All(str),
             v.Optional('decimals'): v.All(int),
