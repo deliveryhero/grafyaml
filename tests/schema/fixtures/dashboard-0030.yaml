@@ -10,6 +10,7 @@ dashboard:
           - title: no title (click here)
             type: graph
             datasource: graphite
+            transparent: true
             targets:
               - target: "stats.gauges.afs.afs01_dfw_openstack_org.part.vicepa.total"
                 refId: "A"

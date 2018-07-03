@@ -34,6 +34,7 @@
                                 }
                             ],
                             "title": "no title (click here)",
+                            "transparent": true,
                             "type": "graph",
                             "x-axis": true,
                             "y-axis": true
