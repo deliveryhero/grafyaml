@@ -1,0 +1,21 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "datasource": "telegraf",
+                        "hide": 0,
+                        "label": "Influxdb filter",
+                        "name": "foobar",
+                        "type": "adhoc"
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}

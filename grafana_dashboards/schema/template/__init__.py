@@ -14,6 +14,7 @@
 
 import voluptuous as v
 
+from grafana_dashboards.schema.template.adhoc import Adhoc
 from grafana_dashboards.schema.template.base import Base
 from grafana_dashboards.schema.template.custom import Custom
 from grafana_dashboards.schema.template.datasource import Datasource
@@ -51,6 +52,8 @@ class Template(object):
                     schema = Custom().get_schema()
                 if template['type'] == 'datasource':
                     schema = Datasource().get_schema()
+                if template['type'] == 'adhoc':
+                    schema = Adhoc().get_schema()
 
                 res['list'].append(schema(template))
 
