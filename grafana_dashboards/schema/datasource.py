@@ -26,5 +26,6 @@ class Datasource(object):
                                                           'influxdb'),
             v.Required('url'): v.All(str, v.Length(min=1)),
             v.Optional('orgId'): int,
+            v.Optional('database'): v.All(str, v.Length(min=1)),
         }
         return datasource
