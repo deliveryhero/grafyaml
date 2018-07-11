@@ -1,0 +1,12 @@
+dashboard:
+  time:
+    from: "2018-02-07T08:42:27.000Z"
+    to: "2018-02-07T13:48:32.000Z"
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - collapsed: false
+            title: Main
+            type: row

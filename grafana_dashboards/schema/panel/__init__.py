@@ -17,6 +17,7 @@ import voluptuous as v
 from grafana_dashboards.schema.panel.base import Base
 from grafana_dashboards.schema.panel.dashlist import Dashlist
 from grafana_dashboards.schema.panel.graph import Graph
+from grafana_dashboards.schema.panel.row import Row
 from grafana_dashboards.schema.panel.singlestat import Singlestat
 from grafana_dashboards.schema.panel.text import Text
 
@@ -42,6 +43,8 @@ class Panel(object):
                     schema = Singlestat().get_schema()
                 elif panel['type'] == 'text':
                     schema = Text().get_schema()
+                elif panel['type'] == 'row':
+                    schema = Row().get_schema()
 
                 res.append(schema(panel))
 

@@ -1,0 +1,36 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "collapsed": false,
+                            "editable": true,
+                            "error": false,
+                            "panels": [],
+                            "span": 12,
+                            "title": "Main",
+                            "type": "row"
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "time": {
+                "from": "2018-02-07T08:42:27.000Z",
+                "to": "2018-02-07T13:48:32.000Z"
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
