@@ -66,6 +66,7 @@ class Graph(Base):
             v.Required('query_as_alias', default=True): v.All(bool),
             v.Required('shared', default=True): v.All(bool),
             v.Required('value_type', default='cumulative'): v.All(value_types),
+            v.Optional('sort'): v.Range(min=0, max=2),
         }
 
         series_override = {

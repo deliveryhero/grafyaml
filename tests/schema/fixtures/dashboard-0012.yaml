@@ -8,3 +8,4 @@ dashboard:
             type: graph
             tooltip:
               value_type: individual
+              sort: 2

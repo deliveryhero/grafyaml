@@ -25,6 +25,7 @@
                             "tooltip": {
                                 "query_as_alias": true,
                                 "shared": true,
+                                "sort": 2,
                                 "value_type": "individual"
                             },
                             "type": "graph",
