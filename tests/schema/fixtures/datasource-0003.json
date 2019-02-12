@@ -1,0 +1,11 @@
+{
+    "datasource": {
+        "new-prometheus-datasource": {
+            "access": "proxy",
+            "isDefault": false,
+            "name": "New prometheus datasource",
+            "type": "prometheus",
+            "url": "http://example.org:9090"
+        }
+    }
+}
