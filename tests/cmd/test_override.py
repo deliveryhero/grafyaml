@@ -28,6 +28,7 @@ class TestCaseArgs(TestCase):
         required = [
             'Grafana URL override: http://example.grafana.org:3000',
             '.*?^Grafana APIKey overridden',
+            '.*?^Grafana Folderid overridden',
             '.*?^Validating schema in %s' % self.path,
         ]
 
@@ -36,6 +37,8 @@ class TestCaseArgs(TestCase):
             'http://example.grafana.org:3000',
             '--grafana-apikey',
             'xyz',
+            '--grafana-folderid',
+            '1',
             'validate',
             self.path,
         ]

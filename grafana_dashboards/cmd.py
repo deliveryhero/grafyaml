@@ -54,6 +54,9 @@ class Client(object):
             '--grafana-apikey', dest='grafana_apikey',
             help='API key to access grafana.')
         parser.add_argument(
+            '--grafana-folderid', dest='grafana_folderid',
+            help='The id of the folder to save the dashboard in.')
+        parser.add_argument(
             '--version', dest='version', action='version',
             version=__version__, help="show "
             "program's version number and exit")
@@ -94,6 +97,9 @@ class Client(object):
         if self.args.grafana_apikey:
             self.config.set('grafana', 'apikey', self.args.grafana_apikey)
             LOG.debug('Grafana APIKey overridden')
+        if self.args.grafana_folderid:
+            self.config.set('grafana', 'folderid', self.args.grafana_folderid)
+            LOG.debug('Grafana Folderid overridden')
 
     def setup_logging(self):
         if self.args.debug:

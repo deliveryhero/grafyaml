@@ -28,6 +28,7 @@ class Builder(object):
         self.cache = Cache(
             config.get('cache', 'cachedir'),
             config.getboolean('cache', 'enabled'))
+        self.folder_id = config.getint('grafana', 'folderid')
         self.grafana = Grafana(
             url=config.get('grafana', 'url'),
             key=config.get('grafana', 'apikey'))
@@ -84,7 +85,9 @@ class Builder(object):
         for name in data:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):
-                self.grafana.dashboard.create(name, data, overwrite=True)
+                self.grafana.dashboard.create(name, data,
+                                              overwrite=True,
+                                              folder_id=self.folder_id)
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)

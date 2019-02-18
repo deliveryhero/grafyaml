@@ -25,7 +25,7 @@ class Dashboard(object):
         self.url = utils.urljoin(url, 'api/dashboards/db/')
         self.session = session
 
-    def create(self, name, data, overwrite=False):
+    def create(self, name, data, overwrite=False, folder_id=0):
         """Create a new dashboard
 
         :param name: URL friendly title of the dashboard
@@ -35,12 +35,15 @@ class Dashboard(object):
         :param overwrite: Overwrite existing dashboard with newer version or
                           with the same dashboard title
         :type overwrite: bool
+        :param folder_id: The id of the folder to save the dashboard in.
+        :type folder_id: int
 
         :raises Exception: if dashboard already exists
 
         """
         dashboard = {
             'dashboard': data,
+            'folderId': folder_id,
             'overwrite': overwrite,
         }
         if not overwrite and self.is_dashboard(name):
