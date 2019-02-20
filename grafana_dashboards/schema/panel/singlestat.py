@@ -47,6 +47,18 @@ class Singlestat(Base):
             v.Required('thresholdMarkers', default=False): v.All(bool),
         }
 
+        valuemap = {
+            v.Required('op', default='='): v.Any(str),
+            v.Required('value'): v.Any(int),
+            v.Required('text'): v.Any(str)
+        }
+
+        rangemap = {
+            v.Required('from'): v.Any(int),
+            v.Required('to'): v.Any(int),
+            v.Required('text'): v.Any(str),
+        }
+
         singlestat = {
             v.Required('colorBackground', default=False): v.All(bool),
             v.Required('colorValue', default=False): v.All(bool),
@@ -76,6 +88,8 @@ class Singlestat(Base):
             v.Optional('hideTimeOverride'): v.All(bool),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
+            v.Optional('valueMaps'): v.All([valuemap]),
+            v.Optional('rangeMaps'): v.All([rangemap]),
         }
         singlestat.update(self.base)
         return v.Schema(singlestat)

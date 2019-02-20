@@ -25,6 +25,18 @@
                             "postfixFontSize": "50%",
                             "prefix": "",
                             "prefixFontSize": "50%",
+                            "rangeMaps": [
+                                {
+                                    "from": 2,
+                                    "text": "TWOTHREE",
+                                    "to": 3
+                                },
+                                {
+                                    "from": 4,
+                                    "text": "FOURFIVE",
+                                    "to": 5
+                                }
+                            ],
                             "span": 12,
                             "sparkline": {
                                 "fillColor": "rgba(31, 118, 189, 0.18)",
@@ -39,6 +51,18 @@
                             "title": "no title (click here)",
                             "type": "singlestat",
                             "valueFontSize": "80%",
+                            "valueMaps": [
+                                {
+                                    "op": "=",
+                                    "text": "OK",
+                                    "value": 0
+                                },
+                                {
+                                    "op": "=",
+                                    "text": "NOT OK",
+                                    "value": 1
+                                }
+                            ],
                             "valueName": "avg"
                         }
                     ],

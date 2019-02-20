@@ -15,3 +15,15 @@ dashboard:
                show: true
                thresholdLabels: false
                thresholdMarkers: true
+            valueMaps:
+               - value: 0
+                 text: 'OK'
+               - value: 1
+                 text: 'NOT OK'
+            rangeMaps:
+               - from: 2
+                 to: 3
+                 text: 'TWOTHREE'
+               - from: 4
+                 to: 5
+                 text: 'FOURFIVE'
