@@ -81,7 +81,8 @@ class Singlestat(Base):
                 'valueFontSize', default='80%'): v.All(
                     v.Match(r'^[1-9]?[0]{1}%$|^1[0-9]?[0]{1}%$|^200%$')),
             v.Required('valueName', default='avg'): v.Any(
-                'avg', 'current', 'max', 'min', 'total'),
+                'min', 'max', 'avg', 'current', 'total',
+                'name', 'first', 'delta', 'diff', 'range', 'last_time'),
             v.Optional('datasource'): v.All(str),
             v.Optional('decimals'): v.All(int, v.Range(min=0, max=12)),
             v.Optional('gauge'): gauge,
