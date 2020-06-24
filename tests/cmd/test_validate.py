@@ -102,7 +102,7 @@ class TestCaseValidate(TestCase):
 
     def _validate_invalid_file_or_directory(self, path):
         required = [
-            '%s: ERROR: \[Errno 2\] No such file or directory:' % path,
+            r'%s: ERROR: \[Errno 2\] No such file or directory:' % path,
         ]
         stdout, stderr = self.shell(
             'validate %s' % path, exitcodes=[1])
@@ -113,9 +113,9 @@ class TestCaseValidate(TestCase):
 
     def test_validate_without_path(self):
         required = [
-            '.*?^usage: grafana-dashboards validate \[-h\] path',
-            '.*?^grafana-dashboards validate: error: (too few arguments|the '
-            'following arguments are required: path)',
+            r'.*?^usage: grafana-dashboards validate \[-h\] path',
+            r'.*?^grafana-dashboards validate: error: (too few arguments|the '
+            r'following arguments are required: path)',
         ]
         stdout, stderr = self.shell('validate', exitcodes=[2])
         for r in required:

@@ -23,9 +23,9 @@ class TestCaseDelete(TestCase):
 
     def test_delete_without_path(self):
         required = [
-            '.*?^usage: grafana-dashboards delete \[-h\] path',
-            '.*?^grafana-dashboards delete: error: (too few arguments|the '
-            'following arguments are required: path)',
+            r'.*?^usage: grafana-dashboards delete \[-h\] path',
+            r'.*?^grafana-dashboards delete: error: (too few arguments|the '
+            r'following arguments are required: path)',
         ]
         stdout, stderr = self.shell('delete', exitcodes=[2])
         for r in required:

@@ -23,9 +23,9 @@ class TestCaseUpdate(TestCase):
 
     def test_update_without_path(self):
         required = [
-            '.*?^usage: grafana-dashboards update \[-h\] path',
-            '.*?^grafana-dashboards update: error: (too few arguments|the '
-            'following arguments are required: path)',
+            r'.*?^usage: grafana-dashboards update \[-h\] path',
+            r'.*?^grafana-dashboards update: error: (too few arguments|the '
+            r'following arguments are required: path)',
         ]
         stdout, stderr = self.shell('update', exitcodes=[2])
         for r in required:
