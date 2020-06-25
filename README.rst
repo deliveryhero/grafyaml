@@ -52,6 +52,11 @@ For example, here is a minimal dashboard specification
 environments.  Users can specify their dashboards via a normal review
 process and tests can validate their correctness.
 
+The tool can also take JSON manually exported from the Grafana
+interface and load it as a dashboard.  This allows keeping dashboards
+that have been edited with the inbuilt editor externally version
+controlled.
+
 A large number of examples are available in the OpenStack
 `project-config
 <https://git.openstack.org/cgit/openstack-infra/project-config/tree/grafana>`__

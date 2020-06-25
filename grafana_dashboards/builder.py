@@ -51,7 +51,8 @@ class Builder(object):
                 files_to_process.extend([os.path.join(path, f)
                                          for f in os.listdir(path)
                                          if (f.endswith('.yaml')
-                                             or f.endswith('.yml'))])
+                                             or f.endswith('.yml')
+                                             or f.endswith('.json'))])
             else:
                 files_to_process.append(path)
 

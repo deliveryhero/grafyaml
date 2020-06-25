@@ -50,21 +50,29 @@ class YamlParser(object):
 
     def parse_fp(self, fp):
         data = yaml.safe_load(fp)
-        result = self.validate(data)
-        for item in result.items():
-            group = self.data.get(item[0], {})
-            # Create slug to make it easier to find dashboards.
-            if item[0] == 'dashboard':
-                name = item[1]['title']
-            else:
-                name = item[1]['name']
-            slug = slugify(name)
-            if slug in group:
-                raise Exception(
-                    "Duplicate {0} found in '{1}: '{2}' "
-                    "already defined".format(item[0], fp.name, name))
-            group[slug] = item[1]
-            self.data[item[0]] = group
+        # Since a json file is valid YAML, we just pass through
+        # any JSON files
+        if fp.name.endswith('.json'):
+            slug = slugify(data['title'])
+            if not self.data.get('dashboard'):
+                self.data['dashboard'] = {}
+            self.data['dashboard'][slug] = data
+        else:
+            result = self.validate(data)
+            for item in result.items():
+                group = self.data.get(item[0], {})
+                # Create slug to make it easier to find dashboards.
+                if item[0] == 'dashboard':
+                    name = item[1]['title']
+                else:
+                    name = item[1]['name']
+                slug = slugify(name)
+                if slug in group:
+                    raise Exception(
+                        "Duplicate {0} found in '{1}: '{2}' "
+                        "already defined".format(item[0], fp.name, name))
+                group[slug] = item[1]
+                self.data[item[0]] = group
 
     def validate(self, data):
         schema = Schema()
