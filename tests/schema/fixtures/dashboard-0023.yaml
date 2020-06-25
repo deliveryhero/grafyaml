@@ -4,7 +4,7 @@ dashboard:
       type: query
       datasource: graphite
       query: node*
-      refresh: true
+      refresh: 1
       hide: 0
   title: New dashboard
   rows:

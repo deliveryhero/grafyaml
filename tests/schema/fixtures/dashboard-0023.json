@@ -59,7 +59,7 @@
                         "multi": false,
                         "name": "hostname",
                         "query": "node*",
-                        "refresh": true,
+                        "refresh": 1,
                         "type": "query"
                     }
                 ]

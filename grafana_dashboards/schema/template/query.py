@@ -23,18 +23,13 @@ LOG = logging.getLogger(__name__)
 
 class Query(Base):
 
-    def validate_refresh(self, data):
-        v.Schema(v.Any(v.All(int, v.Range(min=0, max=2)), bool))(data)
-        if isinstance(data, bool):
-            LOG.warn('templating query refresh type bool is deprecated')
-        return data
-
     def get_schema(self):
         query = {
             v.Required('includeAll', default=False): v.All(bool),
             v.Required('multi', default=False): v.All(bool),
             v.Required('query', default=''): v.All(str),
-            v.Required('refresh', default=0): self.validate_refresh,
+            v.Required('refresh', default=1): \
+                v.All(int, v.Range(min=0, max=2)),
             v.Optional('datasource'): v.All(str),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
         }
