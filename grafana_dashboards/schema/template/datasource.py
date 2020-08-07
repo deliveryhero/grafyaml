@@ -29,6 +29,7 @@ class Datasource(Base):
             v.Required('query', default=''): v.All(str),
             v.Required('current'): v.Any(self.current),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
+            v.Optional('label', default=''): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)
