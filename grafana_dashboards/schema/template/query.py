@@ -32,6 +32,7 @@ class Query(Base):
                 v.All(int, v.Range(min=0, max=2)),
             v.Optional('datasource'): v.All(str),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
+            v.Optional('regex'): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)
