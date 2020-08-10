@@ -26,6 +26,9 @@ class Annotations(object):
             v.Required('name'): v.All(str),
             v.Optional('limit'): int,
             v.Optional('titleFormat'): v.All(str),
+            v.Optional('tagKeys'): v.All(str),
+            v.Optional('textFormat'): v.All(str),
+            v.Optional('type'): v.All(str),
         }
 
         schema = v.Schema({
