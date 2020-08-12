@@ -41,7 +41,7 @@ class Base(object):
             v.Required('span', default=12): v.All(int, v.Range(min=0, max=12)),
             v.Required('title'): v.All(str, v.Length(min=1)),
             v.Required('type'): v.Any(
-                'dashlist', 'graph', 'singlestat', 'text', 'row'),
+                'dashlist', 'graph', 'logs', 'singlestat', 'text', 'row'),
             v.Optional('id'): int,
             v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
             v.Optional('transparent'): v.All(bool),
