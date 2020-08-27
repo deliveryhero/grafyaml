@@ -22,9 +22,14 @@ LOG = logging.getLogger(__name__)
 
 
 class Query(Base):
+    current = {
+        v.Optional('text'): v.All(str, v.Length(min=1)),
+        v.Optional('value'): v.All([str]),
+    }
 
     def get_schema(self):
         query = {
+            v.Optional('current'): v.Any(self.current),
             v.Required('includeAll', default=False): v.All(bool),
             v.Required('multi', default=False): v.All(bool),
             v.Required('query', default=''): v.All(str),
