@@ -19,8 +19,8 @@ from grafana_dashboards.schema.template.base import Base
 
 class Constant(Base):
     current = {
-        v.Required('text'): v.All(str, v.Length(min=1)),
-        v.Required('value'): v.All([str]),
+        v.Optional('text'): v.All(str, v.Length(min=1)),
+        v.Optional('value'): v.All([str]),
     }
 
     def validate_options(self, options):
@@ -36,9 +36,9 @@ class Constant(Base):
 
     def _validate(self, data):
         constant = {
-            v.Required('current'): v.Any(self.current),
             v.Required('options', default=[]): self.validate_options,
             v.Required('query', default=''): v.All(str),
+            v.Optional('current'): v.Any(self.current),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
             v.Optional('label', default=''): v.All(str),
 
