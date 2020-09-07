@@ -32,7 +32,7 @@ class Base(object):
                     u'm3', u'watt', u'kwatt', u'watth', u'kwatth', u'joule',
                     u'ev', u'amp', u'volt', u'celsius', u'farenheit',
                     u'kelvin', u'pressurembar', u'pressurehpa', u'pressurehg',
-                    u'pressurepsi', u'reqps')
+                    u'pressurepsi', u'reqps', u'dtdurations')
 
     def __init__(self):
         self.base = {
