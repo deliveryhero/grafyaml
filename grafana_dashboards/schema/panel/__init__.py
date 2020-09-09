@@ -20,6 +20,7 @@ from grafana_dashboards.schema.panel.graph import Graph
 from grafana_dashboards.schema.panel.logs import Logs
 from grafana_dashboards.schema.panel.row import Row
 from grafana_dashboards.schema.panel.singlestat import Singlestat
+from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
 
 
@@ -44,6 +45,8 @@ class Panel(object):
                     schema = Logs().get_schema()
                 elif panel['type'] == 'singlestat':
                     schema = Singlestat().get_schema()
+                elif panel['type'] == 'stat':
+                    schema = Stat().get_schema()
                 elif panel['type'] == 'text':
                     schema = Text().get_schema()
                 elif panel['type'] == 'row':
