@@ -57,6 +57,7 @@ class Graph(Base):
             v.Optional('show', default=False): v.All(bool),
             v.Optional('total', default=False): v.All(bool),
             v.Optional('values', default=False): v.All(bool),
+            v.Optional('sortDesc', default=False): v.All(bool),
         }
 
         null_point_modes = v.Any('connected', 'null', 'null as zero')
