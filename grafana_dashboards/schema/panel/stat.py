@@ -53,13 +53,13 @@ class Stat(Base):
         }
 
         stat = {
-            v.Required('maxDataPoints', default=100): v.All(int),
             v.Required('targets', default=[]): v.All(list),
             v.Required('fieldConfig'): v.All(fieldConfig),
             v.Optional('options'): v.All(options),
             v.Optional('datasource'): v.All(str),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
+            v.Optional('maxDataPoints'): v.All(int),
         }
         stat.update(self.base)
         return v.Schema(stat)
