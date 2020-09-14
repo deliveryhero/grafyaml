@@ -85,10 +85,16 @@ class Graph(Base):
             v.Optional('pointsradius'): v.All(int, v.Range(min=1, max=5)),
             v.Optional('stack'): v.All(v.Any(bool, 'A', 'B', 'C', 'D')),
             v.Optional('color'): v.All(str),
+            v.Optional('aliasColors', default={}): v.All(dict),
             v.Optional('yaxis'): v.All(int, v.Range(min=1, max=2)),
             v.Optional('zindex'): v.All(int, v.Range(min=-3, max=3)),
-            v.Optional('transform'): v.All(v.Any('negative-Y')),
+            v.Optional('transform'): v.All(str),
             v.Optional('legend'): v.All(bool),
+            v.Optional('hideTooltip'): v.All(bool),
+            v.Optional('lineWidth'): v.All(int),
+            v.Optional('dashLength'): v.All(int),
+            v.Optional('spaceLength'): v.All(int),
+            v.Optional('pointradius'): v.All(int),
         }
         series_overrides = [series_override]
 
@@ -107,6 +113,7 @@ class Graph(Base):
             v.Optional('nullPointMode'): v.All(null_point_modes),
             v.Required('percentage', default=False): v.All(bool),
             v.Required('pointradius', default=5): v.All(int),
+            v.Optional('dashLength'): v.All(int),
             v.Required('points', default=False): v.All(bool),
             v.Optional('repeat'): v.All(str),
             v.Optional('rightYAxisLabel'): v.All(str, v.Length(min=1)),
@@ -115,6 +122,7 @@ class Graph(Base):
             v.Required('stack', default=False): v.All(bool),
             v.Required('steppedLine', default=False): v.All(bool),
             v.Required('targets', default=[]): v.All(list),
+            v.Required('thresholds', default=[]): v.All(list),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('tooltip'): v.All(tooltip),
@@ -125,4 +133,4 @@ class Graph(Base):
             v.Optional('yaxes'): v.All(yaxes_format, v.Length(min=2, max=2)),
         }
         graph.update(self.base)
-        return v.Schema(graph)
+        return v.Schema(graph, extra=True)
