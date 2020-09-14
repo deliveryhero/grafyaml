@@ -74,6 +74,7 @@ class Graph(Base):
         series_override = {
             v.Required('alias'): v.All(str, v.Length(min=1)),
             v.Optional('bars'): v.All(bool),
+            v.Optional('dashes'): v.All(bool),
             v.Optional('lines'): v.All(bool),
             v.Optional('fill'): v.All(int, v.Range(min=0, max=10)),
             v.Optional('width'): v.All(int, v.Range(min=1, max=10)),
