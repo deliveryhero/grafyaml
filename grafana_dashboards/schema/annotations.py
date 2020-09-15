@@ -29,6 +29,7 @@ class Annotations(object):
             v.Optional('tagKeys'): v.All(str),
             v.Optional('textFormat'): v.All(str),
             v.Optional('type'): v.All(str),
+            v.Optional('iconColor'): v.All(str),
         }
 
         schema = v.Schema({
