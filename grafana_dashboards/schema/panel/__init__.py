@@ -22,6 +22,7 @@ from grafana_dashboards.schema.panel.row import Row
 from grafana_dashboards.schema.panel.singlestat import Singlestat
 from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
+from grafana_dashboards.schema.panel.table import Table
 
 
 class Panel(object):
@@ -51,6 +52,8 @@ class Panel(object):
                     schema = Text().get_schema()
                 elif panel['type'] == 'row':
                     schema = Row().get_schema()
+                elif panel['type'] == 'table-old':
+                    schema = Table().get_schema()
 
                 res.append(schema(panel))
 

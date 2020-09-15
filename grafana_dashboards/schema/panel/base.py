@@ -42,7 +42,7 @@ class Base(object):
             v.Required('title'): v.All(str, v.Length(min=1)),
             v.Required('type'): v.Any(
                 'dashlist', 'graph', 'logs', 'singlestat', 'text', 'row',
-                'stat'),
+                'stat', 'table-old'),
             v.Optional('id'): int,
             v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
             v.Optional('transparent'): v.All(bool),
