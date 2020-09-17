@@ -28,6 +28,7 @@ class Dashboard(object):
             v.Required('timezone', default='utc'): v.Any('browser', 'utc'),
             v.Required('title'): v.All(str, v.Length(min=1)),
             v.Optional('id'): int,
+            v.Optional('editable'): bool,
             v.Optional('tags'): [v.Any(str, v.Length(min=1))],
             v.Optional('time'): {
                 v.Required('from'): v.Any(v.Datetime(), str),
