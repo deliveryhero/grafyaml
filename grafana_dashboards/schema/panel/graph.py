@@ -108,7 +108,7 @@ class Graph(Base):
             v.Optional('leftYAxisLabel'): v.All(str, v.Length(min=1)),
             v.Optional('legend'): v.All(legend),
             v.Required('lines', default=True): v.All(bool),
-            v.Required('linewidth', default=2): v.All(int),
+            v.Required('linewidth', default=1): v.All(int),
             v.Optional('minSpan'): v.All(int, v.Range(min=0, max=12)),
             v.Optional('nullPointMode'): v.All(null_point_modes),
             v.Required('percentage', default=False): v.All(bool),
