@@ -47,6 +47,7 @@ class Base(object):
             v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
             v.Optional('transparent'): v.All(bool),
             v.Optional('height'): v.All(int),
+            v.Optional('description'): v.All(str),
         }
 
     def get_schema(self):
