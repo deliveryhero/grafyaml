@@ -84,6 +84,7 @@ class Singlestat(Base):
                 'min', 'max', 'avg', 'current', 'total',
                 'name', 'first', 'delta', 'diff', 'range', 'last_time'),
             v.Optional('datasource'): v.All(str),
+            v.Optional('format'): v.All(str),
             v.Optional('decimals'): v.All(int, v.Range(min=0, max=12)),
             v.Optional('gauge'): gauge,
             v.Optional('hideTimeOverride'): v.All(bool),
