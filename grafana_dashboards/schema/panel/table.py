@@ -47,6 +47,7 @@ class Table(Base):
             v.Optional('transform'): v.All(str),
             v.Optional('type'): v.All(str),
             v.Required('targets', default=[]): v.All(list),
+            v.Required('columns', default=[]): v.All(list),
             v.Optional('datasource'): v.All(str),
             v.Optional('sort'): v.All(sort),
         }
