@@ -1,7 +1,0 @@
-[run]
-branch = True
-source = grafana_dashboards
-omit = grafana_dashboards/openstack/*
-
-[report]
-ignore_errors = True
