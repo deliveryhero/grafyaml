@@ -1,7 +1,7 @@
 Welcome to grafyaml's documentation!
 ====================================
 
-.. include:: ../../README.rst
+.. include:: ../../README.md
 
 Contents
 ++++++++

@@ -4,10 +4,11 @@
 .coverage
 .testrepository/
 .tox/
-AUTHORS
-ChangeLog
 cover/
 doc/build/
+build
+dist
+
 
 # Editors
 *~
