@@ -17,9 +17,12 @@ import voluptuous as v
 from grafana_dashboards.schema.panel.base import Base
 from grafana_dashboards.schema.panel.dashlist import Dashlist
 from grafana_dashboards.schema.panel.graph import Graph
+from grafana_dashboards.schema.panel.logs import Logs
 from grafana_dashboards.schema.panel.row import Row
 from grafana_dashboards.schema.panel.singlestat import Singlestat
+from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
+from grafana_dashboards.schema.panel.table import Table
 
 
 class Panel(object):
@@ -39,12 +42,18 @@ class Panel(object):
                     schema = Dashlist().get_schema()
                 elif panel['type'] == 'graph':
                     schema = Graph().get_schema()
+                elif panel['type'] == 'logs':
+                    schema = Logs().get_schema()
                 elif panel['type'] == 'singlestat':
                     schema = Singlestat().get_schema()
+                elif panel['type'] == 'stat':
+                    schema = Stat().get_schema()
                 elif panel['type'] == 'text':
                     schema = Text().get_schema()
                 elif panel['type'] == 'row':
                     schema = Row().get_schema()
+                elif panel['type'] == 'table-old':
+                    schema = Table().get_schema()
 
                 res.append(schema(panel))
 

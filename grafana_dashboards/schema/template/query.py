@@ -22,9 +22,14 @@ LOG = logging.getLogger(__name__)
 
 
 class Query(Base):
+    current = {
+        v.Optional('text'): v.All(str, v.Length(min=1)),
+        v.Optional('value'): v.All([str]),
+    }
 
     def get_schema(self):
         query = {
+            v.Optional('current'): v.Any(self.current),
             v.Required('includeAll', default=False): v.All(bool),
             v.Required('multi', default=False): v.All(bool),
             v.Required('query', default=''): v.All(str),
@@ -32,6 +37,9 @@ class Query(Base):
                 v.All(int, v.Range(min=0, max=2)),
             v.Optional('datasource'): v.All(str),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
+            v.Optional('regex'): v.All(str),
+            v.Optional('label', default=''): v.All(str),
+            v.Optional('allValue'): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)

@@ -32,7 +32,7 @@ class Base(object):
                     u'm3', u'watt', u'kwatt', u'watth', u'kwatth', u'joule',
                     u'ev', u'amp', u'volt', u'celsius', u'farenheit',
                     u'kelvin', u'pressurembar', u'pressurehpa', u'pressurehg',
-                    u'pressurepsi')
+                    u'pressurepsi', u'reqps', u'dtdurations')
 
     def __init__(self):
         self.base = {
@@ -41,10 +41,13 @@ class Base(object):
             v.Required('span', default=12): v.All(int, v.Range(min=0, max=12)),
             v.Required('title'): v.All(str, v.Length(min=1)),
             v.Required('type'): v.Any(
-                'dashlist', 'graph', 'singlestat', 'text', 'row'),
+                'dashlist', 'graph', 'logs', 'singlestat', 'text', 'row',
+                'stat', 'table-old'),
             v.Optional('id'): int,
             v.Optional('format'): v.Any(self.formats, v.Length(min=1)),
             v.Optional('transparent'): v.All(bool),
+            v.Optional('height'): v.All(int),
+            v.Optional('description'): v.All(str),
         }
 
     def get_schema(self):
