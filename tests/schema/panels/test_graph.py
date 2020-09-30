@@ -39,6 +39,7 @@ class TestCaseGraph(TestCase):
             'stack': False,
             'steppedLine': False,
             'targets': [],
+            'thresholds': [],
             'title': 'foobar',
             'type': 'graph',
             'x-axis': True,
