@@ -122,7 +122,7 @@ class Graph(Base):
             v.Required('stack', default=False): v.All(bool),
             v.Required('steppedLine', default=False): v.All(bool),
             v.Required('targets', default=[]): v.All(list),
-            v.Required('thresholds', default=[]): v.All(list),
+            v.Optional('thresholds', default=[]): v.All(list),
             v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
             v.Optional('tooltip'): v.All(tooltip),

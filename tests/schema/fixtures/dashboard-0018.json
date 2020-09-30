@@ -22,7 +22,6 @@
                             "stack": false,
                             "steppedLine": false,
                             "targets": [],
-                            "thresholds": [],
                             "timeFrom": "10d",
                             "timeShift": "1h",
                             "title": "no title (click here)",

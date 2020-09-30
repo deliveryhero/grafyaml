@@ -26,7 +26,6 @@
                                     "target": "$hostname.Cpu.cpu_prct_used"
                                 }
                             ],
-                            "thresholds": [],
                             "title": "no title (click here)",
                             "type": "graph",
                             "x-axis": true,
