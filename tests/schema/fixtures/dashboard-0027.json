@@ -14,7 +14,7 @@
                             "error": false,
                             "fill": 1,
                             "lines": true,
-                            "linewidth": 2,
+                            "linewidth": 1,
                             "percentage": false,
                             "pointradius": 5,
                             "points": false,
@@ -26,6 +26,7 @@
                                     "target": "$hostname.Cpu.cpu_prct_used"
                                 }
                             ],
+                            "thresholds": [],
                             "title": "no title (click here)",
                             "type": "graph",
                             "x-axis": true,
@@ -41,6 +42,7 @@
                 "list": [
                     {
                         "includeAll": false,
+                        "label": "",
                         "multi": false,
                         "name": "hostname",
                         "query": "*",

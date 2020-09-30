@@ -3,14 +3,11 @@
 # process, which may cause wedges in the gate later.
 
 flake8
-
 coverage>=3.6
 python-subunit>=0.0.18
 requests-mock>=0.6.0
-sphinx!=1.6.6,!=1.6.7,!=2.1.0,>=1.6.2 # BSD
 mock>=1.2
-openstackdocstheme>=1.11.0 # Apache-2.0
-oslotest>=1.2.0  # Apache-2.0
+oslotest>=1.2.0
 testrepository>=0.0.18
 testscenarios>=0.4
 testtools>=0.9.36,!=1.2.0
