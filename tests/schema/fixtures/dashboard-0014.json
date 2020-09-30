@@ -7,6 +7,7 @@
                 "list": [
                     {
                         "includeAll": false,
+                        "label": "",
                         "multi": false,
                         "name": "foobar",
                         "query": "foobar.*",

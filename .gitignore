@@ -9,6 +9,7 @@ doc/build/
 build
 dist
 
+__pycache__
 
 # Editors
 *~

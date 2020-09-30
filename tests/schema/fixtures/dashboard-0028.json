@@ -10,6 +10,7 @@
                             "text": "prometheus",
                             "value": "prometheus"
                         },
+                        "label": "",
                         "name": "foobar",
                         "query": "prometheus",
                         "type": "datasource"

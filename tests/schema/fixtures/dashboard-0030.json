@@ -14,7 +14,7 @@
                             "error": false,
                             "fill": 1,
                             "lines": true,
-                            "linewidth": 2,
+                            "linewidth": 1,
                             "percentage": false,
                             "pointradius": 5,
                             "points": false,
@@ -33,6 +33,7 @@
                                     "target": "divideSeries(stats.gauges.afs.afs01_dfw_openstack_org.part.vicpa.used, #A)"
                                 }
                             ],
+                            "thresholds": [],
                             "title": "no title (click here)",
                             "transparent": true,
                             "type": "graph",

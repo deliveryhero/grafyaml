@@ -21,11 +21,12 @@
                                 "min": true,
                                 "rightSide": true,
                                 "show": true,
+                                "sortDesc": false,
                                 "total": false,
                                 "values": true
                             },
                             "lines": true,
-                            "linewidth": 2,
+                            "linewidth": 1,
                             "minSpan": 4,
                             "percentage": false,
                             "pointradius": 5,
@@ -39,6 +40,7 @@
                                     "target": "$hostname.Cpu.cpu_prct_used"
                                 }
                             ],
+                            "thresholds": [],
                             "title": "no title (click here)",
                             "type": "graph",
                             "x-axis": true,
@@ -56,6 +58,7 @@
                         "datasource": "graphite",
                         "hide": 0,
                         "includeAll": false,
+                        "label": "",
                         "multi": false,
                         "name": "hostname",
                         "query": "node*",

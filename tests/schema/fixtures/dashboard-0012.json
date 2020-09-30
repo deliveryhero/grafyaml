@@ -13,7 +13,7 @@
                             "error": false,
                             "fill": 1,
                             "lines": true,
-                            "linewidth": 2,
+                            "linewidth": 1,
                             "percentage": false,
                             "pointradius": 5,
                             "points": false,
@@ -21,6 +21,7 @@
                             "stack": false,
                             "steppedLine": false,
                             "targets": [],
+                            "thresholds": [],
                             "title": "no title (click here)",
                             "tooltip": {
                                 "query_as_alias": true,
