@@ -33,6 +33,7 @@
                                     "target": "divideSeries(stats.gauges.afs.afs01_dfw_openstack_org.part.vicpa.used, #A)"
                                 }
                             ],
+                            "thresholds": [],
                             "title": "no title (click here)",
                             "transparent": true,
                             "type": "graph",
