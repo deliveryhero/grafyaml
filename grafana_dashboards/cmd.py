@@ -52,17 +52,17 @@ class Client(object):
             'server. The default used is: http://localhost:8080')
         parser.add_argument(
             '--grafana-apikey', dest='grafana_apikey',
-            help='API key to access grafana.', required=True)
+            help='API key to access grafana.')
         parser.add_argument(
-            '--grafana-folderid', dest='grafana_folderid', required=True,
+            '--grafana-folderid', dest='grafana_folderid',
             help='The id of the folder to save the dashboard in.')
         parser.add_argument(
             '--version', dest='version', action='version',
             version=__version__, help="show "
             "program's version number and exit")
 
-        subparsers = parser.add_subparsers(
-            title='commands')
+        subparsers = parser.add_subparsers(title='commands', dest='command')
+        subparsers.required = True
 
         parser_delete = subparsers.add_parser('delete')
         parser_delete.add_argument(
