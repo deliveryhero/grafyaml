@@ -52,9 +52,9 @@ class Client(object):
             'server. The default used is: http://localhost:8080')
         parser.add_argument(
             '--grafana-apikey', dest='grafana_apikey',
-            help='API key to access grafana.')
+            help='API key to access grafana.', required=True)
         parser.add_argument(
-            '--grafana-folderid', dest='grafana_folderid',
+            '--grafana-folderid', dest='grafana_folderid', required=True,
             help='The id of the folder to save the dashboard in.')
         parser.add_argument(
             '--version', dest='version', action='version',
