@@ -61,8 +61,8 @@ class Client(object):
             version=__version__, help="show "
             "program's version number and exit")
 
-        subparsers = parser.add_subparsers(
-            title='commands')
+        subparsers = parser.add_subparsers(title='commands')
+        subparsers.required = True
 
         parser_delete = subparsers.add_parser('delete')
         parser_delete.add_argument(
