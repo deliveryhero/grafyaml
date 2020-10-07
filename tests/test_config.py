@@ -17,19 +17,13 @@ from tests.base import TestCase
 
 
 class TestCaseConfig(TestCase):
-
     def setUp(self):
         super(TestCaseConfig, self).setUp()
         self.config = Config()
 
     def test_defaults(self):
-        self.assertTrue(
-            self.config.getboolean('cache', 'enabled'))
-        self.assertEqual(
-            self.config.get('cache', 'cachedir'), '~/.cache/grafyaml')
-        self.assertEqual(
-            self.config.get('grafana', 'apikey'), '')
-        self.assertEqual(
-            self.config.get('grafana', 'folderid'), '0')
-        self.assertEqual(
-            self.config.get('grafana', 'url'), 'http://localhost:8080')
+        self.assertTrue(self.config.getboolean("cache", "enabled"))
+        self.assertEqual(self.config.get("cache", "cachedir"), "~/.cache/grafyaml")
+        self.assertEqual(self.config.get("grafana", "apikey"), "")
+        self.assertEqual(self.config.get("grafana", "folderid"), "0")
+        self.assertEqual(self.config.get("grafana", "url"), "http://localhost:8080")

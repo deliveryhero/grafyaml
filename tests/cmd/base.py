@@ -23,8 +23,7 @@ from tests.base import TestCase
 
 
 class TestCase(TestCase):
-    configfile = os.path.join(
-        os.path.dirname(__file__), 'fixtures/cmd/grafyaml.conf')
+    configfile = os.path.join(os.path.dirname(__file__), "fixtures/cmd/grafyaml.conf")
 
     def shell(self, argstr, exitcodes=(0,)):
         orig = sys.stdout
@@ -33,11 +32,11 @@ class TestCase(TestCase):
             sys.stdout = six.StringIO()
             sys.stderr = six.StringIO()
             argv = [
-                'grafana-dashboards',
-                '--config-file=%s' % self.configfile,
+                "grafana-dashboards",
+                "--config-file=%s" % self.configfile,
             ]
             argv += argstr.split()
-            self.useFixture(fixtures.MonkeyPatch('sys.argv', argv))
+            self.useFixture(fixtures.MonkeyPatch("sys.argv", argv))
             cmd.main()
         except SystemExit:
             exc_type, exc_value, exc_trackback = sys.exc_info()

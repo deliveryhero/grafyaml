@@ -17,48 +17,47 @@ import voluptuous as v
 
 class Links(object):
     icons = [
-        'bolt',
-        'external link',
-        'cloud',
-        'dashboard',
-        'doc',
-        'info',
-        'question',
+        "bolt",
+        "external link",
+        "cloud",
+        "dashboard",
+        "doc",
+        "info",
+        "question",
     ]
 
     link_base = {
-        v.Required('type'): v.Any('dashboards', 'link'),
-        v.Optional('asDropdown'): v.All(bool),
-        v.Optional('icon', default='external link'): v.Any(*icons),
-        v.Optional('includeVars', default=False): v.All(bool),
-        v.Optional('keepTime', default=False): v.All(bool),
-        v.Optional('tags'): v.All([str]),
-        v.Optional('targetBlank', default=False): v.All(bool),
-        v.Optional('title'): v.All(str),
+        v.Required("type"): v.Any("dashboards", "link"),
+        v.Optional("asDropdown"): v.All(bool),
+        v.Optional("icon", default="external link"): v.Any(*icons),
+        v.Optional("includeVars", default=False): v.All(bool),
+        v.Optional("keepTime", default=False): v.All(bool),
+        v.Optional("tags"): v.All([str]),
+        v.Optional("targetBlank", default=False): v.All(bool),
+        v.Optional("title"): v.All(str),
     }
 
     def _validate(self):
-
         def f(data):
             res = []
             if not isinstance(data, list):
-                raise v.Invalid('Should be a list')
+                raise v.Invalid("Should be a list")
 
             for link in data:
                 validate = v.Schema(self.link_base, extra=True)
                 validate(link)
 
-                if link['type'] == 'dashboards':
+                if link["type"] == "dashboards":
                     link_dashboards = {
-                        v.Optional('asDropdown'): v.All(bool),
-                        v.Optional('tags'): v.All([str]),
+                        v.Optional("asDropdown"): v.All(bool),
+                        v.Optional("tags"): v.All([str]),
                     }
                     link_dashboards.update(self.link_base)
                     schema = v.Schema(link_dashboards)
-                elif link['type'] == 'link':
+                elif link["type"] == "link":
                     link_link = {
-                        v.Optional('tooltip'): v.All(str),
-                        v.Required('url'): v.All(str),
+                        v.Optional("tooltip"): v.All(str),
+                        v.Required("url"): v.All(str),
                     }
                     link_link.update(self.link_base)
                     schema = v.Schema(link_link)
@@ -70,8 +69,10 @@ class Links(object):
         return f
 
     def get_schema(self):
-        schema = v.Schema({
-            v.Optional('links'): v.All(self._validate()),
-        })
+        schema = v.Schema(
+            {
+                v.Optional("links"): v.All(self._validate()),
+            }
+        )
 
         return schema

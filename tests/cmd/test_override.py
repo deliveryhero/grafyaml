@@ -21,43 +21,40 @@ from tests.cmd.base import TestCase
 
 
 class TestCaseArgs(TestCase):
-    path = os.path.join(
-        os.path.dirname(__file__), '../fixtures/cmd/validate/test0001')
+    path = os.path.join(os.path.dirname(__file__), "../fixtures/cmd/validate/test0001")
 
     def test_config_cli_override(self):
         required = [
-            'Grafana URL override: http://example.grafana.org:3000',
-            '.*?^Grafana APIKey overridden',
-            '.*?^Grafana Folderid overridden',
-            '.*?^Validating schema in %s' % self.path,
+            "Grafana URL override: http://example.grafana.org:3000",
+            ".*?^Grafana APIKey overridden",
+            ".*?^Grafana Folderid overridden",
+            ".*?^Validating schema in %s" % self.path,
         ]
 
         args = [
-            '--grafana-url',
-            'http://example.grafana.org:3000',
-            '--grafana-apikey',
-            'xyz',
-            '--grafana-folderid',
-            '1',
-            'validate',
+            "--grafana-url",
+            "http://example.grafana.org:3000",
+            "--grafana-apikey",
+            "xyz",
+            "--grafana-folderid",
+            "1",
+            "validate",
             self.path,
         ]
-        stdout, stderr = self.shell(' '.join(args))
+        stdout, stderr = self.shell(" ".join(args))
 
         for r in required:
             self.assertThat(
-                self.log_fixture.output,
-                MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                self.log_fixture.output, MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
     def test_no_override(self):
-        r = 'Validating schema in %s' % self.path
+        r = "Validating schema in %s" % self.path
 
         args = [
-            'validate',
+            "validate",
             self.path,
         ]
-        stdout, stderr = self.shell(' '.join(args))
+        stdout, stderr = self.shell(" ".join(args))
 
-        self.assertThat(
-            self.log_fixture.output,
-            MatchesRegex(r))
+        self.assertThat(self.log_fixture.output, MatchesRegex(r))

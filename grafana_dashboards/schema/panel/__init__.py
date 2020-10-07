@@ -26,33 +26,31 @@ from grafana_dashboards.schema.panel.table import Table
 
 
 class Panel(object):
-
     def _validate(self):
-
         def f(data):
             res = []
             if not isinstance(data, list):
-                raise v.Invalid('Should be a list')
+                raise v.Invalid("Should be a list")
 
             for panel in data:
                 validate = Base().get_schema()
                 validate(panel)
 
-                if panel['type'] == 'dashlist':
+                if panel["type"] == "dashlist":
                     schema = Dashlist().get_schema()
-                elif panel['type'] == 'graph':
+                elif panel["type"] == "graph":
                     schema = Graph().get_schema()
-                elif panel['type'] == 'logs':
+                elif panel["type"] == "logs":
                     schema = Logs().get_schema()
-                elif panel['type'] == 'singlestat':
+                elif panel["type"] == "singlestat":
                     schema = Singlestat().get_schema()
-                elif panel['type'] == 'stat':
+                elif panel["type"] == "stat":
                     schema = Stat().get_schema()
-                elif panel['type'] == 'text':
+                elif panel["type"] == "text":
                     schema = Text().get_schema()
-                elif panel['type'] == 'row':
+                elif panel["type"] == "row":
                     schema = Row().get_schema()
-                elif panel['type'] == 'table-old':
+                elif panel["type"] == "table-old":
                     schema = Table().get_schema()
 
                 res.append(schema(panel))
@@ -62,8 +60,10 @@ class Panel(object):
         return f
 
     def get_schema(self):
-        schema = v.Schema({
-            v.Required('panels', default=[]): v.All(self._validate()),
-        })
+        schema = v.Schema(
+            {
+                v.Required("panels", default=[]): v.All(self._validate()),
+            }
+        )
 
         return schema

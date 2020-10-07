@@ -14,28 +14,28 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath("../.."))
 # -- General configuration ----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'openstackdocstheme',
+    "sphinx.ext.autodoc",
+    "openstackdocstheme",
 ]
 
 # Also document __init__
-autoclass_content = 'both'
+autoclass_content = "both"
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = u'grafyaml'
-copyright = u'2013, OpenStack Foundation'
+project = u"grafyaml"
+copyright = u"2013, OpenStack Foundation"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = True
@@ -45,10 +45,10 @@ add_function_parentheses = True
 add_module_names = True
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # openstackdocstheme options
-repository_name = 'openstack-infra/grafyaml'
+repository_name = "openstack-infra/grafyaml"
 
 # -- Options for HTML output --------------------------------------------------
 
@@ -58,20 +58,23 @@ repository_name = 'openstack-infra/grafyaml'
 # html_theme = '_theme'
 # html_static_path = ['static']
 
-html_theme = 'openstackdocs'
+html_theme = "openstackdocs"
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = '%sdoc' % project
+htmlhelp_basename = "%sdoc" % project
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
 # [howto/manual]).
 latex_documents = [
-    ('index',
-     '%s.tex' % project,
-     u'%s Documentation' % project,
-     u'OpenStack Foundation', 'manual'),
+    (
+        "index",
+        "%s.tex" % project,
+        u"%s Documentation" % project,
+        u"OpenStack Foundation",
+        "manual",
+    ),
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
-#intersphinx_mapping = {'http://docs.python.org/': None}
+# intersphinx_mapping = {'http://docs.python.org/': None}

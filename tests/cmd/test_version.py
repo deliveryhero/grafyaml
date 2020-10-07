@@ -18,9 +18,8 @@ from tests.cmd.base import TestCase
 
 
 class TestCaseVersion(TestCase):
-
     def test_version(self):
-        stdout, stderr = self.shell('--version')
+        stdout, stderr = self.shell("--version")
         self.assertThat(
-            (stdout + stderr),
-            matchers.MatchesRegex(r'.*?^(\d+)\.(\d+)\.(\d+)'))
+            (stdout + stderr), matchers.MatchesRegex(r".*?^(\d+)\.(\d+)\.(\d+)")
+        )

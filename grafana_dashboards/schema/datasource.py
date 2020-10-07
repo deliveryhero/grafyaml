@@ -16,17 +16,16 @@ import voluptuous as v
 
 
 class Datasource(object):
-
     def get_schema(self):
         datasource = {
-            v.Required('access', default='direct'): v.Any('direct', 'proxy'),
-            v.Required('isDefault', default=False): v.All(bool),
-            v.Required('name'): v.All(str, v.Length(min=1)),
-            v.Required('type', default='graphite'): v.Any('graphite',
-                                                          'influxdb',
-                                                          'prometheus'),
-            v.Required('url'): v.All(str, v.Length(min=1)),
-            v.Optional('orgId'): int,
-            v.Optional('database'): v.All(str, v.Length(min=1)),
+            v.Required("access", default="direct"): v.Any("direct", "proxy"),
+            v.Required("isDefault", default=False): v.All(bool),
+            v.Required("name"): v.All(str, v.Length(min=1)),
+            v.Required("type", default="graphite"): v.Any(
+                "graphite", "influxdb", "prometheus"
+            ),
+            v.Required("url"): v.All(str, v.Length(min=1)),
+            v.Optional("orgId"): int,
+            v.Optional("database"): v.All(str, v.Length(min=1)),
         }
         return datasource

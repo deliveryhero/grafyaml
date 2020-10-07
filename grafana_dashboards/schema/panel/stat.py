@@ -18,48 +18,47 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class Stat(Base):
-
     def get_schema(self):
         reduceOptions = {
-            v.Required('values', default=False): v.All(bool),
-            v.Required('calcs', default=['last']): v.All(list),
-            v.Required('fields', default=''): v.Any(str),
+            v.Required("values", default=False): v.All(bool),
+            v.Required("calcs", default=["last"]): v.All(list),
+            v.Required("fields", default=""): v.Any(str),
         }
 
         thresholds = {
-            v.Required('steps'): v.All(list),
-            v.Required('mode', default='absolute'): v.Any(str),
+            v.Required("steps"): v.All(list),
+            v.Required("mode", default="absolute"): v.Any(str),
         }
 
         defaults = {
-            v.Required('unit', default='short'): Base.formats,
-            v.Required('NoneValueMode', default='connected'): v.Any(str),
-            v.Required('thresholds'): v.All(thresholds),
-            v.Optional('decimals'): v.All(int),
+            v.Required("unit", default="short"): Base.formats,
+            v.Required("NoneValueMode", default="connected"): v.Any(str),
+            v.Required("thresholds"): v.All(thresholds),
+            v.Optional("decimals"): v.All(int),
         }
 
         fieldConfig = {
-            v.Required('defaults'): v.All(defaults),
-            v.Required('overrides', default=[]): v.All(list),
+            v.Required("defaults"): v.All(defaults),
+            v.Required("overrides", default=[]): v.All(list),
         }
 
         options = {
-            v.Required('orientation'): v.Any(str),
-            v.Required('textMode'): v.Any(str),
-            v.Required('colorMode'): v.Any(str),
-            v.Required('graphMode'): v.Any(str),
-            v.Required('justifyMode'): v.Any(str),
-            v.Optional('reduceOptions'): v.All(reduceOptions),
+            v.Required("orientation"): v.Any(str),
+            v.Required("textMode"): v.Any(str),
+            v.Required("colorMode"): v.Any(str),
+            v.Required("graphMode"): v.Any(str),
+            v.Required("justifyMode"): v.Any(str),
+            v.Optional("reduceOptions"): v.All(reduceOptions),
         }
 
         stat = {
-            v.Required('targets', default=[]): v.All(list),
-            v.Required('fieldConfig'): v.All(fieldConfig),
-            v.Optional('options'): v.All(options),
-            v.Optional('datasource'): v.All(str),
-            v.Optional('timeFrom'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
-            v.Optional('timeShift'): v.All(v.Match(r'[1-9]+[0-9]*[smhdw]')),
-            v.Optional('maxDataPoints'): v.All(int),
+            v.Required("targets", default=[]): v.All(list),
+            v.Required("fieldConfig"): v.All(fieldConfig),
+            v.Optional("options"): v.All(options),
+            v.Optional("datasource"): v.All(str),
+            v.Optional("timeFrom"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
+            v.Optional("timeShift"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
+            v.Optional("maxDataPoints"): v.All(int),
         }
         stat.update(self.base)
         return v.Schema(stat)

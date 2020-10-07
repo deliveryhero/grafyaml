@@ -18,7 +18,6 @@ from grafana_dashboards.schema.panel.text import Text
 
 
 class TestCaseText(TestCase):
-
     def setUp(self):
         super(TestCaseText, self).setUp()
         self.schema = Text().get_schema()
@@ -26,12 +25,12 @@ class TestCaseText(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'content': 'junk',
-            'editable': True,
-            'error': False,
-            'mode': 'markdown',
-            'span': 12,
-            'title': 'foobar',
-            'type': 'text',
+            "content": "junk",
+            "editable": True,
+            "error": False,
+            "mode": "markdown",
+            "span": 12,
+            "title": "foobar",
+            "type": "text",
         }
         self.assertEqual(self.schema(defaults), defaults)

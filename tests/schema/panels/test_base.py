@@ -18,7 +18,6 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class TestCaseBase(TestCase):
-
     def setUp(self):
         super(TestCaseBase, self).setUp()
         self.schema = Base().get_schema()
@@ -26,10 +25,10 @@ class TestCaseBase(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'editable': True,
-            'error': False,
-            'span': 12,
-            'title': 'foobar',
-            'type': 'text',
+            "editable": True,
+            "error": False,
+            "span": 12,
+            "title": "foobar",
+            "type": "text",
         }
         self.assertEqual(self.schema(defaults), defaults)

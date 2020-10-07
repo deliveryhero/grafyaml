@@ -18,7 +18,6 @@ from grafana_dashboards.schema.panel.singlestat import Singlestat
 
 
 class TestCaseSinglestat(TestCase):
-
     def setUp(self):
         super(TestCaseSinglestat, self).setUp()
         self.schema = Singlestat().get_schema()
@@ -26,27 +25,27 @@ class TestCaseSinglestat(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'colorBackground': False,
-            'colorValue': False,
-            'editable': True,
-            'error': False,
-            'maxDataPoints': 100,
-            'postfix': '',
-            'postfixFontSize': '50%',
-            'prefix': '',
-            'prefixFontSize': '50%',
-            'span': 12,
-            'sparkline': {
-                'fillColor': 'rgba(31, 118, 189, 0.18)',
-                'full': False,
-                'lineColor': 'rgb(31, 120, 193)',
-                'show': False
+            "colorBackground": False,
+            "colorValue": False,
+            "editable": True,
+            "error": False,
+            "maxDataPoints": 100,
+            "postfix": "",
+            "postfixFontSize": "50%",
+            "prefix": "",
+            "prefixFontSize": "50%",
+            "span": 12,
+            "sparkline": {
+                "fillColor": "rgba(31, 118, 189, 0.18)",
+                "full": False,
+                "lineColor": "rgb(31, 120, 193)",
+                "show": False,
             },
-            'targets': [],
-            'thresholds': '',
-            'title': 'foobar',
-            'type': 'singlestat',
-            'valueFontSize': '80%',
-            'valueName': 'avg',
+            "targets": [],
+            "thresholds": "",
+            "title": "foobar",
+            "type": "singlestat",
+            "valueFontSize": "80%",
+            "valueName": "avg",
         }
         self.assertEqual(self.schema(defaults), defaults)

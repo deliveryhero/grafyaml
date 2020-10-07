@@ -22,5 +22,5 @@ from tests.schema.base import TestCase as BaseTestCase
 
 
 class TestCaseSchema(TestWithScenarios, TestCase, BaseTestCase):
-    fixtures_path = os.path.join(os.path.dirname(__file__), 'fixtures')
+    fixtures_path = os.path.join(os.path.dirname(__file__), "fixtures")
     scenarios = get_scenarios(fixtures_path)

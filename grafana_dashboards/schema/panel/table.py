@@ -18,38 +18,37 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class Table(Base):
-
     def get_schema(self):
         style = {
-            v.Optional('alias'): v.All(str),
-            v.Optional('align'): v.All(str),
-            v.Required('colors', default=[]): v.All(list),
-            v.Optional('dateFormat'): v.All(str),
-            v.Optional('decimals'): v.All(int),
-            v.Optional('mappingType'): v.All(int),
-            v.Optional('pattern'): v.All(str),
-            v.Optional('type'): v.All(str),
-            v.Optional('unit'): v.All(str),
+            v.Optional("alias"): v.All(str),
+            v.Optional("align"): v.All(str),
+            v.Required("colors", default=[]): v.All(list),
+            v.Optional("dateFormat"): v.All(str),
+            v.Optional("decimals"): v.All(int),
+            v.Optional("mappingType"): v.All(int),
+            v.Optional("pattern"): v.All(str),
+            v.Optional("type"): v.All(str),
+            v.Optional("unit"): v.All(str),
         }
         styles = [style]
 
         sort = {
-            v.Optional('col'): v.All(int),
-            v.Required('desc', default=True): v.All(bool),
+            v.Optional("col"): v.All(int),
+            v.Required("desc", default=True): v.All(bool),
         }
 
         table = {
-            v.Optional('fontSize'): v.All(str),
-            v.Optional('pageSize'): v.All(int),
-            v.Required('scroll', default=False): v.All(bool),
-            v.Optional('styles'): v.All(styles, v.Length(min=1)),
-            v.Required('showHeader', default=False): v.All(bool),
-            v.Optional('transform'): v.All(str),
-            v.Optional('type'): v.All(str),
-            v.Required('targets', default=[]): v.All(list),
-            v.Required('columns', default=[]): v.All(list),
-            v.Optional('datasource'): v.All(str),
-            v.Optional('sort'): v.All(sort),
+            v.Optional("fontSize"): v.All(str),
+            v.Optional("pageSize"): v.All(int),
+            v.Required("scroll", default=False): v.All(bool),
+            v.Optional("styles"): v.All(styles, v.Length(min=1)),
+            v.Required("showHeader", default=False): v.All(bool),
+            v.Optional("transform"): v.All(str),
+            v.Optional("type"): v.All(str),
+            v.Required("targets", default=[]): v.All(list),
+            v.Required("columns", default=[]): v.All(list),
+            v.Optional("datasource"): v.All(str),
+            v.Optional("sort"): v.All(sort),
         }
         table.update(self.base)
         return v.Schema(table)

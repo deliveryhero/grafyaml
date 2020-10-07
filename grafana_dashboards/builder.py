@@ -23,35 +23,37 @@ LOG = logging.getLogger(__name__)
 
 
 class Builder(object):
-
     def __init__(self, config):
         self.cache = Cache(
-            config.get('cache', 'cachedir'),
-            config.getboolean('cache', 'enabled'))
-        self.folder_id = config.getint('grafana', 'folderid')
+            config.get("cache", "cachedir"), config.getboolean("cache", "enabled")
+        )
+        self.folder_id = config.getint("grafana", "folderid")
         self.grafana = Grafana(
-            url=config.get('grafana', 'url'),
-            key=config.get('grafana', 'apikey'))
+            url=config.get("grafana", "url"), key=config.get("grafana", "apikey")
+        )
         self.parser = YamlParser()
 
     def delete(self, path):
         self.load_files(path)
-        datasources = self.parser.data.get('datasource', {})
-        LOG.info('Number of datasources to be deleted: %d', len(datasources))
+        datasources = self.parser.data.get("datasource", {})
+        LOG.info("Number of datasources to be deleted: %d", len(datasources))
         self._delete_datasource(datasources)
-        dashboards = self.parser.data.get('dashboard', {})
-        LOG.info('Number of dashboards to be deleted: %d', len(dashboards))
+        dashboards = self.parser.data.get("dashboard", {})
+        LOG.info("Number of dashboards to be deleted: %d", len(dashboards))
         self._delete_dashboard(dashboards)
 
     def load_files(self, path):
         files_to_process = []
-        paths = path.split(':')
+        paths = path.split(":")
         for path in paths:
             if os.path.isdir(path):
-                files_to_process.extend([os.path.join(path, f)
-                                         for f in os.listdir(path)
-                                         if (f.endswith('.yaml')
-                                             or f.endswith('.yml'))])
+                files_to_process.extend(
+                    [
+                        os.path.join(path, f)
+                        for f in os.listdir(path)
+                        if (f.endswith(".yaml") or f.endswith(".yml"))
+                    ]
+                )
             else:
                 files_to_process.append(path)
 
@@ -60,34 +62,34 @@ class Builder(object):
 
     def update(self, path):
         self.load_files(path)
-        datasources = self.parser.data.get('datasource', {})
-        LOG.info('Number of datasources to be updated: %d', len(datasources))
+        datasources = self.parser.data.get("datasource", {})
+        LOG.info("Number of datasources to be updated: %d", len(datasources))
         self._update_datasource(datasources)
-        dashboards = self.parser.data.get('dashboard', {})
-        LOG.info('Number of dashboards to be updated: %d', len(dashboards))
+        dashboards = self.parser.data.get("dashboard", {})
+        LOG.info("Number of dashboards to be updated: %d", len(dashboards))
         self._update_dashboard(dashboards)
 
     def _delete_dashboard(self, data):
         for name in data:
-            LOG.debug('Deleting grafana dashboard %s', name)
+            LOG.debug("Deleting grafana dashboard %s", name)
             self.grafana.dashboard.delete(name)
-            self.cache.set(name, '')
+            self.cache.set(name, "")
 
     def _delete_datasource(self, data):
         for name in data:
-            LOG.debug('Deleting grafana datasource %s', name)
+            LOG.debug("Deleting grafana datasource %s", name)
             datasource_id = self.grafana.datasource.is_datasource(name)
             if datasource_id:
                 self.grafana.datasource.delete(datasource_id)
-                self.cache.set(name, '')
+                self.cache.set(name, "")
 
     def _update_dashboard(self, data):
         for name in data:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):
-                self.grafana.dashboard.create(name, data,
-                                              overwrite=True,
-                                              folder_id=self.folder_id)
+                self.grafana.dashboard.create(
+                    name, data, overwrite=True, folder_id=self.folder_id
+                )
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)

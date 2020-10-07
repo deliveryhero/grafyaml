@@ -13,4 +13,4 @@
 import pbr.version
 
 
-__version__ = pbr.version.VersionInfo('grafyaml').version_string()
+__version__ = pbr.version.VersionInfo("grafyaml").version_string()
