@@ -1,5 +1,4 @@
 from setuptools import setup
-from io import open
 
 setup(
     name="grafyaml",
@@ -8,7 +7,13 @@ setup(
     license="Apache v2.0",
     description="A nice and easy way to template Grafana dashboards in YAML",
     long_description=open("README.md", encoding="utf-8").read(),
-    packages=["grafana_dashboards"],
+    packages=[
+        "grafana_dashboards",
+        "grafana_dashboards/grafana",
+        "grafana_dashboards/schema",
+        "grafana_dashboards/schema/panel",
+        "grafana_dashboards/schema/template",
+    ],
     entry_points={
         "console_scripts": ["grafana-dashboard=grafana_dashboards.cmd:main"],
     },
