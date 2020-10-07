@@ -18,7 +18,6 @@ from grafana_dashboards.schema.panel.dashlist import Dashlist
 
 
 class TestCaseDashlist(TestCase):
-
     def setUp(self):
         super(TestCaseDashlist, self).setUp()
         self.schema = Dashlist().get_schema()
@@ -26,14 +25,14 @@ class TestCaseDashlist(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'editable': True,
-            'error': False,
-            'limit': 10,
-            'mode': 'starred',
-            'query': '',
-            'span': 12,
-            'tag': '',
-            'title': 'foobar',
-            'type': 'dashlist',
+            "editable": True,
+            "error": False,
+            "limit": 10,
+            "mode": "starred",
+            "query": "",
+            "span": 12,
+            "tag": "",
+            "title": "foobar",
+            "type": "dashlist",
         }
         self.assertEqual(self.schema(defaults), defaults)

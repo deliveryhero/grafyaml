@@ -30,7 +30,7 @@ class TestCase(object):
         if self.out_filename is None:
             return ""
 
-        content = open(self.out_filename, 'r').read()
+        content = open(self.out_filename, "r").read()
 
         return content
 
@@ -41,7 +41,12 @@ class TestCase(object):
         valid_yaml = parser.data
 
         pretty_json = json.dumps(
-            valid_yaml, indent=4, separators=(',', ': '), sort_keys=True)
+            valid_yaml, indent=4, separators=(",", ": "), sort_keys=True
+        )
 
-        self.assertThat(pretty_json, testtools.matchers.DocTestMatches(
-            expected_json, doctest.ELLIPSIS | doctest.REPORT_NDIFF))
+        self.assertThat(
+            pretty_json,
+            testtools.matchers.DocTestMatches(
+                expected_json, doctest.ELLIPSIS | doctest.REPORT_NDIFF
+            ),
+        )

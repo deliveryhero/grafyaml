@@ -18,12 +18,11 @@ from grafana_dashboards.schema.template.base import Base
 
 
 class Adhoc(Base):
-
     def get_schema(self):
         query = {
-            v.Required('datasource'): v.All(str),
-            v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
-            v.Optional('label', default=''): v.All(str),
+            v.Required("datasource"): v.All(str),
+            v.Optional("hide"): v.All(int, v.Range(min=0, max=2)),
+            v.Optional("label", default=""): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)

@@ -20,9 +20,8 @@ from grafana_dashboards.grafana import utils
 
 
 class Datasource(object):
-
     def __init__(self, url, session):
-        self.url = utils.urljoin(url, 'api/datasources/')
+        self.url = utils.urljoin(url, "api/datasources/")
         self.session = session
 
     def create(self, name, data):
@@ -37,10 +36,9 @@ class Datasource(object):
 
         """
         if self.is_datasource(name):
-            raise Exception('datasource[%s] already exists' % name)
+            raise Exception("datasource[%s] already exists" % name)
 
-        res = self.session.post(
-            self.url, data=json.dumps(data))
+        res = self.session.post(self.url, data=json.dumps(data))
 
         res.raise_for_status()
         return res.json()
@@ -57,7 +55,7 @@ class Datasource(object):
         url = utils.urljoin(self.url, str(datasource_id))
         self.session.delete(url)
         if self.get(datasource_id):
-            raise Exception('datasource[%s] failed to delete' % datasource_id)
+            raise Exception("datasource[%s] failed to delete" % datasource_id)
 
     def get(self, datasource_id):
         """Get a datasource
@@ -100,8 +98,8 @@ class Datasource(object):
         """
         datasources = self.get_all()
         for datasource in datasources:
-            if datasource['name'].lower() == name.lower():
-                return datasource['id']
+            if datasource["name"].lower() == name.lower():
+                return datasource["id"]
         return 0
 
     def update(self, datasource_id, data):
@@ -120,8 +118,7 @@ class Datasource(object):
         """
         url = utils.urljoin(self.url, str(datasource_id))
 
-        res = self.session.put(
-            url, data=json.dumps(data))
+        res = self.session.put(url, data=json.dumps(data))
 
         res.raise_for_status()
         return res.json()

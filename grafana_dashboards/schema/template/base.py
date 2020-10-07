@@ -15,15 +15,15 @@
 import voluptuous as v
 
 
-AUTO_INTERVAL = '$__auto_interval'
-ALL_CUSTOM = '$__all'
+AUTO_INTERVAL = "$__auto_interval"
+ALL_CUSTOM = "$__all"
 
 
 class Base(object):
     option = {
-        v.Required('text'): v.All(str, v.Length(min=1)),
-        v.Required('value'): v.All(str, v.Length(min=1)),
-        v.Required('selected', default=False): v.All(bool),
+        v.Required("text"): v.All(str, v.Length(min=1)),
+        v.Required("value"): v.All(str, v.Length(min=1)),
+        v.Required("selected", default=False): v.All(bool),
     }
     options = [option]
 
@@ -48,25 +48,26 @@ class Base(object):
             # supply it for them.  NB: if a user wants 'auto' with value
             # 'foobar', they can just override this by simply including
             # 'value: foobar'.
-            if option.get('text') == 'auto' and 'value' not in option:
-                option['value'] = AUTO_INTERVAL
+            if option.get("text") == "auto" and "value" not in option:
+                option["value"] = AUTO_INTERVAL
 
-            if option.get('text') == 'all' and 'value' not in option:
-                option['value'] = ALL_CUSTOM
+            if option.get("text") == "all" and "value" not in option:
+                option["value"] = ALL_CUSTOM
 
             # Let's also not make our users type every option twice.  For
             # each option with a text entry but no value, copy the next
             # entry to that value.
-            if option.get('text') and 'value' not in option:
-                option['value'] = option['text']
+            if option.get("text") and "value" not in option:
+                option["value"] = option["text"]
 
         return v.Schema(self.options)(options)
 
     def __init__(self):
         self.base = {
-            v.Required('name'): v.All(str, v.Length(min=1)),
-            v.Required('type'): v.Any('query', 'interval', 'custom',
-                                      'datasource', 'adhoc', 'constant'),
+            v.Required("name"): v.All(str, v.Length(min=1)),
+            v.Required("type"): v.Any(
+                "query", "interval", "custom", "datasource", "adhoc", "constant"
+            ),
         }
 
     def get_schema(self):

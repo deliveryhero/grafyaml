@@ -21,19 +21,18 @@ from grafana_dashboards.schema.template import Template
 
 
 class Dashboard(object):
-
     def get_schema(self):
 
         dashboard = {
-            v.Required('timezone', default='utc'): v.Any('browser', 'utc'),
-            v.Required('title'): v.All(str, v.Length(min=1)),
-            v.Optional('id'): int,
-            v.Optional('sharedCrosshair'): bool,
-            v.Optional('editable'): bool,
-            v.Optional('tags'): [v.Any(str, v.Length(min=1))],
-            v.Optional('time'): {
-                v.Required('from'): v.Any(v.Datetime(), str),
-                v.Required('to'): v.Any(v.Datetime(), str),
+            v.Required("timezone", default="utc"): v.Any("browser", "utc"),
+            v.Required("title"): v.All(str, v.Length(min=1)),
+            v.Optional("id"): int,
+            v.Optional("sharedCrosshair"): bool,
+            v.Optional("editable"): bool,
+            v.Optional("tags"): [v.Any(str, v.Length(min=1))],
+            v.Optional("time"): {
+                v.Required("from"): v.Any(v.Datetime(), str),
+                v.Required("to"): v.Any(v.Datetime(), str),
             },
         }
         links = Links().get_schema()

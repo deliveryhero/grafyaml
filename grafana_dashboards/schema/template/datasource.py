@@ -20,16 +20,16 @@ from grafana_dashboards.schema.template.base import Base
 class Datasource(Base):
 
     current = {
-        v.Required('text'): v.All(str, v.Length(min=1)),
-        v.Required('value'): v.All(str, v.Length(min=1)),
+        v.Required("text"): v.All(str, v.Length(min=1)),
+        v.Required("value"): v.All(str, v.Length(min=1)),
     }
 
     def get_schema(self):
         query = {
-            v.Required('query', default=''): v.All(str),
-            v.Required('current'): v.Any(self.current),
-            v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
-            v.Optional('label', default=''): v.All(str),
+            v.Required("query", default=""): v.All(str),
+            v.Required("current"): v.Any(self.current),
+            v.Optional("hide"): v.All(int, v.Range(min=0, max=2)),
+            v.Optional("label", default=""): v.All(str),
         }
         query.update(self.base)
         return v.Schema(query)

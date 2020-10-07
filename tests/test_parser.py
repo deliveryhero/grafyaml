@@ -20,80 +20,83 @@ from grafana_dashboards import parser
 
 
 class TestCaseParser(TestCase):
-
     def setUp(self):
         super(TestCaseParser, self).setUp()
         self.parser = parser.YamlParser()
 
     def test_get_dashboard_empty(self):
-        self._get_empty_dashboard('foobar')
+        self._get_empty_dashboard("foobar")
 
     def test_parse_multiple(self):
         path = os.path.join(
-            os.path.dirname(__file__), 'fixtures/parser/dashboard-0001.yaml')
+            os.path.dirname(__file__), "fixtures/parser/dashboard-0001.yaml"
+        )
         self.parser.parse(path)
         dashboard = {
-            'foobar': {
-                'rows': [],
-                'templating': {
-                    'enabled': False,
-                    'list': [],
+            "foobar": {
+                "rows": [],
+                "templating": {
+                    "enabled": False,
+                    "list": [],
                 },
-                'timezone': 'utc',
-                'title': 'foobar',
+                "timezone": "utc",
+                "title": "foobar",
             },
-            'new-dashboard': {
-                'rows': [],
-                'templating': {
-                    'enabled': False,
-                    'list': [],
+            "new-dashboard": {
+                "rows": [],
+                "templating": {
+                    "enabled": False,
+                    "list": [],
                 },
-                'timezone': 'utc',
-                'title': 'New dashboard',
+                "timezone": "utc",
+                "title": "New dashboard",
             },
         }
 
         # Get parsed dashboard
-        res, md5 = self.parser.get_dashboard('new-dashboard')
-        self.assertEqual(res, dashboard['new-dashboard'])
+        res, md5 = self.parser.get_dashboard("new-dashboard")
+        self.assertEqual(res, dashboard["new-dashboard"])
 
         # Check for a dashboard that does not exist
-        self._get_empty_dashboard('foobar')
+        self._get_empty_dashboard("foobar")
 
         # Parse another file to ensure we are appending data.
         path = os.path.join(
-            os.path.dirname(__file__), 'fixtures/parser/dashboard-0002.yaml')
+            os.path.dirname(__file__), "fixtures/parser/dashboard-0002.yaml"
+        )
         self.parser.parse(path)
 
-        res, md5 = self.parser.get_dashboard('foobar')
-        self.assertEqual(res, dashboard['foobar'])
+        res, md5 = self.parser.get_dashboard("foobar")
+        self.assertEqual(res, dashboard["foobar"])
 
         # Ensure our first dashboard still exists.
-        res, md5 = self.parser.get_dashboard('new-dashboard')
-        self.assertEqual(res, dashboard['new-dashboard'])
+        res, md5 = self.parser.get_dashboard("new-dashboard")
+        self.assertEqual(res, dashboard["new-dashboard"])
 
     def test_parse_duplicate(self):
         path = os.path.join(
-            os.path.dirname(__file__), 'fixtures/parser/dashboard-0001.yaml')
+            os.path.dirname(__file__), "fixtures/parser/dashboard-0001.yaml"
+        )
         self.parser.parse(path)
         dashboard = {
-            'new-dashboard': {
-                'rows': [],
-                'templating': {
-                    'enabled': False,
-                    'list': [],
+            "new-dashboard": {
+                "rows": [],
+                "templating": {
+                    "enabled": False,
+                    "list": [],
                 },
-                'timezone': 'utc',
-                'title': 'New dashboard',
+                "timezone": "utc",
+                "title": "New dashboard",
             },
         }
 
         # Get parsed dashboard
-        res, md5 = self.parser.get_dashboard('new-dashboard')
-        self.assertEqual(res, dashboard['new-dashboard'])
+        res, md5 = self.parser.get_dashboard("new-dashboard")
+        self.assertEqual(res, dashboard["new-dashboard"])
 
         path = os.path.join(
-            os.path.dirname(__file__), 'fixtures/parser/dashboard-0003.yaml')
+            os.path.dirname(__file__), "fixtures/parser/dashboard-0003.yaml"
+        )
         # Fail to parse duplicate dashboard
         self.assertRaises(Exception, self.parser.parse, path)
 

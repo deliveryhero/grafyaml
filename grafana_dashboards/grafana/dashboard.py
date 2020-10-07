@@ -20,9 +20,8 @@ from grafana_dashboards.grafana import utils
 
 
 class Dashboard(object):
-
     def __init__(self, url, session):
-        self.url = utils.urljoin(url, 'api/dashboards/db/')
+        self.url = utils.urljoin(url, "api/dashboards/db/")
         self.session = session
 
     def create(self, name, data, overwrite=False, folder_id=0):
@@ -42,18 +41,17 @@ class Dashboard(object):
 
         """
         dashboard = {
-            'dashboard': data,
-            'folderId': folder_id,
-            'overwrite': overwrite,
+            "dashboard": data,
+            "folderId": folder_id,
+            "overwrite": overwrite,
         }
         if not overwrite and self.is_dashboard(name):
-            raise Exception('dashboard[%s] already exists' % name)
+            raise Exception("dashboard[%s] already exists" % name)
 
-        res = self.session.post(
-            self.url, data=json.dumps(dashboard))
+        res = self.session.post(self.url, data=json.dumps(dashboard))
         res.raise_for_status()
         if not self.is_dashboard(name):
-            raise Exception('dashboard[%s] does not exist' % name)
+            raise Exception("dashboard[%s] does not exist" % name)
 
     def delete(self, name):
         """Delete a dashboard
@@ -67,7 +65,7 @@ class Dashboard(object):
         url = utils.urljoin(self.url, name)
         self.session.delete(url)
         if self.is_dashboard(name):
-            raise Exception('dashboard[%s] failed to delete' % name)
+            raise Exception("dashboard[%s] failed to delete" % name)
 
     def get(self, name):
         """Get a dashboard
@@ -98,6 +96,6 @@ class Dashboard(object):
 
         """
         res = self.get(name)
-        if res and res['meta']['slug'] == name:
+        if res and res["meta"]["slug"] == name:
             return True
         return False
