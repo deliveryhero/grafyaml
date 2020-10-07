@@ -12,7 +12,7 @@ setup(
         "grafana_dashboards/grafana",
         "grafana_dashboards/schema",
         "grafana_dashboards/schema/panel",
-        "grafana_dashboards/schema/template"
+        "grafana_dashboards/schema/template",
     ],
     entry_points={
         "console_scripts": ["grafana-dashboard=grafana_dashboards.cmd:main"],
