@@ -18,11 +18,10 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class Row(Base):
-
     def get_schema(self):
         row = {
-            v.Required('collapsed'): v.All(bool),
-            v.Optional('panels', default=[]): v.All([str])
+            v.Required("collapsed"): v.All(bool),
+            v.Optional("panels", default=[]): v.All([str]),
         }
         row.update(self.base)
         return v.Schema(row)

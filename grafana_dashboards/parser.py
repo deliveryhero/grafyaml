@@ -26,26 +26,25 @@ LOG = logging.getLogger(__name__)
 
 
 class YamlParser(object):
-
     def __init__(self):
         self.data = {}
 
     def get_dashboard(self, slug):
-        data = self.data.get('dashboard', {}).get(slug, None)
+        data = self.data.get("dashboard", {}).get(slug, None)
         md5 = self._generate_md5(data)
-        LOG.debug('Dashboard %s: %s' % (slug, md5))
+        LOG.debug("Dashboard %s: %s" % (slug, md5))
 
         return data, md5
 
     def get_datasource(self, slug):
-        data = self.data.get('datasource', {}).get(slug, None)
+        data = self.data.get("datasource", {}).get(slug, None)
         md5 = self._generate_md5(data)
-        LOG.debug('Datasource %s: %s' % (slug, md5))
+        LOG.debug("Datasource %s: %s" % (slug, md5))
 
         return data, md5
 
     def parse(self, fn):
-        with io.open(fn, 'r', encoding='utf-8') as fp:
+        with io.open(fn, "r", encoding="utf-8") as fp:
             self.parse_fp(fp)
 
     def parse_fp(self, fp):
@@ -54,15 +53,16 @@ class YamlParser(object):
         for item in result.items():
             group = self.data.get(item[0], {})
             # Create slug to make it easier to find dashboards.
-            if item[0] == 'dashboard':
-                name = item[1]['title']
+            if item[0] == "dashboard":
+                name = item[1]["title"]
             else:
-                name = item[1]['name']
+                name = item[1]["name"]
             slug = slugify(name)
             if slug in group:
                 raise Exception(
                     "Duplicate {0} found in '{1}: '{2}' "
-                    "already defined".format(item[0], fp.name, name))
+                    "already defined".format(item[0], fp.name, name)
+                )
             group[slug] = item[1]
             self.data[item[0]] = group
 
@@ -75,5 +75,5 @@ class YamlParser(object):
         if data:
             # Sort json keys to help our md5 hash are constant.
             content = json.dumps(data, sort_keys=True)
-            md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+            md5 = hashlib.md5(content.encode("utf-8")).hexdigest()
         return md5

@@ -16,15 +16,14 @@ from six.moves import configparser as ConfigParser
 
 
 class Config(ConfigParser.ConfigParser):
-
     def __init__(self):
         ConfigParser.ConfigParser.__init__(self)
         # Add [cache] section
-        self.add_section('cache')
-        self.set('cache', 'cachedir', '~/.cache/grafyaml')
-        self.set('cache', 'enabled', 'true')
+        self.add_section("cache")
+        self.set("cache", "cachedir", "~/.cache/grafyaml")
+        self.set("cache", "enabled", "true")
         # Add [grafana] section
-        self.add_section('grafana')
-        self.set('grafana', 'apikey', '')
-        self.set('grafana', 'url', 'http://localhost:8080')
-        self.set('grafana', 'folderid', '0')
+        self.add_section("grafana")
+        self.set("grafana", "apikey", "")
+        self.set("grafana", "url", "http://localhost:8080")
+        self.set("grafana", "folderid", "0")

@@ -19,14 +19,15 @@ from grafana_dashboards.schema.datasource import Datasource
 
 
 class Schema(object):
-
     def validate(self, data):
         dashboard = Dashboard().get_schema()
         datasource = Datasource().get_schema()
 
-        schema = v.Schema({
-            v.Optional('dashboard'): dashboard,
-            v.Optional('datasource'): datasource,
-        })
+        schema = v.Schema(
+            {
+                v.Optional("dashboard"): dashboard,
+                v.Optional("datasource"): datasource,
+            }
+        )
 
         return schema(data)

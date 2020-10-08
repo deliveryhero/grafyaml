@@ -23,49 +23,49 @@ from grafana_dashboards.schema.template.query import Query
 
 
 class Template(object):
-
     def __init__(self):
         # TODO(pabelanger): This is pretty ugly, there much be a better way to
         # set default values.
         self.defaults = {
-            'enabled': False,
-            'list': [],
+            "enabled": False,
+            "list": [],
         }
 
     def _validate(self):
-
         def f(data):
             res = self.defaults
             if not isinstance(data, list):
-                raise v.Invalid('Should be a list')
+                raise v.Invalid("Should be a list")
 
             for template in data:
-                res['enabled'] = True
+                res["enabled"] = True
                 validate = Base().get_schema()
                 validate(template)
 
-                if template['type'] == 'query':
+                if template["type"] == "query":
                     schema = Query().get_schema()
-                if template['type'] == 'interval':
+                if template["type"] == "interval":
                     schema = Interval().get_schema()
-                if template['type'] == 'custom':
+                if template["type"] == "custom":
                     schema = Custom().get_schema()
-                if template['type'] == 'datasource':
+                if template["type"] == "datasource":
                     schema = Datasource().get_schema()
-                if template['type'] == 'adhoc':
+                if template["type"] == "adhoc":
                     schema = Adhoc().get_schema()
 
-                res['list'].append(schema(template))
+                res["list"].append(schema(template))
 
             return res
 
         return f
 
     def get_schema(self):
-        schema = v.Schema({
-            v.Required(
-                'templating', default=self.defaults): v.All(
-                    self._validate()),
-        })
+        schema = v.Schema(
+            {
+                v.Required("templating", default=self.defaults): v.All(
+                    self._validate()
+                ),
+            }
+        )
 
         return schema

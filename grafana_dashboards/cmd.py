@@ -25,9 +25,8 @@ LOG = logging.getLogger(__name__)
 
 
 class Client(object):
-
     def delete(self):
-        LOG.info('Deleting schema in %s', self.args.path)
+        LOG.info("Deleting schema in %s", self.args.path)
         builder = Builder(self.config)
         builder.delete(self.args.path)
 
@@ -41,45 +40,59 @@ class Client(object):
     def parse_arguments(self):
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            '--config-file', dest='config', help='Path to a config file to '
-            'use. The default file used is: /etc/grafyaml/grafyaml.conf')
+            "--config-file",
+            dest="config",
+            help="Path to a config file to "
+            "use. The default file used is: /etc/grafyaml/grafyaml.conf",
+        )
         parser.add_argument(
-            '--debug', dest='debug', action='store_true',
-            help='Print debugging output (set logging level to DEBUG instead '
-            ' of default INFO level)')
+            "--debug",
+            dest="debug",
+            action="store_true",
+            help="Print debugging output (set logging level to DEBUG instead "
+            " of default INFO level)",
+        )
         parser.add_argument(
-            '--grafana-url', dest='grafana_url', help='URL for grafana '
-            'server. The default used is: http://localhost:8080')
+            "--grafana-url",
+            dest="grafana_url",
+            help="URL for grafana "
+            "server. The default used is: http://localhost:8080",
+        )
         parser.add_argument(
-            '--grafana-apikey', dest='grafana_apikey',
-            help='API key to access grafana.')
+            "--grafana-apikey", dest="grafana_apikey", help="API key to access grafana."
+        )
         parser.add_argument(
-            '--grafana-folderid', dest='grafana_folderid',
-            help='The id of the folder to save the dashboard in.')
+            "--grafana-folderid",
+            dest="grafana_folderid",
+            help="The id of the folder to save the dashboard in.",
+        )
         parser.add_argument(
-            '--version', dest='version', action='version',
-            version=__version__, help="show "
-            "program's version number and exit")
+            "--version",
+            dest="version",
+            action="version",
+            version=__version__,
+            help="show " "program's version number and exit",
+        )
 
-        subparsers = parser.add_subparsers(title='commands')
+        subparsers = parser.add_subparsers(title="commands")
         subparsers.required = True
 
-        parser_delete = subparsers.add_parser('delete')
+        parser_delete = subparsers.add_parser("delete")
         parser_delete.add_argument(
-            'path', help='colon-separated list of paths to YAML files or'
-            ' directories')
+            "path", help="colon-separated list of paths to YAML files or" " directories"
+        )
         parser_delete.set_defaults(func=self.delete)
 
-        parser_update = subparsers.add_parser('update')
+        parser_update = subparsers.add_parser("update")
         parser_update.add_argument(
-            'path', help='colon-separated list of paths to YAML files or'
-            ' directories')
+            "path", help="colon-separated list of paths to YAML files or" " directories"
+        )
         parser_update.set_defaults(func=self.update)
 
-        parser_validate = subparsers.add_parser('validate')
+        parser_validate = subparsers.add_parser("validate")
         parser_validate.add_argument(
-            'path', help='colon-separated list of paths to YAML files or'
-            ' directories')
+            "path", help="colon-separated list of paths to YAML files or" " directories"
+        )
         parser_validate.set_defaults(func=self.validate)
 
         self.args = parser.parse_args()
@@ -89,17 +102,17 @@ class Client(object):
         if self.args.config:
             fp = self.args.config
         else:
-            fp = '/etc/grafyaml/grafyaml.conf'
+            fp = "/etc/grafyaml/grafyaml.conf"
         self.config.read(os.path.expanduser(fp))
         if self.args.grafana_url:
-            self.config.set('grafana', 'url', self.args.grafana_url)
-            LOG.debug('Grafana URL override: {}'.format(self.args.grafana_url))
+            self.config.set("grafana", "url", self.args.grafana_url)
+            LOG.debug("Grafana URL override: {}".format(self.args.grafana_url))
         if self.args.grafana_apikey:
-            self.config.set('grafana', 'apikey', self.args.grafana_apikey)
-            LOG.debug('Grafana APIKey overridden')
+            self.config.set("grafana", "apikey", self.args.grafana_apikey)
+            LOG.debug("Grafana APIKey overridden")
         if self.args.grafana_folderid:
-            self.config.set('grafana', 'folderid', self.args.grafana_folderid)
-            LOG.debug('Grafana Folderid overridden')
+            self.config.set("grafana", "folderid", self.args.grafana_folderid)
+            LOG.debug("Grafana Folderid overridden")
 
     def setup_logging(self):
         if self.args.debug:
@@ -108,22 +121,22 @@ class Client(object):
             logging.basicConfig(level=logging.INFO)
 
     def update(self):
-        LOG.info('Updating schema in %s', self.args.path)
+        LOG.info("Updating schema in %s", self.args.path)
         builder = Builder(self.config)
         builder.update(self.args.path)
 
     def validate(self):
-        LOG.info('Validating schema in %s', self.args.path)
+        LOG.info("Validating schema in %s", self.args.path)
         # NOTE(pabelanger): Disable caching support by default, in an effort
         # to improve performance.
-        self.config.set('cache', 'enabled', 'false')
+        self.config.set("cache", "enabled", "false")
         builder = Builder(self.config)
 
         try:
             builder.load_files(self.args.path)
-            print('SUCCESS!')
+            print("SUCCESS!")
         except Exception as e:
-            print('%s: ERROR: %s' % (self.args.path, e))
+            print("%s: ERROR: %s" % (self.args.path, e))
             sys.exit(1)
 
 

@@ -18,13 +18,12 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class Dashlist(Base):
-
     def get_schema(self):
         dashlist = {
-            v.Required('limit', default=10): v.All(int),
-            v.Required('mode', default='starred'): v.Any('search', 'starred'),
-            v.Required('tag', default=''): v.All(str),
-            v.Required('query', default=''): v.All(str),
+            v.Required("limit", default=10): v.All(int),
+            v.Required("mode", default="starred"): v.Any("search", "starred"),
+            v.Required("tag", default=""): v.All(str),
+            v.Required("query", default=""): v.All(str),
         }
         dashlist.update(self.base)
         return v.Schema(dashlist)

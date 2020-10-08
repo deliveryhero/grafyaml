@@ -19,7 +19,6 @@ from grafana_dashboards.grafana.datasource import Datasource
 
 
 class Grafana(object):
-
     def __init__(self, url, key=None):
         """Create object for grafana instance
 
@@ -33,13 +32,15 @@ class Grafana(object):
         self.auth = None
 
         session = requests.Session()
-        session.headers.update({
-            'Content-Type': 'application/json',
-        })
+        session.headers.update(
+            {
+                "Content-Type": "application/json",
+            }
+        )
         # NOTE(pabelanger): Grafana 2.1.0 added basic auth support so now the
         # api key is optional.
         if key:
-            self.auth = {'Authorization': 'Bearer %s' % key}
+            self.auth = {"Authorization": "Bearer %s" % key}
             session.headers.update(self.auth)
 
         self.dashboard = Dashboard(self.server, session)

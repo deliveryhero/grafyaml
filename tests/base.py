@@ -25,28 +25,33 @@ import testtools
 
 from grafana_dashboards.config import Config
 
-FIXTURE_DIR = os.path.join(
-    os.path.dirname(__file__), 'fixtures')
+FIXTURE_DIR = os.path.join(os.path.dirname(__file__), "fixtures")
 
 
-def get_scenarios(fixtures_path, in_ext='yaml', out_ext='json'):
+def get_scenarios(fixtures_path, in_ext="yaml", out_ext="json"):
     scenarios = []
     files = []
     for dirpath, dirs, fs in os.walk(fixtures_path):
         files.extend([os.path.join(dirpath, f) for f in fs])
 
-    input_files = [f for f in files if re.match(r'.*\.{0}$'.format(in_ext), f)]
+    input_files = [f for f in files if re.match(r".*\.{0}$".format(in_ext), f)]
 
     for input_filename in input_files:
         output_candidate = re.sub(
-            r'\.{0}$'.format(in_ext), '.{0}'.format(out_ext), input_filename)
+            r"\.{0}$".format(in_ext), ".{0}".format(out_ext), input_filename
+        )
         if output_candidate not in files:
             output_candidate = None
 
-        scenarios.append((input_filename, {
-            'in_filename': input_filename,
-            'out_filename': output_candidate,
-        }))
+        scenarios.append(
+            (
+                input_filename,
+                {
+                    "in_filename": input_filename,
+                    "out_filename": output_candidate,
+                },
+            )
+        )
 
     return scenarios
 
@@ -56,16 +61,15 @@ class TestCase(testtools.TestCase):
 
     def setUp(self):
         super(TestCase, self).setUp()
-        self.log_fixture = self.useFixture(fixtures.FakeLogger(
-            level=logging.DEBUG))
+        self.log_fixture = self.useFixture(fixtures.FakeLogger(level=logging.DEBUG))
         self.setup_config()
         self.cachedir = tempfile.mkdtemp()
-        self.config.set('cache', 'cachedir', self.cachedir)
+        self.config.set("cache", "cachedir", self.cachedir)
         self.addCleanup(self.cleanup_cachedir)
 
     def setup_config(self):
         self.config = Config()
-        self.config.read(os.path.join(FIXTURE_DIR, 'grafyaml.conf'))
+        self.config.read(os.path.join(FIXTURE_DIR, "grafyaml.conf"))
 
     def cleanup_cachedir(self):
         shutil.rmtree(self.cachedir)

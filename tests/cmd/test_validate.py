@@ -23,102 +23,98 @@ from tests.cmd.base import TestCase
 
 
 class TestCaseValidateScenarios(TestWithScenarios, TestCase):
-    fixtures_path = os.path.join(
-        os.path.dirname(__file__), '../fixtures/cmd/validate')
+    fixtures_path = os.path.join(os.path.dirname(__file__), "../fixtures/cmd/validate")
     scenarios = get_scenarios(fixtures_path)
 
     def test_command(self):
-        if os.path.basename(self.in_filename).startswith('good-'):
+        if os.path.basename(self.in_filename).startswith("good-"):
             self._validate_success()
         else:
             self._validate_failure()
 
     def _validate_failure(self):
         required = [
-            '%s: ERROR:' % self.in_filename,
+            "%s: ERROR:" % self.in_filename,
         ]
-        stdout, stderr = self.shell(
-            'validate %s' % self.in_filename, exitcodes=[1])
+        stdout, stderr = self.shell("validate %s" % self.in_filename, exitcodes=[1])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
     def _validate_success(self):
         required = [
-            'SUCCESS!',
+            "SUCCESS!",
         ]
-        stdout, stderr = self.shell(
-            'validate %s' % self.in_filename, exitcodes=[0])
+        stdout, stderr = self.shell("validate %s" % self.in_filename, exitcodes=[0])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
 
 class TestCaseValidate(TestCase):
-
     def test_validate_directory_success(self):
         path = os.path.join(
-            os.path.dirname(__file__), '../fixtures/cmd/validate/test0001')
+            os.path.dirname(__file__), "../fixtures/cmd/validate/test0001"
+        )
         required = [
-            'SUCCESS!',
+            "SUCCESS!",
         ]
-        stdout, stderr = self.shell(
-            'validate %s' % path, exitcodes=[0])
+        stdout, stderr = self.shell("validate %s" % path, exitcodes=[0])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
     def test_validate_mutiple_directories_success(self):
         paths = [
             os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/cmd/validate/test0001'),
+                os.path.dirname(__file__), "../fixtures/cmd/validate/test0001"
+            ),
             os.path.join(
-                os.path.dirname(__file__),
-                '../fixtures/cmd/validate/test0002'),
+                os.path.dirname(__file__), "../fixtures/cmd/validate/test0002"
+            ),
         ]
         required = [
-            'SUCCESS!',
+            "SUCCESS!",
         ]
-        stdout, stderr = self.shell(
-            'validate %s' % ':'.join(paths), exitcodes=[0])
+        stdout, stderr = self.shell("validate %s" % ":".join(paths), exitcodes=[0])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
     def test_validate_directory_invalid(self):
         path = os.path.join(
-            os.path.dirname(__file__), '../fixtures/cmd/validate/__invalid__')
+            os.path.dirname(__file__), "../fixtures/cmd/validate/__invalid__"
+        )
         self._validate_invalid_file_or_directory(path)
 
     def test_validate_file_invalid(self):
         path = os.path.join(
-            os.path.dirname(__file__), '../fixtures/cmd/validate/invalid.yaml')
+            os.path.dirname(__file__), "../fixtures/cmd/validate/invalid.yaml"
+        )
         self._validate_invalid_file_or_directory(path)
 
     def _validate_invalid_file_or_directory(self, path):
         required = [
-            r'%s: ERROR: \[Errno 2\] No such file or directory:' % path,
+            r"%s: ERROR: \[Errno 2\] No such file or directory:" % path,
         ]
-        stdout, stderr = self.shell(
-            'validate %s' % path, exitcodes=[1])
+        stdout, stderr = self.shell("validate %s" % path, exitcodes=[1])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )
 
     def test_validate_without_path(self):
         required = [
-            r'.*?^usage: grafana-dashboards validate \[-h\] path',
-            r'.*?^grafana-dashboards validate: error: (too few arguments|the '
-            r'following arguments are required: path)',
+            r".*?^usage: grafana-dashboards validate \[-h\] path",
+            r".*?^grafana-dashboards validate: error: (too few arguments|the "
+            r"following arguments are required: path)",
         ]
-        stdout, stderr = self.shell('validate', exitcodes=[2])
+        stdout, stderr = self.shell("validate", exitcodes=[2])
         for r in required:
             self.assertThat(
-                (stdout + stderr),
-                matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE))
+                (stdout + stderr), matchers.MatchesRegex(r, re.DOTALL | re.MULTILINE)
+            )

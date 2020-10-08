@@ -19,49 +19,50 @@ from grafana_dashboards.schema.template.base import Base
 
 class Constant(Base):
     current = {
-        v.Optional('text'): v.All(str, v.Length(min=1)),
-        v.Optional('value'): v.All([str]),
+        v.Optional("text"): v.All(str, v.Length(min=1)),
+        v.Optional("value"): v.All([str]),
     }
 
     def validate_options(self, options):
         options = self._validate_options(options)
 
         if len(options):
-            selected_options = [x for x in options if x.get('selected')]
+            selected_options = [x for x in options if x.get("selected")]
             # Default to first option as selected (if nothing selected)
             if len(selected_options) == 0:
-                options[0]['selected'] = True
+                options[0]["selected"] = True
 
         return options
 
     def _validate(self, data):
         constant = {
-            v.Required('options', default=[]): self.validate_options,
-            v.Required('query', default=''): v.All(str),
-            v.Optional('current'): v.Any(self.current),
-            v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
-            v.Optional('label', default=''): v.All(str),
-
+            v.Required("options", default=[]): self.validate_options,
+            v.Required("query", default=""): v.All(str),
+            v.Optional("current"): v.Any(self.current),
+            v.Optional("hide"): v.All(int, v.Range(min=0, max=2)),
+            v.Optional("label", default=""): v.All(str),
         }
         constant.update(self.base)
 
         constant_options_schema = {
-            v.Required('options', default=[]): self.validate_options,
+            v.Required("options", default=[]): self.validate_options,
         }
         data = v.Schema(constant_options_schema, extra=True)(data)
 
         # If 'query' is not supplied, compose it from the list of options.
-        if 'query' not in data:
-            query = [option['text']
-                     for option in data.get('options')
-                     if option['text'] != 'All']
-            data['query'] = ','.join(query)
+        if "query" not in data:
+            query = [
+                option["text"]
+                for option in data.get("options")
+                if option["text"] != "All"
+            ]
+            data["query"] = ",".join(query)
 
-        if 'current' not in data:
-            selected = [option['text']
-                        for option in data.get('options')
-                        if option['selected']]
-            data['current'] = dict(text='+'.join(selected), value=selected)
+        if "current" not in data:
+            selected = [
+                option["text"] for option in data.get("options") if option["selected"]
+            ]
+            data["current"] = dict(text="+".join(selected), value=selected)
 
         return v.Schema(constant)(data)
 

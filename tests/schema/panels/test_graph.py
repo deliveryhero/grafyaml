@@ -18,7 +18,6 @@ from grafana_dashboards.schema.panel.graph import Graph
 
 
 class TestCaseGraph(TestCase):
-
     def setUp(self):
         super(TestCaseGraph, self).setUp()
         self.schema = Graph().get_schema()
@@ -26,23 +25,23 @@ class TestCaseGraph(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'bars': False,
-            'editable': True,
-            'error': False,
-            'fill': 1,
-            'lines': True,
-            'linewidth': 2,
-            'percentage': False,
-            'pointradius': 5,
-            'points': False,
-            'span': 12,
-            'stack': False,
-            'steppedLine': False,
-            'targets': [],
-            'thresholds': [],
-            'title': 'foobar',
-            'type': 'graph',
-            'x-axis': True,
-            'y-axis': True,
+            "bars": False,
+            "editable": True,
+            "error": False,
+            "fill": 1,
+            "lines": True,
+            "linewidth": 2,
+            "percentage": False,
+            "pointradius": 5,
+            "points": False,
+            "span": 12,
+            "stack": False,
+            "steppedLine": False,
+            "targets": [],
+            "thresholds": [],
+            "title": "foobar",
+            "type": "graph",
+            "x-axis": True,
+            "y-axis": True,
         }
         self.assertEqual(self.schema(defaults), defaults)
