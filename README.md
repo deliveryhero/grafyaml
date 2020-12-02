@@ -31,7 +31,7 @@ export GRAFANA_API_KEY="API_KEY_HERE"
 
 ## More examples
 
-[examples/basic](examples/basic)
+- [examples/basic](examples/basic): a very basic example with a single dashboard.
 
 ## License, history and contributors
 
