@@ -2,7 +2,7 @@
 
 [![Delivery Hero ❤️ Grafana](img/banner.png)](#)
 
-[Delivery Hero](https://www.deliveryhero.com/) are big fans of Grafana, it is used by many teams. When Prometheus becomes your default storage for metrics of all types then the importance of good, consistent and manageable dashboards becomes paramount. Then add many teams, applications, services, environments and it becomes clear that a tool is needed to manage this complexity. This is that tool 🎉
+[Delivery Hero](https://www.deliveryhero.com/) are big fans of Grafana but when Prometheus becomes your default storage for metrics of all types then the importance of good, consistent and manageable Grafana dashboards becomes paramount. Then add many teams, applications, services, environments and it becomes clear that a tool is needed to manage this complexity. This is that tool 🎉
 
 - No more headaches with copying, pasting and editing JSON
 - Template panels and use them in multiple dashboards
@@ -19,14 +19,23 @@ pip3 install https://github.com/deliveryhero/grafyaml/archive/master.zip
 Create a file, e.g. `my-example-dashboard.yaml`:
 
 ```yaml
-
+dashboard:
+  title: My Dashboard
+  rows:
+  - title: Container metrics
+    height: 500px
+    panels:
+    - title: Container CPU usage
+      targets:
+      - expr: rate(container_cpu_user_seconds_total[30s]) * 100
+      type: graph
 ```
 
 Sync it to Grafana:
 
 ```
 export GRAFANA_API_KEY="API_KEY_HERE"
-
+grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-example-dashboard.yaml
 ```
 
 ## More examples
