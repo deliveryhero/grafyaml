@@ -1,0 +1,216 @@
+rows:
+  title: Database
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: Connections
+      datasource: $datasource
+      span: 4
+      legend:
+        show: false
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'mysql_global_status_threads_connected{service="$mysql_service_name"}'
+          legendFormat: 'Current'
+        - expr: 'mysql_global_variables_max_connections{service="$mysql_service_name"}'
+          legendFormat: 'Max'
+      type: graph
+    - title: Network Received vs Sent
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: decbytes
+          decimals: 1
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        show: false
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'irate(mysql_global_status_bytes_received{service="$mysql_service_name"}[5m])'
+          legendFormat: 'Received'
+        - expr: 'irate(mysql_global_status_bytes_sent{service="$mysql_service_name"}[5m])'
+          legendFormat: 'Sent'
+      type: graph
+    - title: Statement Durations
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: ms
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'rate(mysql_global_status_auroradb_delete_stmt_duration{service="$mysql_service_name"}[5m])'
+          legendFormat: 'DELETE'
+        - expr: 'rate(mysql_global_status_auroradb_select_stmt_duration{service="$mysql_service_name"}[5m])'
+          legendFormat: 'SELECT'
+        - expr: 'rate(mysql_global_status_auroradb_insert_stmt_duration{service="$mysql_service_name"}[5m])'
+          legendFormat: 'INSERT'
+        - expr: 'rate(mysql_global_status_auroradb_insert_stmt_duration{service="$mysql_service_name"}[5m])'
+          legendFormat: 'UPDATE'
+        - expr: 'rate(mysql_global_status_auroradb_ddl_stmt_duration{service="$mysql_service_name"}[5m])'
+          legendFormat: 'DDL'
+      type: graph
+    - title: CPU Utilisation
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: percent
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(aws_rds_cpuutilization_average{service="$rds_service_name"}) by (dbinstance_identifier_short)'
+          legendFormat: '{{ dbinstance_identifier_short }}'
+          interval: 2m
+      type: graph
+    - title: Freeable Memory
+      description: 'Based on cloudwatch'
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: decgbytes
+          min: 0
+          show: true
+        - show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_rds_freeable_memory_average{dbinstance_identifier=~"$rds_service_name.*",dbinstance_identifier!~".*replica.*"}/1024/1024/1024'
+          legendFormat: '{{ dbinstance_identifier }}'
+          interval: 2m
+      type: graph
+    - title: Thread Deadlocks
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'mysql_global_status_auroradb_thread_deadlocks{service="$mysql_service_name"}'
+          legendFormat: 'Thread deadlocks'
+      type: graph
+    - title: Query Rated
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'irate(mysql_global_status_commands_total{service="$mysql_service_name"}[5m]) > 0'
+          legendFormat: '{{ command }}'
+      type: graph
+    - title: Threads
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - show: true
+          decimals: 1
+        - show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'mysql_global_status_threads_running{service="$mysql_service_name"}'
+          legendFormat: 'Running'
+        - expr: 'mysql_global_status_threads_cached{service="$mysql_service_name"}'
+          legendFormat: 'Cached'
+        - expr: 'rate(mysql_global_status_threads_created{service="$mysql_service_name"}[5m])'
+          legendFormat: 'Created'
+      type: graph
+    - title: Rows
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - show: true
+          min: 0
+        - show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(mysql_info_schema_table_rows{service="$mysql_service_name"})'
+          legendFormat: 'Rows Sum'
+      type: graph
+    - title: Disk Usage Tables/Indexes
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: decbytes
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(mysql_info_schema_table_size{component="data_length",service="$mysql_service_name"})'
+          legendFormat: 'Tables'
+        - expr: 'sum(mysql_info_schema_table_size{component="index_length",service="$mysql_service_name"})'
+          legendFormat: 'Indexes'
+      type: graph
+    - title: Connections per second
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - show: true
+          min: 0
+        - show: false
+      legend:
+        alignAsTable: false
+        show: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'rate(mysql_global_status_connections{service="$mysql_service_name"}[5m])'
+          legendFormat: 'connections'
+      type: graph

@@ -1,0 +1,265 @@
+rows:
+  title: Kubernetes Pod
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: CPU Usage
+      datasource: $datasource
+      span: 4
+      fill: 0
+      seriesOverrides:
+        - alias: limit
+          color: '#FF0000'
+          hideTooltip: true
+          legend: false
+          nullPointMode: connected
+        - alias: request
+          color: '#00FF04'
+          hideTooltip: true
+          legend: false
+          nullPointMode: connected
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(container_cpu_usage_seconds_total{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
+          legendFormat: '{{container}} in {{pod}}'
+        - expr: 'sum(kube_pod_container_resource_limits_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
+          legendFormat: 'limit'
+        - expr: 'sum(kube_pod_container_resource_requests_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
+          legendFormat: 'request'
+      type: graph
+    - title: Memory Limit Usage
+      datasource: $datasource
+      span: 4
+      fill: 0
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(container_memory_working_set_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)/sum(container_spec_memory_limit_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)'
+          legendFormat: '{{container}} in {{pod}}'
+      type: graph
+      format: percentunit
+      yaxes:
+        - format: percentunit
+          decimals: 2
+          min: 0
+          max: 1
+          show: true
+        - show: false
+    - title: Disk IO
+      datasource: $datasource
+      span: 4
+      fill: 0
+      yaxes:
+        - format: Bps
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(container_fs_writes_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
+          legendFormat: '{{ pod }} write'
+        - expr: '- sum(rate(container_fs_reads_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
+          legendFormat: '{{ pod }} read'
+      type: graph
+    - title: Pod Restarts
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(delta(kube_pod_container_status_restarts_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
+          legendFormat: '{{ pod }}'
+      type: graph
+    - title: Network IO
+      datasource: $datasource
+      span: 4
+      fill: 0
+      yaxes:
+        - format: Bps
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum (rate (container_network_receive_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
+          legendFormat: '{{pod}} in'
+        - expr: '- sum (rate (container_network_transmit_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
+          legendFormat: '{{pod}} out'
+      type: graph
+    - title: HPA Status
+      datasource: $datasource
+      span: 4
+      fill: 0
+      seriesOverrides:
+        - alias: 'CPU request usage'
+          color: '#C334EB'
+        - alias: 'Pods running'
+          color: '#34EB4F'
+          yaxis: 2
+        - alias: 'HPA max replicas'
+          color: 'rgba(112, 112, 112, 0.26)'
+          fillBelowTo: 'HPA min replicas'
+          hideTooltip: true
+          legend: false
+          lineWidth: 0
+          yaxis: 2
+        - alias: 'HPA min replicas'
+          color: 'rgba(112, 112, 112, 0.26)'
+          hideTooltip: true
+          legend: false
+          lineWidth: 0
+          yaxis: 2
+        - alias: 'HPA threshold'
+          color: '#F2495C'
+          dashLength: 2
+          dashes: true
+          lineWidth: 2
+          spaceLength: 3
+      yaxes:
+        - format: percent
+          show: true
+          min: 0
+          label: CPU
+        - format: short
+          show: true
+          min: 0
+          label: Pods
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'kube_hpa_spec_target_metric{hpa=~"$app"}'
+          legendFormat: 'HPA threshold'
+          step: 10
+        - expr: 'kube_hpa_spec_min_replicas{hpa=~"$app"}'
+          legendFormat: 'HPA min replicas'
+          step: 10
+        - expr: 'kube_hpa_spec_max_replicas{hpa=~"$app"}'
+          legendFormat: 'HPA max replicas'
+          step: 10
+        - expr: 'avg(round(100 * sum(irate(container_cpu_usage_seconds_total{name!~".*prometheus.*",container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}[5m])) by (pod, container, namespace) / sum(kube_pod_container_resource_requests_cpu_cores{name!~".*prometheus.*", container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}) by (pod, container, namespace)))'
+          legendFormat: 'CPU request usage'
+          step: 10
+        - expr: 'sum(kube_pod_status_phase{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", pod!~".*-prometheus-.*", phase="Running"} > 0)'
+          legendFormat: 'Pods running'
+      type: graph
+    - title: Network Transmit Errors
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - show: true
+          min: 0
+        - show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(container_network_transmit_errors_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*"}[5m])) by (pod)'
+          legendFormat: '{{pod}}'
+      type: graph
+    - title: CPU Throttle Seconds
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: dtdurations
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(container_cpu_cfs_throttled_seconds_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
+          legendFormat: '{{pod}} - {{container}}'
+      type: graph
+    - title: Pod Ready
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum by (pod, condition) (kube_pod_status_ready{pod=~"$app-\\w{8,13}(-.*)?"})'
+          legendFormat: '{{condition}}-{{pod}}'
+      type: graph

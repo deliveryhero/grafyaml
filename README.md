@@ -40,7 +40,8 @@ grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-exa
 
 ## More examples
 
-- [examples/basic](examples/basic): a very basic example with a single dashboard.
+- [examples/basic](examples/basic): A very basic example with a single dashboard
+- [examples/advanced](examples/advanced): An example showing how to create multiple dashboards using templates
 
 ## License, history and contributors
 

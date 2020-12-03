@@ -1,0 +1,29 @@
+dashboard:
+  title: 'Dashboard Name'
+  editable: false
+  sharedCrosshair: true
+  tags:
+    - grafyaml
+    - example
+    - advanced
+  time:
+    from: now-30m
+    to: now
+  timezone: browser
+  templating:
+    - name: datasource
+      query: prometheus
+      current:
+        text: 'datasource'
+        value: 'datasource'
+      type: datasource
+      label: Datasource
+      hide: 2
+    - name: app
+      query: app_name
+      type: constant
+      current:
+        text: app_name
+        value: app_name
+      hide: 2
+  rows:
