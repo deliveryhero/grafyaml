@@ -2,7 +2,7 @@
 
 [![Delivery Hero ❤️ Grafana](img/banner.png)](#)
 
-[Delivery Hero](https://www.deliveryhero.com/) are big fans of Grafana but when Prometheus becomes your default storage for metrics of all types then the importance of good, consistent and manageable Grafana dashboards becomes paramount. Then add many teams, applications, services, environments and it becomes clear that a tool is needed to manage this complexity. This is that tool 🎉
+[Delivery Hero](https://www.deliveryhero.com/) are big fans of Grafana but when Prometheus becomes your default storage for metrics of all types then the importance of good, consistent and manageable Grafana dashboards becomes paramount. Then once you add many teams, applications, services and environments to the mix, it becomes clear that a tool is needed to manage this complexity. This is that tool 🎉
 
 - No more headaches with copying, pasting and editing JSON
 - Template panels and use them in multiple dashboards
