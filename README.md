@@ -1,60 +1,48 @@
-# Grafyaml
+# grafyaml: Grafana dashboards templated in YAML
 
-Free software: Apache license
+[![Delivery Hero ❤️ Grafana](img/banner.png)](#)
 
-Forked from [Grafyaml](https://opendev.org/opendev/grafyaml). This fork adds support for new panel types like log panel, stat panel etc. and also adds other features like annotations and constant template type.
+[Delivery Hero](https://www.deliveryhero.com/) are big fans of Grafana but when Prometheus becomes your default storage for metrics of all types then the importance of good, consistent and manageable Grafana dashboards becomes paramount. Then once you add many teams, applications, services and environments to the mix, it becomes clear that a tool is needed to manage this complexity. This is that tool 🎉
 
+- No more headaches with copying, pasting and editing JSON
+- Template panels and use them in multiple dashboards
+- Mass update many dashboards quickly and easily
 
-### Introduction
+## Install and quick start
 
-grafyaml helps you create Grafana dashboards in code using YAML format.
+Install `grafyaml`:
 
-### Installation
+```
+pip3 install https://github.com/deliveryhero/grafyaml/archive/master.zip
+```
 
-Install using pip: `pip3 install git+https://github.com/deliveryhero/grafyaml.git`
-
-
-### How To Use
-
-1. Create a dashboard yaml file using the yaml specified below.
+Create a file, e.g. `my-example-dashboard.yaml`:
 
 ```yaml
 dashboard:
-  editable: false
-  annotations:
-    list:
-    - datasource: $datasource
-      enable: true
-      expr: query_for_my_annotation
-      hide: false
-      name: My Annotation
-  templating:
-  - current:
-      text: DatasourceName
-      value: DatasourceName
-    label: Datasource
-    name: datasource
-    query: prometheus
-    type: datasource
+  title: My Dashboard
   rows:
-  - collapse: false
-    height: 300px
+  - title: Container metrics
+    height: 500px
     panels:
-    - datasource: $datasource
-      fill: 8
-      span: 4
+    - title: Container CPU usage
       targets:
       - expr: rate(container_cpu_user_seconds_total[30s]) * 100
-      title: CPU Utilisation
       type: graph
 ```
 
-3. Validate the dashboard for any issues:
+Sync it to Grafana:
 
-`grafana-dashboard --grafana-url https://localhost:3000 --grafana-folderid <GRAFANA_FOLDER_ID> --grafana-apikey <YOUR_GRAFANA_API_TOKEN_HERE> validate <PATH TO DASHBOARD YAML FILE>`
+```
+export GRAFANA_API_KEY="API_KEY_HERE"
+grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-example-dashboard.yaml
+```
 
-2. Sync the dashboard to your Grafana:
+## More examples
 
-`grafana-dashboard --grafana-url https://localhost:3000 --grafana-folderid <GRAFANA_FOLDER_ID> --grafana-apikey <YOUR_GRAFANA_API_TOKEN_HERE> update <PATH TO DASHBOARD YAML FILE>`
+- [examples/basic](examples/basic): A very basic example with a single dashboard
+- [examples/advanced](examples/advanced): An example showing how to create multiple dashboards using templates
 
-And that's it you should see your dashboard created on Grafana.
+## License, history and contributors
+
+[The LICENSE](LICENSE) is Apache License 2.0. Most of the code in this repository was initially written at [opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml) before being forked to here.

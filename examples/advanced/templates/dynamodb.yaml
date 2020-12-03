@@ -1,0 +1,147 @@
+rows:
+  title: DynamoDB
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: Consumed vs provisioned read/write capacity units
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_dynamodb_consumed_read_capacity_units_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} read consumed'
+        - expr: 'aws_dynamodb_provisioned_read_capacity_units_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} read provisioned'
+        - expr: 'aws_dynamodb_consumed_write_capacity_units_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} write consumed'
+        - expr: 'aws_dynamodb_provisioned_write_capacity_units_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} write provisioned'
+      type: graph
+
+    - title: 'Global Secondary Index: Consumed vs provisioned read/write capacity units'
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(aws_dynamodb_consumed_read_capacity_units_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} read consumed'
+        - expr: 'sum(aws_dynamodb_provisioned_read_capacity_units_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} read provisioned'
+        - expr: 'sum(aws_dynamodb_consumed_write_capacity_units_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} write consumed'
+        - expr: 'sum(aws_dynamodb_provisioned_write_capacity_units_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} write provisioned'
+      type: graph
+
+    - title: Successful Request Latency Average
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      yaxes:
+        - format: ms
+          show: true
+        - show: false
+      targets:
+        - expr: 'sum(aws_dynamodb_successful_request_latency_average{table_name=~"^$dynamodb_name.*"}) by (table_name, operation)'
+          legendFormat: '{{ table_name }} {{ operation }}'
+      type: graph
+
+    - title: Returned item count
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(aws_dynamodb_returned_item_count_average{table_name=~"^$dynamodb_name.*"}) by (table_name, operation)'
+          legendFormat: '{{ table_name }} {{ operation }}'
+      type: graph
+
+    - title: Throttle events
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_dynamodb_write_throttle_events_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} write throttle events'
+        - expr: 'aws_dynamodb_read_throttle_events_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} read throttle events'
+        - expr: 'sum(aws_dynamodb_write_throttle_events_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} write throttle events'
+        - expr: 'sum(aws_dynamodb_read_throttle_events_index_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, global_secondary_index_name)'
+          legendFormat: '{{ table_name }}/{{ global_secondary_index_name }} read throttle events'
+      type: graph
+
+    - title: Transaction conflicts, failed requests, system errors, throttled operations
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_dynamodb_conditional_check_failed_requests_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} conditional check failed requests'
+        - expr: 'aws_dynamodb_transaction_conflict_maximum{table_name=~"^$dynamodb_name.*"}'
+          legendFormat: '{{ table_name }} transaction conflicts'
+        - expr: 'sum(aws_dynamodb_system_errors_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, operation)'
+          legendFormat: '{{ table_name }} system error {{ operation }}'
+        - expr: 'sum(aws_dynamodb_throttled_requests_maximum{table_name=~"^$dynamodb_name.*"}) by (table_name, operation)'
+          legendFormat: '{{ table_name }} throttled requests {{ operation }}'
+      type: graph

@@ -1,0 +1,47 @@
+dashboard:
+  editable: false
+  tags:
+  - grafyaml
+  - example
+  - basic
+  time:
+    from: now-30m
+    to: now
+  timezone: browser
+  title: Host metrics
+  rows:
+  - showTitle: true
+    title: CPU and memory usage
+    collapse: false
+    height: 500px
+    panels:
+    - fill: 8
+      legend:
+        alignAsTable: true
+        current: true
+        show: true
+        sort: current
+        sortDesc: true
+        values: true
+      span: 4
+      stack: true
+      targets:
+      - expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) * on (instance) group_left (nodename) node_uname_info
+        legendFormat: '{{ nodename }}'
+      title: CPU usage
+      type: graph
+    - fill: 8
+      legend:
+        alignAsTable: true
+        current: true
+        show: true
+        sort: current
+        sortDesc: true
+        values: true
+      span: 4
+      stack: true
+      targets:
+      - expr: 100 * (avg by (instance) (1 - ((avg_over_time(node_memory_MemFree_bytes{}[5m]) + avg_over_time(node_memory_Cached_bytes{}[5m]) + avg_over_time(node_memory_Buffers_bytes{}[5m])) / avg_over_time(node_memory_MemTotal_bytes{}[5m])))) * on (instance) group_left (nodename) node_uname_info
+        legendFormat: '{{ nodename }}'
+      title: Memory usage
+      type: graph

@@ -1,0 +1,71 @@
+app1:
+  templating:
+    - name: dynamodb_name
+      query: dynamodb_name
+      type: constant
+      hide: 2
+      current:
+        text: app1-table
+        value: app1-table
+    - name: app
+      query: app_name
+      type: constant
+      hide: 2
+      current:
+        text: my-app1
+        value: my-app1
+  rows:
+    - kube_deployment
+    - kube_pod
+    - dynamodb
+
+app2:
+  templating:
+    - name: sqs_name
+      query: sqs_name
+      type: constant
+      hide: 2
+      current:
+        text: app2-sqs-queue
+        value: app2-sqs-queue
+    - name: app
+      query: app_name
+      type: constant
+      hide: 2
+      current:
+        text: my-app2
+        value: my-app2
+  rows:
+    - kube_deployment
+    - kube_pod
+    - kube_ingress
+    - sqs
+
+app3:
+  templating:
+    - name: mysql_service_name
+      query: mysql_service_name
+      type: constant
+      hide: 2
+      current:
+        text: app3-mysql-service
+        value: app3-mysql-service
+    - name: rds_service_name
+      query: rds_service_name
+      type: constant
+      hide: 2
+      current:
+        text: app3-rds-instance
+        value: app3-rds-instance
+    - name: app
+      query: app_name
+      type: constant
+      hide: 2
+      current:
+        text: my-app3
+        value: my-app3
+  rows:
+    - kube_deployment
+    - kube_pod
+    - kube_ingress
+    - mysql

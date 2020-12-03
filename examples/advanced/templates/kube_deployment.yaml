@@ -1,0 +1,82 @@
+rows:
+  title: Kubernetes Deployment
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: Pod Status
+      datasource: $datasource
+      span: 4
+      fill: 0
+      nullPointMode: 'null as zero'
+      yaxes:
+        - format: short
+          label: count
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(kube_pod_status_phase{pod=~"^$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", pod!~".*-prometheus-.*", phase!="Succeeded"} > 0) by (phase)'
+          legendFormat: '{{ phase }}'
+        - expr: 'count(kube_pod_status_ready{pod=~"^$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", pod!~".*-prometheus-.*", condition="true"})'
+          legendFormat: 'Ready'
+      type: graph
+    - title: Total CPU Cores Requested & Used
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - format: none
+          label: CPU cores
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(container_cpu_usage_seconds_total{pod=~"^$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m]))'
+          legendFormat: 'Used'
+        - expr: 'sum(kube_pod_container_resource_requests_cpu_cores{pod=~"^$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"})'
+          legendFormat: 'Requested'
+      type: graph
+    - title: Current Docker Image
+      datasource: $datasource
+      span: 4
+      fill: 6
+      yaxes:
+        - show: false
+        - show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(kube_pod_container_info{pod=~"^$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", image!="", container!~".*migration.*|prometheus.*|webserver"}) by (image)'
+          legendFormat: '{{image}}'
+      type: graph

@@ -1,0 +1,97 @@
+rows:
+  title: SQS
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: Age Of Oldest Message
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_sqs_approximate_age_of_oldest_message_average{queue_name=~"$sqs_name.*"}'
+          legendFormat: '{{ queue_name }}'
+          interval: 2m
+      type: graph
+    - title: Number Of Messages Visible
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_sqs_approximate_number_of_messages_visible_average{queue_name=~"$sqs_name.*"}'
+          legendFormat: '{{ queue_name }}'
+          interval: 2m
+      type: graph
+    - title: Number Of Messages Not Visible
+      datasource: $datasource
+      span: 4
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'aws_sqs_approximate_number_of_messages_not_visible_average{queue_name=~"$sqs_name.*"}'
+          legendFormat: '{{ queue_name }}'
+          interval: 2m
+      type: graph
+    - title: Number Of Messages Received & Deleted
+      datasource: $datasource
+      span: 4
+      yaxes:
+        - show: true
+          label: Messages
+        - show: false
+      seriesOverrides:
+        - alias: '/difference/'
+          color: '#F2495C'
+          fill: 10
+          lineWidth: 2
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(aws_sqs_number_of_messages_received_sum{queue_name=~"$sqs_name.*"}) by (queue_name)'
+          legendFormat: 'received: {{ queue_name }}'
+          interval: 2m
+        - expr: '-sum(aws_sqs_number_of_messages_deleted_sum{queue_name=~"$sqs_name.*"}) by (queue_name)'
+          legendFormat: 'deleted: {{ queue_name }}'
+          interval: 2m
+        - expr: 'sum(aws_sqs_number_of_messages_received_sum{queue_name=~"$sqs_name.*"}) by (queue_name) - sum(aws_sqs_number_of_messages_deleted_sum{queue_name=~"$sqs_name.*"}) by (queue_name)'
+          legendFormat: 'difference: {{ queue_name }}'
+          interval: 2m
+      type: graph

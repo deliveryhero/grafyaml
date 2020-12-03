@@ -1,0 +1,89 @@
+rows:
+  title: Kubernetes Ingress
+  collapse: true
+  showTitle: true
+  height: 300px
+  panels:
+    - title: Requests Per Minute By Status
+      datasource: $datasource
+      span: 4
+      fill: 8
+      stack: true
+      yaxes:
+        - format: rpm
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'sum(rate(nginx_ingress_controller_requests{ingress=~"$app"}[5m])) by (status) * 60'
+          legendFormat: '{{ status }}'
+      type: graph
+    - title: Request Time Percentiles
+      datasource: $datasource
+      span: 4
+      fill: 0
+      yaxes:
+        - format: s
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'histogram_quantile(0.999,sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m])))'
+          legendFormat: 99.9%
+        - expr: 'histogram_quantile(0.99,sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m])))'
+          legendFormat: 99%
+        - expr: 'histogram_quantile(0.95,sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m])))'
+          legendFormat: 95%
+        - expr: 'histogram_quantile(0.90,sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m])))'
+          legendFormat: 90%
+        - expr: 'histogram_quantile(0.75,sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m]  )))'
+          legendFormat: 75%
+      type: graph
+    - title: Upstream Latency
+      datasource: $datasource
+      span: 4
+      fill: 0
+      yaxes:
+        - format: s
+          show: true
+        - decimals: 0
+          show: false
+      legend:
+        alignAsTable: true
+        current: true
+        sort: current
+        show: true
+        values: true
+        sortDesc: true
+      tooltip:
+        shared: true
+        sort: 2
+        value_type: individual
+      targets:
+        - expr: 'avg(rate(nginx_ingress_controller_ingress_upstream_latency_seconds_sum{ingress=~"$app"}[5m]))'
+          legendFormat: average
+        - expr: 'histogram_quantile(0.5, sum by (le)(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress=~"$app"}[5m])))'
+          legendFormat: median
+      type: graph
