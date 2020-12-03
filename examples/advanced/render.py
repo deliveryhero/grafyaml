@@ -43,32 +43,31 @@ def main():
         for row in parsed_input[appname]["rows"]:
             template_file_name = template_dir_name + "/" + row + ".yaml"
             row_template = open(template_file_name)
-            parsed_row = yaml.load(row_template,
-                                   Loader=yaml.FullLoader)["rows"]
+            parsed_row = yaml.load(row_template, Loader=yaml.FullLoader)["rows"]
             rows.append(parsed_row)
 
         # Add or override the default templates with the templates
         # specified in the app dashboards file
-        if 'templating' in parsed_input[appname]:
+        if "templating" in parsed_input[appname]:
             for template in parsed_input[appname]["templating"]:
                 index = find_template_index(
-                    template,
-                    dashboard["dashboard"]["templating"])
+                    template, dashboard["dashboard"]["templating"]
+                )
                 if index == -1:
                     dashboard["dashboard"]["templating"].append(template)
                 else:
                     dashboard["dashboard"]["templating"][index] = template
 
         # Override tags if specified
-        if 'tags' in parsed_input[appname]:
+        if "tags" in parsed_input[appname]:
             dashboard["dashboard"]["tags"] = parsed_input[appname]["tags"]
 
         dashboard["dashboard"]["rows"] = rows
 
         output_file_name = "rendered_dashboards/" + "/" + appname + ".yaml"
-        output_file = open(output_file_name, 'w')
+        output_file = open(output_file_name, "w")
         output_file.write(yaml.dump(dashboard))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
