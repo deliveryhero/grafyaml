@@ -59,7 +59,10 @@ class Client(object):
             "server. The default used is: http://localhost:8080",
         )
         parser.add_argument(
-            "--grafana-apikey", dest="grafana_apikey", help="API key to access grafana."
+            "--grafana-apikey",
+            dest="grafana_apikey",
+            help="API key to access grafana.",
+            default=os.getenv("GRAFANA_API_KEY", None),
         )
         parser.add_argument(
             "--grafana-folderid",
