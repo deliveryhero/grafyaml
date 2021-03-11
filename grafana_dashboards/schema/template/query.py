@@ -28,8 +28,8 @@ class Query(Base):
             v.Required('includeAll', default=False): v.All(bool),
             v.Required('multi', default=False): v.All(bool),
             v.Required('query', default=''): v.All(str),
-            v.Required('refresh', default=1): \
-                v.All(int, v.Range(min=0, max=2)),
+            v.Required('refresh',
+                       default=1): v.All(int, v.Range(min=0, max=2)),
             v.Optional('datasource'): v.All(str),
             v.Optional('hide'): v.All(int, v.Range(min=0, max=2)),
         }
