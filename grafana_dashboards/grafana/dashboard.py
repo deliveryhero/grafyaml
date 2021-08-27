@@ -14,7 +14,6 @@
 
 import json
 
-
 from requests import exceptions
 
 from grafana_dashboards.grafana import utils
