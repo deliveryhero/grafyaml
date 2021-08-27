@@ -60,7 +60,8 @@ class Dashboard(object):
 
         """
         url = utils.urljoin(self.url, name)
-        self.session.delete(url)
+        res = self.session.delete(url)
+        res.raise_for_status()
 
     def get(self, name):
         """Get a dashboard
