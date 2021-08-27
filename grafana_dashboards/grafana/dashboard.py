@@ -60,23 +60,8 @@ class Dashboard(object):
 
         """
         url = utils.urljoin(self.url, name)
-        res = self.session.delete(url)
-        res.raise_for_status()
-
-    def get(self, name):
-        """Get a dashboard
-
-        :param name: URL friendly title of the dashboard
-        :type name: str
-
-        :rtype: dict or None
-
-        """
-        url = utils.urljoin(self.url, name)
         try:
-            res = self.session.get(url)
+            res = self.session.delete(url)
             res.raise_for_status()
         except exceptions.HTTPError:
             return None
-
-        return res.json()
