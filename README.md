@@ -43,6 +43,13 @@ grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-exa
 - [examples/basic](examples/basic): A very basic example with a single dashboard
 - [examples/advanced](examples/advanced): An example showing how to create multiple dashboards using templates
 
+## Build and install from source
+
+```
+python3 setup.py bdist_wheel
+python3 -m pip install --force-reinstall ~/dev/grafyaml/dist/grafyaml-1.0-py3-none-any.whl
+```
+
 ## License, history and contributors
 
 [The LICENSE](LICENSE) is Apache License 2.0. Most of the code in this repository was initially written at [opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml) before being forked to here.
