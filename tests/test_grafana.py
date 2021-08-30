@@ -59,12 +59,6 @@ class TestCaseGrafana(TestCase):
             return True
 
         mock_requests.post("/api/dashboards/db/", json=post_callback)
-        mock_requests.get(
-            "/api/dashboards/db/new-dashboard",
-            json=DASHBOARD_NOT_FOUND,
-            status_code=404,
-        )
-
         data = {
             "dashboard": {
                 "title": "New dashboard",
@@ -72,12 +66,11 @@ class TestCaseGrafana(TestCase):
             "slug": "new-dashboard",
         }
         self.grafana.dashboard.create(name=data["slug"], data=data["dashboard"])
-        self.assertEqual(mock_requests.call_count, 3)
+        self.assertEqual(mock_requests.call_count, 1)
 
     @requests_mock.Mocker()
     def test_create_dashboard_overwrite(self, mock_requests):
         mock_requests.post("/api/dashboards/db/")
-        mock_requests.get("/api/dashboards/db/new-dashboard", json=CREATE_NEW_DASHBOARD)
         data = {
             "dashboard": {
                 "title": "New dashboard",
@@ -87,42 +80,9 @@ class TestCaseGrafana(TestCase):
         self.grafana.dashboard.create(
             name=data["slug"], data=data["dashboard"], overwrite=True
         )
-        self.assertEqual(mock_requests.call_count, 2)
-
-    @requests_mock.Mocker()
-    def test_create_dashboard_existing(self, mock_requests):
-        mock_requests.post("/api/dashboards/db/")
-        mock_requests.get("/api/dashboards/db/new-dashboard", json=CREATE_NEW_DASHBOARD)
-        data = {
-            "dashboard": {
-                "title": "New dashboard",
-            },
-            "slug": "new-dashboard",
-        }
-        self.assertRaises(
-            Exception,
-            self.grafana.dashboard.create,
-            name=data["slug"],
-            data=data["dashboard"],
-            overwrite=False,
-        )
-
         self.assertEqual(mock_requests.call_count, 1)
 
     @requests_mock.Mocker()
     def test_delete_dashboard(self, mock_requests):
         mock_requests.delete("/api/dashboards/db/new-dashboard")
-        mock_requests.get(
-            "/api/dashboards/db/new-dashboard",
-            json=DASHBOARD_NOT_FOUND,
-            status_code=404,
-        )
         self.grafana.dashboard.delete("new-dashboard")
-
-    @requests_mock.Mocker()
-    def test_delete_dashboard_failure(self, mock_requests):
-        mock_requests.delete("/api/dashboards/db/new-dashboard")
-        mock_requests.get("/api/dashboards/db/new-dashboard", json=CREATE_NEW_DASHBOARD)
-        self.assertRaises(
-            Exception, self.grafana.dashboard.delete, name="new-dashboard"
-        )

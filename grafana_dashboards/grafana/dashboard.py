@@ -45,13 +45,9 @@ class Dashboard(object):
             "folderId": folder_id,
             "overwrite": overwrite,
         }
-        if not overwrite and self.is_dashboard(name):
-            raise Exception("dashboard[%s] already exists" % name)
 
         res = self.session.post(self.url, data=json.dumps(dashboard))
         res.raise_for_status()
-        if not self.is_dashboard(name):
-            raise Exception("dashboard[%s] does not exist" % name)
 
     def delete(self, name):
         """Delete a dashboard
@@ -63,39 +59,8 @@ class Dashboard(object):
 
         """
         url = utils.urljoin(self.url, name)
-        self.session.delete(url)
-        if self.is_dashboard(name):
-            raise Exception("dashboard[%s] failed to delete" % name)
-
-    def get(self, name):
-        """Get a dashboard
-
-        :param name: URL friendly title of the dashboard
-        :type name: str
-
-        :rtype: dict or None
-
-        """
-        url = utils.urljoin(self.url, name)
         try:
-            res = self.session.get(url)
+            res = self.session.delete(url)
             res.raise_for_status()
         except exceptions.HTTPError:
             return None
-
-        return res.json()
-
-    def is_dashboard(self, name):
-        """Check if a dashboard exists
-
-        :param name: URL friendly title of the dashboard
-        :type name: str
-
-        :returns: True if dashboard exists
-        :rtype: bool
-
-        """
-        res = self.get(name)
-        if res and res["meta"]["slug"] == name:
-            return True
-        return False
