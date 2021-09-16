@@ -51,4 +51,4 @@ class Table(Base):
             v.Optional("sort"): v.All(sort),
         }
         table.update(self.base)
-        return v.Schema(table)
+        return v.Schema(table, extra=True)

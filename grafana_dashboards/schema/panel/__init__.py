@@ -52,6 +52,8 @@ class Panel(object):
                     schema = Row().get_schema()
                 elif panel["type"] == "table-old":
                     schema = Table().get_schema()
+                elif panel["type"] == "table":
+                    schema = Table().get_schema()
 
                 res.append(schema(panel))
 

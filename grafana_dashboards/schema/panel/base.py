@@ -109,6 +109,7 @@ class Base(object):
                 "row",
                 "stat",
                 "table-old",
+                "table",
             ),
             v.Optional("id"): int,
             v.Optional("format"): v.Any(self.formats, v.Length(min=1)),
