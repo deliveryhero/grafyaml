@@ -50,8 +50,6 @@ class Panel(object):
                     schema = Text().get_schema()
                 elif panel["type"] == "row":
                     schema = Row().get_schema()
-                elif panel["type"] == "table-old":
-                    schema = Table().get_schema()
                 elif panel["type"] == "table":
                     schema = Table().get_schema()
 

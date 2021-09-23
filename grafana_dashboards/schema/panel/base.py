@@ -108,7 +108,6 @@ class Base(object):
                 "text",
                 "row",
                 "stat",
-                "table-old",
                 "table",
             ),
             v.Optional("id"): int,
