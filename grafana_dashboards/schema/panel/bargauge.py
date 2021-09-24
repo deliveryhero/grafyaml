@@ -25,11 +25,6 @@ class Bargauge(Base):
             v.Required("fields", default=""): v.Any(str),
         }
 
-        thresholds = {
-            v.Required("steps"): v.All(list),
-            v.Required("mode", default="absolute"): v.Any(str),
-        }
-
         fieldConfig = {
             v.Required("overrides", default=[]): v.All(list),
         }
@@ -38,6 +33,7 @@ class Bargauge(Base):
             v.Required("orientation"): v.Any(str),
             v.Required("displayMode"): v.Any(str),
             v.Optional("reduceOptions"): v.All(reduceOptions),
+            v.Optional("showUnfilled", default=True): v.All(bool),
         }
 
         bargauge = {
