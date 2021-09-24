@@ -23,6 +23,7 @@ from grafana_dashboards.schema.panel.singlestat import Singlestat
 from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
 from grafana_dashboards.schema.panel.table import Table
+from grafana_dashboards.schema.panel.bargauge import Bargauge
 
 
 class Panel(object):
@@ -54,6 +55,8 @@ class Panel(object):
                     schema = Table().get_schema()
                 elif panel["type"] == "table":
                     schema = Table().get_schema()
+                elif panel["type"] == "bargauge":
+                    schema = Bargauge().get_schema()
 
                 res.append(schema(panel))
 
