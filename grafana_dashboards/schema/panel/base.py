@@ -110,7 +110,7 @@ class Base(object):
                 "stat",
                 "table-old",
                 "table",
-                "bargauge"
+                "bargauge",
             ),
             v.Optional("id"): int,
             v.Optional("format"): v.Any(self.formats, v.Length(min=1)),
