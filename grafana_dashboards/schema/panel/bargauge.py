@@ -38,7 +38,7 @@ class Bargauge(Base):
 
         bargauge = {
             v.Required("targets", default=[]): v.All(list),
-            v.Required("fieldConfig"): v.All(fieldConfig),
+            v.Optional("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
             v.Optional("datasource"): v.All(str),
             v.Optional("timeFrom"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
