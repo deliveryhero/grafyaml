@@ -38,7 +38,8 @@ Update Command
 
 ``grafana-dashboard`` [options] update <path>
 
-Updates each specified dashboard to the lastest layout from parsed yaml files.
+Updates each specified dashboard to the lastest layout from parsed
+yaml or json files.
 
 FILES
 =====
