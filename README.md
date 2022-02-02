@@ -8,6 +8,7 @@
 - Template panels and use them in multiple dashboards
 - Mass update many dashboards quickly and easily
 
+
 ## Install and quick start
 
 Install `grafyaml`:
