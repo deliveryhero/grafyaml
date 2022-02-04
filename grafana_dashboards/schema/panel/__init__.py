@@ -24,6 +24,7 @@ from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
 from grafana_dashboards.schema.panel.table import Table
 from grafana_dashboards.schema.panel.bargauge import Bargauge
+from grafana_dashboards.schema.panel.heatmap import Heatmap
 
 
 class Panel(object):
@@ -55,6 +56,8 @@ class Panel(object):
                     schema = Table().get_schema()
                 elif panel["type"] == "bargauge":
                     schema = Bargauge().get_schema()
+                elif panel["type"] == "heatmap":
+                    schema = Heatmap().get_schema()
 
                 res.append(schema(panel))
 

@@ -34,8 +34,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"grafyaml"
-copyright = u"2013, OpenStack Foundation"
+project = "grafyaml"
+copyright = "2013, OpenStack Foundation"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = True
@@ -70,8 +70,8 @@ latex_documents = [
     (
         "index",
         "%s.tex" % project,
-        u"%s Documentation" % project,
-        u"OpenStack Foundation",
+        "%s Documentation" % project,
+        "OpenStack Foundation",
         "manual",
     ),
 ]

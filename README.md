@@ -50,6 +50,19 @@ python3 setup.py bdist_wheel
 python3 -m pip install --force-reinstall dist/grafyaml-1.0-py3-none-any.whl
 ```
 
+### Docker
+Use the provided docker file to build and test
+```
+docker build -t grafyaml .
+
+docker run -it --rm -v ${PWD}:/workspace grafyaml bash
+```
+
+to build and test you can run the `tox` command
+
+
+
+
 ## License, history and contributors
 
 [The LICENSE](LICENSE) is Apache License 2.0. Most of the code in this repository was initially written at [opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml) before being forked to here.
