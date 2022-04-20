@@ -16,3 +16,5 @@ __pycache__
 .*.swp
 
 examples/advanced/rendered_dashboards/*.yaml
+
+/venv3

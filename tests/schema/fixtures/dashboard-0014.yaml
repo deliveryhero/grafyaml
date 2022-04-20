@@ -1,6 +1,7 @@
 dashboard:
   templating:
     - name: foobar
+      description: foobar
       query: foobar.*
       type: query
   title: New dashboard
