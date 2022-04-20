@@ -47,11 +47,17 @@ class Builder(object):
         paths = path.split(":")
         for path in paths:
             if os.path.isdir(path):
-                files_to_process.extend([os.path.join(path, f)
-                                         for f in os.listdir(path)
-                                         if (f.endswith('.yaml')
-                                             or f.endswith('.yml')
-                                             or f.endswith('.json'))])
+                files_to_process.extend(
+                    [
+                        os.path.join(path, f)
+                        for f in os.listdir(path)
+                        if (
+                            f.endswith(".yaml")
+                            or f.endswith(".yml")
+                            or f.endswith(".json")
+                        )
+                    ]
+                )
             else:
                 files_to_process.append(path)
 

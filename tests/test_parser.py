@@ -106,9 +106,9 @@ class TestCaseParser(TestCase):
 
     def test_parse_json(self):
         path = os.path.join(
-            os.path.dirname(__file__),
-            'fixtures/parser/json-dashboard-0001.json')
+            os.path.dirname(__file__), "fixtures/parser/json-dashboard-0001.json"
+        )
         self.parser.parse(path)
         # Get parsed dashboard
-        res, md5 = self.parser.get_dashboard('test-json')
-        self.assertEqual(res['title'], 'test json')
+        res, md5 = self.parser.get_dashboard("test-json")
+        self.assertEqual(res["title"], "test json")
