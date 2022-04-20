@@ -10,6 +10,7 @@
                         "label": "",
                         "multi": false,
                         "name": "foobar",
+                        "description": "foobar",
                         "query": "foobar.*",
                         "refresh": 1,
                         "type": "query"

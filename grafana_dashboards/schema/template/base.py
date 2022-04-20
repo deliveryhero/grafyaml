@@ -68,6 +68,7 @@ class Base(object):
             v.Required("type"): v.Any(
                 "query", "interval", "custom", "datasource", "adhoc", "constant"
             ),
+            v.Optional("description"): v.All(str),
         }
 
     def get_schema(self):

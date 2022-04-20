@@ -16,8 +16,8 @@
 
 import json
 
-import doctest
 import testtools
+import testtools.matchers
 
 from grafana_dashboards.parser import YamlParser
 
@@ -36,17 +36,8 @@ class TestCase(object):
 
     def test_yaml_snippet(self):
         parser = YamlParser()
-        expected_json = self._read_raw_content()
+        expected_json = json.loads(self._read_raw_content(), strict=True)
         parser.parse(self.in_filename)
         valid_yaml = parser.data
 
-        pretty_json = json.dumps(
-            valid_yaml, indent=4, separators=(",", ": "), sort_keys=True
-        )
-
-        self.assertThat(
-            pretty_json,
-            testtools.matchers.DocTestMatches(
-                expected_json, doctest.ELLIPSIS | doctest.REPORT_NDIFF
-            ),
-        )
+        self.assertThat(valid_yaml, testtools.matchers.Equals(expected_json))
