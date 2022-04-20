@@ -39,6 +39,7 @@ class Query(Base):
             v.Optional("regex"): v.All(str),
             v.Optional("label", default=""): v.All(str),
             v.Optional("allValue"): v.All(str),
+            v.Optional("sort"): v.All(int, v.Range(min=0, max=8)),
         }
         query.update(self.base)
         return v.Schema(query)

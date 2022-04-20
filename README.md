@@ -50,6 +50,17 @@ python3 setup.py bdist_wheel
 python3 -m pip install --force-reinstall dist/grafyaml-1.0-py3-none-any.whl
 ```
 
+## How to run linter
+
+This repo uses black as the linter. You can read about it [here](https://black.readthedocs.io/en/stable/getting_started.html)
+
+Install and run linter:
+
+```
+pip install black
+black .
+```
+
 ## License, history and contributors
 
 [The LICENSE](LICENSE) is Apache License 2.0. Most of the code in this repository was initially written at [opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml) before being forked to here.
