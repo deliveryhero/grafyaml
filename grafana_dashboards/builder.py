@@ -51,7 +51,11 @@ class Builder(object):
                     [
                         os.path.join(path, f)
                         for f in os.listdir(path)
-                        if (f.endswith(".yaml") or f.endswith(".yml"))
+                        if (
+                            f.endswith(".yaml")
+                            or f.endswith(".yml")
+                            or f.endswith(".json")
+                        )
                     ]
                 )
             else:
