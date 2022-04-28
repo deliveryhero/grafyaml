@@ -30,9 +30,8 @@ class TestCase(object):
         if self.out_filename is None:
             return ""
 
-        content = open(self.out_filename, "r").read()
-
-        return content
+        with open(self.out_filename, "r") as f:
+            return f.read()
 
     def test_yaml_snippet(self):
         parser = YamlParser()
