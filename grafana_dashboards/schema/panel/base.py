@@ -94,6 +94,49 @@ class Base(object):
         "dtdurations",
     )
 
+    datasource = {
+        v.Optional("datasource"): {
+            v.Optional("type"): str,
+            v.Optional("uid"): str,
+        },
+    }
+
+    grid_pos = {
+        v.Optional("gridPos"): {
+            v.Required("h", default=9): v.Range(min=0, min_included=False),
+            v.Required("w", default=12): v.Range(min=0, min_included=False, max=24),
+            v.Required("x", default=0): v.Clamp(min=0),
+            v.Required("y", default=0): v.Clamp(min=0),
+            v.Optional("static"): bool,
+        },
+    }
+
+    options_with_tooltip = {
+        v.Optional("tooltip"): {
+            v.Required("mode"): v.Any("single", "multi", "none"),
+            v.Required("sort"): v.Any("asc", "desc", "none"),
+        },
+    }
+
+    options_with_legend = {
+        v.Optional("legend"): {
+            v.Required("displayMode"): v.Any("list", "table", "hidden"),
+            v.Required("placement"): v.Any("bottom", "right"),
+            v.Optional("asTable"): bool,
+            v.Optional("isVisible"): bool,
+            v.Optional("sortBy"): str,
+            v.Optional("sortDesc"): bool,
+            v.Required("calcs", default=[]): [str],
+        },
+    }
+
+    options_with_text_formatting = {
+        v.Optional("text"): {
+            v.Optional("titleSize"): v.Number(),
+            v.Optional("valueSize"): v.Number(),
+        },
+    }
+
     def __init__(self):
         self.base = {
             v.Required("editable", default=True): v.All(bool),
@@ -110,6 +153,7 @@ class Base(object):
                 "stat",
                 "table",
                 "bargauge",
+                "timeseries",
             ),
             v.Optional("id"): int,
             v.Optional("format"): v.Any(self.formats, v.Length(min=1)),
