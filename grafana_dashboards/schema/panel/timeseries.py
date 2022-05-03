@@ -134,12 +134,12 @@ class Timeseries(Base):
                     {
                         v.Required("matcher"): {
                             v.Required("id", default=""): str,
-                            v.Optional("options"): v.Any(str, dict),
+                            v.Optional("options"): v.All(),
                         },
                         v.Required("properties"): [
                             {
                                 v.Required("id", default=""): str,
-                                v.Optional("value"): dict,
+                                v.Optional("value"): v.All(),
                             }
                         ],
                     }
