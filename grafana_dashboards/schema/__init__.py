@@ -30,4 +30,15 @@ class Schema(object):
             }
         )
 
-        return schema(data)
+        compiled: dict = schema(data)
+
+        if "dashboard" not in compiled:
+            return compiled
+
+        # FIXME: Only temporarily allow the old schema during transition period
+        if len(compiled["dashboard"]["rows"]) > 0:
+            del compiled["dashboard"]["panels"]
+        else:
+            del compiled["dashboard"]["rows"]
+
+        return compiled

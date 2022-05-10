@@ -102,9 +102,9 @@ class Base(object):
     }
 
     grid_pos = {
-        v.Optional("gridPos"): {
-            v.Required("h", default=9): v.Range(min=0, min_included=False),
-            v.Required("w", default=12): v.Range(min=0, min_included=False, max=24),
+        v.Required("gridPos"): {
+            v.Required("h", default=8): v.Range(min=0, min_included=False),
+            v.Required("w", default=8): v.Range(min=0, min_included=False, max=24),
             v.Required("x", default=0): v.Clamp(min=0),
             v.Required("y", default=0): v.Clamp(min=0),
             v.Optional("static"): bool,
@@ -137,7 +137,7 @@ class Base(object):
         },
     }
 
-    def __init__(self):
+    def __init__(self, requiresGridPos=False):
         self.base = {
             v.Required("editable", default=True): v.All(bool),
             v.Required("error", default=False): v.All(bool),
@@ -149,7 +149,6 @@ class Base(object):
                 "logs",
                 "singlestat",
                 "text",
-                "row",
                 "stat",
                 "table",
                 "bargauge",
@@ -161,6 +160,10 @@ class Base(object):
             v.Optional("height"): v.All(int),
             v.Optional("description"): v.All(str),
         }
+
+        if requiresGridPos:
+            self.base.update(__class__.grid_pos)
+            del self.base["span"]
 
     def get_schema(self):
         return v.Schema(self.base, extra=True)

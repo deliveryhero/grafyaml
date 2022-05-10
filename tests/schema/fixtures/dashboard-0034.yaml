@@ -8,15 +8,15 @@ dashboard:
       query: 'label_values(kong_http_status{dh_env="$env", service=~".*$app.*"}, service)'
       multi: true
       includeAll: false
-  rows:
+  panels:
     - title: Kong
-      showTitle: true
-      collapse: false
-      height: '300px'
       panels:
         - datasource:
             uid: $datasource
           description: test timeseries
+          gridPos:
+            w: 8
+            h: 8
           fieldConfig:
             defaults:
               color:

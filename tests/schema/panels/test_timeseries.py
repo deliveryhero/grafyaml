@@ -19,6 +19,12 @@ class TestCaseTimeseries(TestCase):
                 "defaults": {},
                 "overrides": [],
             },
+            "gridPos": {
+                "w": 8,
+                "h": 8,
+                "x": 0,
+                "y": 0,
+            },
             "options": {},
         }
         self.assertThat(self.schema(defaults), testtools.matchers.Equals(defaults))
