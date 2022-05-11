@@ -22,14 +22,13 @@ Create a file, e.g. `my-example-dashboard.yaml`:
 ```yaml
 dashboard:
   title: My Dashboard
-  rows:
+  panels:
   - title: Container metrics
-    height: 500px
     panels:
     - title: Container CPU usage
       targets:
       - expr: rate(container_cpu_user_seconds_total[30s]) * 100
-      type: graph
+      type: timeseries
 ```
 
 Sync it to Grafana:

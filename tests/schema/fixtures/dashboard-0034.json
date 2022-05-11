@@ -1,19 +1,23 @@
 {
     "dashboard": {
         "rooster-api-clone": {
-            "rows": [
+            "panels": [
                 {
+                    "type": "row",
                     "title": "Kong",
-                    "showTitle": true,
-                    "collapse": false,
-                    "editable": true,
-                    "height": "300px",
+                    "collapsed": true,
                     "panels": [
                         {
                             "datasource": {
                                 "uid": "$datasource"
                             },
                             "description": "test timeseries",
+                            "gridPos": {
+                                "w": 8,
+                                "h": 8,
+                                "x": 0,
+                                "y": 0
+                            },
                             "editable": true,
                             "error": false,
                             "fieldConfig": {

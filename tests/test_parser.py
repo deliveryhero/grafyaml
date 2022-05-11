@@ -34,7 +34,7 @@ class TestCaseParser(TestCase):
         self.parser.parse(path)
         dashboard = {
             "foobar": {
-                "rows": [],
+                "panels": [],
                 "templating": {
                     "enabled": False,
                     "list": [],
@@ -43,7 +43,7 @@ class TestCaseParser(TestCase):
                 "title": "foobar",
             },
             "new-dashboard": {
-                "rows": [],
+                "panels": [],
                 "templating": {
                     "enabled": False,
                     "list": [],
@@ -80,7 +80,7 @@ class TestCaseParser(TestCase):
         self.parser.parse(path)
         dashboard = {
             "new-dashboard": {
-                "rows": [],
+                "panels": [],
                 "templating": {
                     "enabled": False,
                     "list": [],

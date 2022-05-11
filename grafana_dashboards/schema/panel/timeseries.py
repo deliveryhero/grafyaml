@@ -110,10 +110,12 @@ class Timeseries(Base):
         v.Optional("transform"): v.Any("constant", "negative-Y"),
     }
 
+    def __init__(self):
+        super(__class__, self).__init__(requiresGridPos=True)
+
     def get_schema(self):
         timeseries = {
             **Base.datasource,
-            **Base.grid_pos,
             v.Required("fieldConfig", default={"defaults": {}}): {
                 v.Required("defaults", default={}): {
                     v.Optional("displayName"): str,
@@ -156,8 +158,5 @@ class Timeseries(Base):
             v.Optional("targets"): list,
         }
         timeseries.update(self.base)
-
-        # FIXME: this is smelly
-        del timeseries["span"]
 
         return v.Schema(timeseries, extra=v.PREVENT_EXTRA)

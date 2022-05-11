@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="grafyaml",
-    version="1.0",
+    version="1.1.0",
     url="https://github.com/deliveryhero/grafyaml",
     license="Apache v2.0",
     description="A nice and easy way to template Grafana dashboards in YAML",
