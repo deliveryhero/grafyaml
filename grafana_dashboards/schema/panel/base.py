@@ -137,7 +137,7 @@ class Base(object):
         },
     }
 
-    def __init__(self, requiresGridPos=False):
+    def __init__(self, usingNewSchema=False):
         self.base = {
             v.Required("editable", default=True): v.All(bool),
             v.Required("error", default=False): v.All(bool),
@@ -161,9 +161,9 @@ class Base(object):
             v.Optional("description"): v.All(str),
         }
 
-        if requiresGridPos:
+        if usingNewSchema:
             self.base.update(__class__.grid_pos)
-            del self.base["span"]
+            del self.base["span"], self.base["editable"], self.base["error"]
 
     def get_schema(self):
         return v.Schema(self.base, extra=True)

@@ -25,7 +25,7 @@ class Row(Base):
             v.Required("type", default="row"): "row",
             v.Required("collapsed", default=True): True,
         }
-        panel = Panel(requiresGridPos=True).get_schema()
+        panel = Panel(usingNewSchema=True).get_schema()
         row.update(panel.schema)
         return v.Schema(
             {
