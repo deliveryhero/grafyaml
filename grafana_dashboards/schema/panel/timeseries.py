@@ -111,7 +111,7 @@ class Timeseries(Base):
     }
 
     def __init__(self):
-        super(__class__, self).__init__(requiresGridPos=True)
+        super(__class__, self).__init__(usingNewSchema=True)
 
     def get_schema(self):
         timeseries = {

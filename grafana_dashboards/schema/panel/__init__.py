@@ -27,8 +27,8 @@ from grafana_dashboards.schema.panel.timeseries import Timeseries
 
 
 class Panel(object):
-    def __init__(self, requiresGridPos=False):
-        self.requiresGridPos = requiresGridPos
+    def __init__(self, usingNewSchema=False):
+        self.usingNewSchema = usingNewSchema
 
     def _validate(self):
         def f(data):
@@ -41,23 +41,21 @@ class Panel(object):
                 validate(panel)
 
                 if panel["type"] == "dashlist":
-                    schema = Dashlist(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Dashlist(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "graph":
-                    schema = Graph(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Graph(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "logs":
-                    schema = Logs(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Logs(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "singlestat":
-                    schema = Singlestat(
-                        requiresGridPos=self.requiresGridPos
-                    ).get_schema()
+                    schema = Singlestat(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "stat":
-                    schema = Stat(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Stat(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "text":
-                    schema = Text(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Text(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "table":
-                    schema = Table(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Table(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "bargauge":
-                    schema = Bargauge(requiresGridPos=self.requiresGridPos).get_schema()
+                    schema = Bargauge(usingNewSchema=self.usingNewSchema).get_schema()
                 elif panel["type"] == "timeseries":
                     schema = Timeseries().get_schema()
 

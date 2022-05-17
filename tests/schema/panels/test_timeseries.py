@@ -13,8 +13,6 @@ class TestCaseTimeseries(TestCase):
         defaults = {
             "type": "timeseries",
             "title": "test timeseries",
-            "editable": True,
-            "error": False,
             "fieldConfig": {
                 "defaults": {},
                 "overrides": [],
