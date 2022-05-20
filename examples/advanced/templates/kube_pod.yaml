@@ -5,7 +5,7 @@ rows:
   height: 300px
   panels:
     - title: CPU Usage
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       fill: 0
       seriesOverrides:
@@ -31,15 +31,21 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(rate(container_cpu_usage_seconds_total{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
+        - expr: >-
+            sum by (pod, container) (irate(container_cpu_usage_seconds_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
           legendFormat: '{{container}} in {{pod}}'
-        - expr: 'sum(kube_pod_container_resource_limits_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
-          legendFormat: 'limit'
-        - expr: 'sum(kube_pod_container_resource_requests_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
-          legendFormat: 'request'
+        - expr: >-
+            min by (container) (kube_pod_container_resource_limits{dh_cluster="$dh_cluster", namespace="$namespace",
+            resource="cpu", unit="core", pod=~".*$app.*"})
+          legendFormat: 'Limit: {{ container }}'
+        - expr: >-
+            min by (container) (kube_pod_container_resource_requests{dh_cluster="$dh_cluster", namespace="$namespace",
+            resource="cpu", unit="core", pod=~".*$app.*"})
+          legendFormat: 'Request: {{ container }}'
       type: graph
     - title: Memory Limit Usage
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       fill: 0
       legend:
@@ -54,7 +60,11 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(container_memory_working_set_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)/sum(container_spec_memory_limit_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)'
+        - expr: >-
+            avg by (pod, container) (container_memory_working_set_bytes{dh_cluster="$dh_cluster",
+            namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}) / avg by (pod, container)
+            (container_spec_memory_limit_bytes{dh_cluster="$dh_cluster", namespace="$namespace",
+            container!="POD", container!="", pod=~".*$app.*"})
           legendFormat: '{{container}} in {{pod}}'
       type: graph
       format: percentunit
@@ -66,7 +76,7 @@ rows:
           show: true
         - show: false
     - title: Disk IO
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       fill: 0
       yaxes:
@@ -86,13 +96,17 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(rate(container_fs_writes_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
-          legendFormat: '{{ pod }} write'
-        - expr: '- sum(rate(container_fs_reads_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
-          legendFormat: '{{ pod }} read'
+        - expr: >-
+            sum by (pod) (irate(container_fs_writes_bytes_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+          legendFormat: '{{ pod }} disk write'
+        - expr: >-
+            -sum by (pod) (irate(container_fs_reads_bytes_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+          legendFormat: '{{ pod }} disk read'
       type: graph
     - title: Pod Restarts
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       legend:
         alignAsTable: true
@@ -106,11 +120,13 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(delta(kube_pod_container_status_restarts_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
+        - expr: >-
+            sum by (pod) (delta(kube_pod_container_status_restarts_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
           legendFormat: '{{ pod }}'
       type: graph
     - title: Network IO
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       fill: 0
       yaxes:
@@ -130,13 +146,17 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum (rate (container_network_receive_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
-          legendFormat: '{{pod}} in'
-        - expr: '- sum (rate (container_network_transmit_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
-          legendFormat: '{{pod}} out'
+        - expr: >-
+            sum by (pod) (irate(container_network_receive_bytes_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+          legendFormat: '{{pod}} network recv bytes'
+        - expr: >-
+            -sum by (pod) (irate(container_network_transmit_bytes_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+          legendFormat: '{{pod}} network sent bytes'
       type: graph
     - title: HPA Status
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       fill: 0
       seriesOverrides:
@@ -165,7 +185,7 @@ rows:
           lineWidth: 2
           spaceLength: 3
       yaxes:
-        - format: percent
+        - format: percentunit
           show: true
           min: 0
           label: CPU
@@ -185,23 +205,25 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'kube_hpa_spec_target_metric{hpa=~"$app"}'
-          legendFormat: 'HPA threshold'
-          step: 10
-        - expr: 'kube_hpa_spec_min_replicas{hpa=~"$app"}'
+        - expr: 'kube_hpa_spec_target_metric{dh_cluster="$dh_cluster", hpa=~".*$app.*"}'
+          legendFormat: 'HPA target'
+        - expr: 'kube_hpa_spec_min_replicas{dh_cluster="$dh_cluster", hpa=~".*$app.*"}'
           legendFormat: 'HPA min replicas'
-          step: 10
-        - expr: 'kube_hpa_spec_max_replicas{hpa=~"$app"}'
+        - expr: 'kube_hpa_spec_max_replicas{dh_cluster="$dh_cluster", hpa=~".*$app.*"}'
           legendFormat: 'HPA max replicas'
-          step: 10
-        - expr: 'avg(round(100 * sum(irate(container_cpu_usage_seconds_total{name!~".*prometheus.*",container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}[5m])) by (pod, container, namespace) / sum(kube_pod_container_resource_requests_cpu_cores{name!~".*prometheus.*", container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}) by (pod, container, namespace)))'
-          legendFormat: 'CPU request usage'
-          step: 10
-        - expr: 'sum(kube_pod_status_phase{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", pod!~".*-prometheus-.*", phase="Running"} > 0)'
+        - expr: >-
+            sum by (pod, namespace) (irate(container_cpu_usage_seconds_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", pod=~".*$app.*"}[$__rate_interval])) / sum by
+            (pod, namespace) (kube_pod_container_resource_requests {dh_cluster="$dh_cluster",
+            namespace="$namespace", resource="cpu", unit="core", pod=~".*$app.*"})
+          legendFormat: 'CPU request usage - {{ pod }}'
+        - expr: >-
+            sum(kube_pod_status_phase{dh_cluster="$dh_cluster", namespace="$namespace", pod=~".*$app.*",
+            phase="Running"} > 0)
           legendFormat: 'Pods running'
       type: graph
     - title: Network Transmit Errors
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       yaxes:
         - show: true
@@ -219,11 +241,13 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(rate(container_network_transmit_errors_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*"}[5m])) by (pod)'
+        - expr: >-
+            sum by (pod) (irate(container_network_transmit_errors_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
           legendFormat: '{{pod}}'
       type: graph
     - title: CPU Throttle Seconds
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       yaxes:
         - format: dtdurations
@@ -242,15 +266,17 @@ rows:
         sort: 2
         value_type: individual
       targets:
-        - expr: 'sum(rate(container_cpu_cfs_throttled_seconds_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
+        - expr: >-
+            sum by (pod, container) (rate(container_cpu_cfs_throttled_seconds_total{dh_cluster="$dh_cluster",
+            namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
           legendFormat: '{{pod}} - {{container}}'
       type: graph
     - title: Pod Ready
-      datasource: $datasource
+      datasource: q5KtSq17z
       span: 4
       legend:
         alignAsTable: true
-        current: true
+        current: false
         sort: current
         show: true
         values: true
@@ -259,7 +285,29 @@ rows:
         shared: true
         sort: 2
         value_type: individual
+      stack: true
       targets:
-        - expr: 'sum by (pod, condition) (kube_pod_status_ready{pod=~"$app-\\w{8,13}(-.*)?"})'
-          legendFormat: '{{condition}}-{{pod}}'
+        - expr: >-
+            sum by (condition) (kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace",
+            pod=~".*$app.*", condition="true"})
+          legendFormat: '{{ condition }}'
+        - expr: >-
+            sum by (condition) (kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace",
+            pod=~".*$app.*", condition="false"})
+          legendFormat: '{{ condition }}'
+        - expr: >-
+            kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace", pod=~".*$app.*",
+            condition="false"} > 0
+          legendFormat: 'Not ready: {{ pod }}'
+      seriesOverrides:
+        - alias: '/true|false/'
+          legend: false
+        - alias: 'true'
+          color: green
+        - alias: 'false'
+          color: red
+        - alias: '/Not ready/'
+          stack: false
+          lines: false
+          hideTooltip: true
       type: graph
