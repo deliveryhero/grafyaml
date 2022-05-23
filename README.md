@@ -41,7 +41,8 @@ grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-exa
 ## More examples
 
 - [examples/basic](examples/basic): A very basic example with a single dashboard
-- [examples/advanced](examples/advanced): An example showing how to create multiple dashboards using templates
+- **_Timeseries panels_**: [kube_pod.yaml](examples/advanced/templates/kube_pod.yaml): An example of Timeseries panels of kube_pod_* and container_* metrics.
+  - An example dashboard: https://dashboards.syslogistics.io/d/FxYFbAXnk/grafyamls-example?orgId=1
 
 ## Build and install from source
 
