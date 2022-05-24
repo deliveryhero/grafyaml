@@ -1,265 +1,609 @@
 rows:
-  title: Kubernetes Pod
-  collapse: true
-  showTitle: true
-  height: 300px
   panels:
-    - title: CPU Usage
-      datasource: $datasource
-      span: 4
-      fill: 0
-      seriesOverrides:
-        - alias: limit
-          color: '#FF0000'
-          hideTooltip: true
-          legend: false
-          nullPointMode: connected
-        - alias: request
-          color: '#00FF04'
-          hideTooltip: true
-          legend: false
-          nullPointMode: connected
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 0
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+      overrides:
+      - matcher:
+          id: byName
+          options: limit
+        properties:
+        - id: color
+          value:
+            fixedColor: '#FF0000'
+            mode: fixed
+        - id: custom.hideFrom
+          value:
+            legend: true
+            tooltip: true
+            viz: false
+        - id: custom.pointSize
+          value: 0
+        - id: custom.spanNulls
+          value: true
+      - matcher:
+          id: byName
+          options: request
+        properties:
+        - id: color
+          value:
+            fixedColor: '#00FF04'
+            mode: fixed
+        - id: custom.hideFrom
+          value:
+            legend: true
+            tooltip: true
+            viz: false
+        - id: custom.pointSize
+          value: 0
+        - id: custom.spanNulls
+          value: true
+    gridPos:
+      h: 8
+      w: 8
+      x: 0
+      y: 0
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(rate(container_cpu_usage_seconds_total{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
-          legendFormat: '{{container}} in {{pod}}'
-        - expr: 'sum(kube_pod_container_resource_limits_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
-          legendFormat: 'limit'
-        - expr: 'sum(kube_pod_container_resource_requests_cpu_cores{pod!~".*migration.*|.*prometheus.*", pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}) by (pod)'
-          legendFormat: 'request'
-      type: graph
-    - title: Memory Limit Usage
-      datasource: $datasource
-      span: 4
-      fill: 0
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod, container) (irate(container_cpu_usage_seconds_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{container}} in {{pod}}'
+    - expr: min by (container) (kube_pod_container_resource_limits{dh_cluster="$dh_cluster",
+        namespace="$namespace", resource="cpu", unit="core", pod=~".*$app.*"})
+      legendFormat: 'Limit: {{ container }}'
+    - expr: min by (container) (kube_pod_container_resource_requests{dh_cluster="$dh_cluster",
+        namespace="$namespace", resource="cpu", unit="core", pod=~".*$app.*"})
+      legendFormat: 'Request: {{ container }}'
+    title: CPU Usage
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 0
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        decimals: 2
+        max: 1
+        min: 0
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: percentunit
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 8
+      y: 0
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(container_memory_working_set_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)/sum(container_spec_memory_limit_bytes{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}) by (pod, container)'
-          legendFormat: '{{container}} in {{pod}}'
-      type: graph
-      format: percentunit
-      yaxes:
-        - format: percentunit
-          decimals: 2
-          min: 0
-          max: 1
-          show: true
-        - show: false
-    - title: Disk IO
-      datasource: $datasource
-      span: 4
-      fill: 0
-      yaxes:
-        - format: Bps
-          show: true
-        - decimals: 0
-          show: false
+        mode: multi
+        sort: desc
+    targets:
+    - expr: avg by (pod, container) (container_memory_working_set_bytes{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"})
+        / avg by (pod, container) (container_spec_memory_limit_bytes{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"})
+      legendFormat: '{{container}} in {{pod}}'
+    title: Memory Limit Usage
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 0
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: Bps
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 16
+      y: 0
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(rate(container_fs_writes_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
-          legendFormat: '{{ pod }} write'
-        - expr: '- sum(rate(container_fs_reads_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
-          legendFormat: '{{ pod }} read'
-      type: graph
-    - title: Pod Restarts
-      datasource: $datasource
-      span: 4
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod) (irate(container_fs_writes_bytes_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{ pod }} disk write'
+    - expr: -sum by (pod) (irate(container_fs_reads_bytes_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{ pod }} disk read'
+    title: Disk IO
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 10
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 0
+      y: 1
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(delta(kube_pod_container_status_restarts_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?"}[5m])) by (pod)'
-          legendFormat: '{{ pod }}'
-      type: graph
-    - title: Network IO
-      datasource: $datasource
-      span: 4
-      fill: 0
-      yaxes:
-        - format: Bps
-          show: true
-        - decimals: 0
-          show: false
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod) (delta(kube_pod_container_status_restarts_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{ pod }}'
+    title: Pod Restarts
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 0
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: Bps
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 8
+      y: 1
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum (rate (container_network_receive_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
-          legendFormat: '{{pod}} in'
-        - expr: '- sum (rate (container_network_transmit_bytes_total{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", name!~".*prometheus.*"}[1m])) by (pod)'
-          legendFormat: '{{pod}} out'
-      type: graph
-    - title: HPA Status
-      datasource: $datasource
-      span: 4
-      fill: 0
-      seriesOverrides:
-        - alias: 'CPU request usage'
-          color: '#C334EB'
-        - alias: 'Pods running'
-          color: '#34EB4F'
-          yaxis: 2
-        - alias: 'HPA max replicas'
-          color: 'rgba(112, 112, 112, 0.26)'
-          fillBelowTo: 'HPA min replicas'
-          hideTooltip: true
-          legend: false
-          lineWidth: 0
-          yaxis: 2
-        - alias: 'HPA min replicas'
-          color: 'rgba(112, 112, 112, 0.26)'
-          hideTooltip: true
-          legend: false
-          lineWidth: 0
-          yaxis: 2
-        - alias: 'HPA threshold'
-          color: '#F2495C'
-          dashLength: 2
-          dashes: true
-          lineWidth: 2
-          spaceLength: 3
-      yaxes:
-        - format: percent
-          show: true
-          min: 0
-          label: CPU
-        - format: short
-          show: true
-          min: 0
-          label: Pods
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod) (irate(container_network_receive_bytes_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{pod}} network recv bytes'
+    - expr: -sum by (pod) (irate(container_network_transmit_bytes_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{pod}} network sent bytes'
+    title: Network IO
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: CPU
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 0
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        min: 0
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: percentunit
+      overrides:
+      - matcher:
+          id: byName
+          options: CPU request usage
+        properties:
+        - id: color
+          value:
+            fixedColor: '#C334EB'
+            mode: fixed
+      - matcher:
+          id: byName
+          options: Pods running
+        properties:
+        - id: color
+          value:
+            fixedColor: '#34EB4F'
+            mode: fixed
+        - id: custom.axisLabel
+          value: Pods
+        - id: unit
+          value: short
+        - id: min
+          value: 0
+      - matcher:
+          id: byName
+          options: HPA max replicas
+        properties:
+        - id: color
+          value:
+            fixedColor: rgba(112, 112, 112, 0.26)
+            mode: fixed
+        - id: custom.hideFrom
+          value:
+            legend: true
+            tooltip: true
+            viz: false
+        - id: custom.pointSize
+          value: 0
+        - id: custom.fillBelowTo
+          value: HPA min replicas
+        - id: custom.axisLabel
+          value: Pods
+        - id: unit
+          value: short
+        - id: min
+          value: 0
+      - matcher:
+          id: byName
+          options: HPA min replicas
+        properties:
+        - id: color
+          value:
+            fixedColor: rgba(112, 112, 112, 0.26)
+            mode: fixed
+        - id: custom.hideFrom
+          value:
+            legend: true
+            tooltip: true
+            viz: false
+        - id: custom.pointSize
+          value: 0
+        - id: custom.axisLabel
+          value: Pods
+        - id: unit
+          value: short
+        - id: min
+          value: 0
+      - matcher:
+          id: byName
+          options: HPA threshold
+        properties:
+        - id: color
+          value:
+            fixedColor: '#F2495C'
+            mode: fixed
+        - id: custom.lineStyle
+          value:
+            dash:
+            - 2
+            - 2
+            fill: dash
+    gridPos:
+      h: 8
+      w: 8
+      x: 16
+      y: 1
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'kube_hpa_spec_target_metric{hpa=~"$app"}'
-          legendFormat: 'HPA threshold'
-          step: 10
-        - expr: 'kube_hpa_spec_min_replicas{hpa=~"$app"}'
-          legendFormat: 'HPA min replicas'
-          step: 10
-        - expr: 'kube_hpa_spec_max_replicas{hpa=~"$app"}'
-          legendFormat: 'HPA max replicas'
-          step: 10
-        - expr: 'avg(round(100 * sum(irate(container_cpu_usage_seconds_total{name!~".*prometheus.*",container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}[5m])) by (pod, container, namespace) / sum(kube_pod_container_resource_requests_cpu_cores{name!~".*prometheus.*", container!="POD", pod=~"$app-\\w{8,13}(-.*)?"}) by (pod, container, namespace)))'
-          legendFormat: 'CPU request usage'
-          step: 10
-        - expr: 'sum(kube_pod_status_phase{pod=~"$app-(?:[0-9]+[a-z]|[a-z]+[0-9])[a-z0-9]*(-.*)?", pod!~".*-prometheus-.*", phase="Running"} > 0)'
-          legendFormat: 'Pods running'
-      type: graph
-    - title: Network Transmit Errors
-      datasource: $datasource
-      span: 4
-      yaxes:
-        - show: true
-          min: 0
-        - show: false
+        mode: multi
+        sort: desc
+    targets:
+    - expr: kube_hpa_spec_target_metric{dh_cluster="$dh_cluster", hpa=~".*$app.*"}
+      legendFormat: HPA target
+    - expr: kube_hpa_spec_min_replicas{dh_cluster="$dh_cluster", hpa=~".*$app.*"}
+      legendFormat: HPA min replicas
+    - expr: kube_hpa_spec_max_replicas{dh_cluster="$dh_cluster", hpa=~".*$app.*"}
+      legendFormat: HPA max replicas
+    - expr: sum by (pod, namespace) (irate(container_cpu_usage_seconds_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", pod=~".*$app.*"}[$__rate_interval])) / sum by (pod,
+        namespace) (kube_pod_container_resource_requests {dh_cluster="$dh_cluster",
+        namespace="$namespace", resource="cpu", unit="core", pod=~".*$app.*"})
+      legendFormat: CPU request usage - {{ pod }}
+    - expr: sum(kube_pod_status_phase{dh_cluster="$dh_cluster", namespace="$namespace",
+        pod=~".*$app.*", phase="Running"} > 0)
+      legendFormat: Pods running
+    title: HPA Status
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 10
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        min: 0
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: short
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 0
+      y: 2
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(rate(container_network_transmit_errors_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*"}[5m])) by (pod)'
-          legendFormat: '{{pod}}'
-      type: graph
-    - title: CPU Throttle Seconds
-      datasource: $datasource
-      span: 4
-      yaxes:
-        - format: dtdurations
-          show: true
-        - decimals: 0
-          show: false
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod) (irate(container_network_transmit_errors_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{pod}}'
+    title: Network Transmit Errors
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 10
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: none
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+        unit: dtdurations
+      overrides: []
+    gridPos:
+      h: 8
+      w: 8
+      x: 8
+      y: 2
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs:
+        - lastNotNull
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum(rate(container_cpu_cfs_throttled_seconds_total{pod=~"$app-\\w{8,13}(-.*)?", name!~".*prometheus.*", image!="", container!="POD"}[5m])) by (pod, container)'
-          legendFormat: '{{pod}} - {{container}}'
-      type: graph
-    - title: Pod Ready
-      datasource: $datasource
-      span: 4
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (pod, container) (rate(container_cpu_cfs_throttled_seconds_total{dh_cluster="$dh_cluster",
+        namespace="$namespace", container!="POD", container!="", pod=~".*$app.*"}[$__rate_interval]))
+      legendFormat: '{{pod}} - {{container}}'
+    title: CPU Throttle Seconds
+    type: timeseries
+  - datasource:
+      uid: q5KtSq17z
+    fieldConfig:
+      defaults:
+        custom:
+          axisLabel: ''
+          axisPlacement: auto
+          drawStyle: line
+          fillOpacity: 10
+          lineWidth: 1
+          pointSize: 2
+          scaleDistribution:
+            type: linear
+          spanNulls: false
+          stacking:
+            mode: normal
+          thresholdsStyle:
+            mode: 'off'
+        thresholds:
+          mode: absolute
+          steps:
+          - color: tranparent
+            value: null
+      overrides:
+      - matcher:
+          id: byRegexp
+          options: /true|false/
+        properties:
+        - id: custom.hideFrom
+          value:
+            legend: true
+            tooltip: false
+            viz: false
+      - matcher:
+          id: byName
+          options: 'true'
+        properties:
+        - id: color
+          value:
+            fixedColor: green
+            mode: fixed
+      - matcher:
+          id: byName
+          options: 'false'
+        properties:
+        - id: color
+          value:
+            fixedColor: red
+            mode: fixed
+      - matcher:
+          id: byRegexp
+          options: /Not ready/
+        properties:
+        - id: custom.drawStyle
+          value: line
+        - id: custom.hideFrom
+          value:
+            legend: false
+            tooltip: true
+            viz: false
+        - id: custom.pointSize
+          value: 0
+        - id: custom.stacking
+          value:
+            mode: none
+        - id: custom.fillOpacity
+          value: 0
+        - id: custom.lineWidth
+          value: 0
+    gridPos:
+      h: 8
+      w: 8
+      x: 16
+      y: 2
+    options:
       legend:
-        alignAsTable: true
-        current: true
-        sort: current
-        show: true
-        values: true
+        calcs: []
+        displayMode: table
+        placement: bottom
         sortDesc: true
       tooltip:
-        shared: true
-        sort: 2
-        value_type: individual
-      targets:
-        - expr: 'sum by (pod, condition) (kube_pod_status_ready{pod=~"$app-\\w{8,13}(-.*)?"})'
-          legendFormat: '{{condition}}-{{pod}}'
-      type: graph
+        mode: multi
+        sort: desc
+    targets:
+    - expr: sum by (condition) (kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace",
+        pod=~".*$app.*", condition="true"})
+      legendFormat: '{{ condition }}'
+    - expr: sum by (condition) (kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace",
+        pod=~".*$app.*", condition="false"})
+      legendFormat: '{{ condition }}'
+    - expr: kube_pod_status_ready{dh_cluster="$dh_cluster", namespace="$namespace",
+        pod=~".*$app.*", condition="false"} > 0
+      legendFormat: 'Not ready: {{ pod }}'
+    title: Pod Ready
+    type: timeseries
+  title: Kubernetes Pod
+  type: row

@@ -20,10 +20,12 @@ dashboard:
       label: Datasource
       hide: 2
     - name: app
-      query: app_name
+      query: datadog
       type: constant
-      current:
-        text: app_name
-        value: app_name
-      hide: 2
-  rows:
+    - name: dh_cluster
+      query: production-eu-cluster-0
+      type: constant
+    - name: namespace
+      query: datadog
+      type: constant
+  panels:
