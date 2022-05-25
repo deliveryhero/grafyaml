@@ -5,28 +5,11 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
-          fillOpacity: 0
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
       overrides:
       - matcher:
-          id: byName
-          options: limit
+          id: byRegexp
+          options: /^Limit/
         properties:
         - id: color
           value:
@@ -42,8 +25,8 @@ rows:
         - id: custom.spanNulls
           value: true
       - matcher:
-          id: byName
-          options: request
+          id: byRegexp
+          options: /^Request/
         properties:
         - id: color
           value:
@@ -69,6 +52,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -90,29 +74,11 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
-          fillOpacity: 0
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
         decimals: 2
         max: 1
         min: 0
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: percentunit
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -124,6 +90,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -141,26 +108,8 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
-          fillOpacity: 0
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: Bps
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -172,6 +121,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -190,25 +140,8 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
           fillOpacity: 10
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -220,6 +153,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -235,26 +169,8 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
-          fillOpacity: 0
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: Bps
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -266,6 +182,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -285,24 +202,8 @@ rows:
       defaults:
         custom:
           axisLabel: CPU
-          axisPlacement: auto
-          drawStyle: line
-          fillOpacity: 0
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
         min: 0
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: percentunit
       overrides:
       - matcher:
@@ -396,6 +297,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -422,27 +324,10 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
           fillOpacity: 10
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
         min: 0
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: short
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -454,6 +339,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -469,26 +355,9 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
           fillOpacity: 10
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: none
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
         unit: dtdurations
-      overrides: []
     gridPos:
       h: 8
       w: 8
@@ -500,6 +369,7 @@ rows:
         - lastNotNull
         displayMode: table
         placement: bottom
+        sortBy: Last *
         sortDesc: true
       tooltip:
         mode: multi
@@ -515,24 +385,8 @@ rows:
     fieldConfig:
       defaults:
         custom:
-          axisLabel: ''
-          axisPlacement: auto
-          drawStyle: line
           fillOpacity: 10
-          lineWidth: 1
           pointSize: 2
-          scaleDistribution:
-            type: linear
-          spanNulls: false
-          stacking:
-            mode: normal
-          thresholdsStyle:
-            mode: 'off'
-        thresholds:
-          mode: absolute
-          steps:
-          - color: tranparent
-            value: null
       overrides:
       - matcher:
           id: byRegexp
@@ -561,7 +415,7 @@ rows:
             mode: fixed
       - matcher:
           id: byRegexp
-          options: /Not ready/
+          options: /^Not ready/
         properties:
         - id: custom.drawStyle
           value: line
