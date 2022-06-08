@@ -19,6 +19,7 @@ from grafana_dashboards.schema.annotations import Annotations
 from grafana_dashboards.schema.row import Row as DeprecatedRow
 from grafana_dashboards.schema.panel.row import Row
 from grafana_dashboards.schema.template import Template
+from grafana_dashboards.schema.panel import Panel
 
 
 class Dashboard(object):
@@ -38,10 +39,21 @@ class Dashboard(object):
         }
         links = Links().get_schema()
         dashboard.update(links.schema)
-        rows = DeprecatedRow().get_schema()
-        dashboard.update(rows.schema)
-        panels = Row().get_schema()
-        dashboard.update(panels.schema)
+        deprecated_rows = DeprecatedRow().get_schema()
+        dashboard.update(deprecated_rows.schema)
+
+        row = Row().get_schema()
+        callable_panel_validator = Panel(usingNewSchema=True).validate_individually
+        # Accepts both (new) row and non-row panel
+        # i.e. accepts panels outside of rows
+        dashboard.update(
+            {
+                v.Required("panels", default=[]): [
+                    v.Any(row, callable_panel_validator)
+                ],
+            }
+        )
+
         templating = Template().get_schema()
         dashboard.update(templating.schema)
         annotations = Annotations().get_schema()

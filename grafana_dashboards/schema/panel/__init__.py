@@ -30,38 +30,37 @@ class Panel(object):
     def __init__(self, usingNewSchema=False):
         self.usingNewSchema = usingNewSchema
 
+    def validate_individually(self, panel: dict):
+        validate = Base().get_schema()
+        validate(panel)
+
+        if panel["type"] == "dashlist":
+            schema = Dashlist(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "graph":
+            schema = Graph(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "logs":
+            schema = Logs(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "singlestat":
+            schema = Singlestat(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "stat":
+            schema = Stat(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "text":
+            schema = Text(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "table":
+            schema = Table(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "bargauge":
+            schema = Bargauge(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "timeseries":
+            schema = Timeseries().get_schema()
+
+        return schema(panel)
+
     def _validate(self):
         def f(data):
-            res = []
             if not isinstance(data, list):
                 raise v.Invalid("Should be a list")
 
-            for panel in data:
-                validate = Base().get_schema()
-                validate(panel)
-
-                if panel["type"] == "dashlist":
-                    schema = Dashlist(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "graph":
-                    schema = Graph(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "logs":
-                    schema = Logs(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "singlestat":
-                    schema = Singlestat(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "stat":
-                    schema = Stat(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "text":
-                    schema = Text(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "table":
-                    schema = Table(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "bargauge":
-                    schema = Bargauge(usingNewSchema=self.usingNewSchema).get_schema()
-                elif panel["type"] == "timeseries":
-                    schema = Timeseries().get_schema()
-
-                res.append(schema(panel))
-
-            return res
+            return [self.validate_individually(panel) for panel in data]
 
         return f
 

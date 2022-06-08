@@ -27,8 +27,4 @@ class Row(Base):
         }
         panel = Panel(usingNewSchema=True).get_schema()
         row.update(panel.schema)
-        return v.Schema(
-            {
-                v.Required("panels", default=[]): [row],
-            }
-        )
+        return v.Schema(row)
