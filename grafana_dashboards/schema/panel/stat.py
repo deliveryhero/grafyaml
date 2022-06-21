@@ -59,6 +59,7 @@ class Stat(Base):
             v.Optional("timeFrom"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
             v.Optional("timeShift"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
             v.Optional("maxDataPoints"): v.All(int),
+            v.Optional("hideTimeOverride"): v.All(bool),
         }
         stat.update(self.base)
         return v.Schema(stat)
