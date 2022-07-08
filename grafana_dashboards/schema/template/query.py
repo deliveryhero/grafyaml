@@ -32,7 +32,7 @@ class Query(Base):
             v.Optional("current"): v.Any(self.current),
             v.Required("includeAll", default=False): v.All(bool),
             v.Required("multi", default=False): v.All(bool),
-            v.Required("query", default=""): v.All(str),
+            v.Required("query", default=""): v.Any(str, dict),
             v.Required("refresh", default=1): v.All(int, v.Range(min=0, max=2)),
             v.Optional("datasource"): v.All(str),
             v.Optional("hide"): v.All(int, v.Range(min=0, max=2)),
@@ -40,6 +40,8 @@ class Query(Base):
             v.Optional("label", default=""): v.All(str),
             v.Optional("allValue"): v.All(str),
             v.Optional("sort"): v.All(int, v.Range(min=0, max=8)),
+            v.Optional("definition"): v.All(str),
+            v.Optional("skipUrlSync"): v.All(bool),
         }
         query.update(self.base)
         return v.Schema(query)
