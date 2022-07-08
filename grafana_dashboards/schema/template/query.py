@@ -32,7 +32,7 @@ class Query(Base):
             v.Optional("current"): v.Any(self.current),
             v.Required("includeAll", default=False): v.All(bool),
             v.Required("multi", default=False): v.All(bool),
-            v.Required("query", default=""): v.Any(str,dict),
+            v.Required("query", default=""): v.Any(str, dict),
             v.Required("refresh", default=1): v.All(int, v.Range(min=0, max=2)),
             v.Optional("datasource"): v.All(str),
             v.Optional("hide"): v.All(int, v.Range(min=0, max=2)),
