@@ -23,7 +23,7 @@ class Row(Base):
         row = {
             v.Required("title"): v.All(str, v.Length(min=1)),
             v.Required("type", default="row"): "row",
-            v.Required("collapsed", default=True): True,
+            v.Required("collapsed", default=True): bool,
         }
         panel = Panel(usingNewSchema=True).get_schema()
         row.update(panel.schema)
