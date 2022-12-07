@@ -11,18 +11,13 @@ class TestCasePieChart(TestCase):
 
     def test_defaults(self):
         defaults = {
-            "type": "piechart",
+            "editable": True,
+            "error": False,
+            "fieldConfig": {"defaults": {}, "overrides": []},
+            "gridPos": {"h": 8, "w": 8, "x": 0, "y": 0},
+            "span": 12,
+            "targets": [],
             "title": "test piechart",
-            "fieldConfig": {
-                "defaults": {},
-                "overrides": [],
-            },
-            "gridPos": {
-                "w": 8,
-                "h": 8,
-                "x": 0,
-                "y": 0,
-            },
-            "options": {},
+            "type": "piechart",
         }
         self.assertThat(self.schema(defaults), testtools.matchers.Equals(defaults))

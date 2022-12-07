@@ -40,12 +40,16 @@ class PieChart(Base):
         }
 
         options = {
-            v.Required("orientation"): v.Any(str),
-            v.Required("textMode"): v.Any(str),
-            v.Required("colorMode"): v.Any(str),
-            v.Required("graphMode"): v.Any(str),
-            v.Required("justifyMode"): v.Any(str),
+            v.Required("pieType"): v.Any(str),
+            v.Required("displayLabels"): v.All(list),
             v.Optional("reduceOptions"): v.All(reduceOptions),
+        }
+
+        grid_pos = {
+            v.Required("h"): v.Any(int),
+            v.Required("w"): v.Any(int),
+            v.Required("x"): v.Any(int),
+            v.Required("y"): v.Any(int),
         }
 
         pie_chart = {
@@ -53,6 +57,7 @@ class PieChart(Base):
             v.Required("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
             v.Optional("datasource"): v.All(str),
+            v.Optional("gridPos"): v.All(grid_pos),
         }
         pie_chart.update(self.base)
         return v.Schema(pie_chart)
