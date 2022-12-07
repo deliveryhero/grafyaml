@@ -25,16 +25,13 @@ class PieChart(Base):
             v.Required("fields", default=""): v.Any(str),
         }
 
-        thresholds = {
-            v.Required("steps"): v.All(list),
-            v.Required("mode", default="absolute"): v.Any(str),
+        color = {
+            v.Required("fixedColor", default="dark-red"): v.Any(str),
+            v.Required("mode", default="palette-classic"): v.Any(str),
         }
 
         defaults = {
-            v.Required("unit", default="short"): Base.formats,
-            v.Required("NoneValueMode", default="connected"): v.Any(str),
-            v.Required("thresholds"): v.All(thresholds),
-            v.Optional("decimals"): v.All(int),
+            v.Optional("color"): v.All(color),
         }
 
         fieldConfig = {
@@ -43,12 +40,16 @@ class PieChart(Base):
         }
 
         options = {
-            v.Required("orientation"): v.Any(str),
-            v.Required("textMode"): v.Any(str),
-            v.Required("colorMode"): v.Any(str),
-            v.Required("graphMode"): v.Any(str),
-            v.Required("justifyMode"): v.Any(str),
+            v.Required("pieType"): v.Any(str),
+            v.Required("displayLabels"): v.All(list),
             v.Optional("reduceOptions"): v.All(reduceOptions),
+        }
+
+        grid_pos = {
+            v.Required("h"): v.Any(int),
+            v.Required("w"): v.Any(int),
+            v.Required("x"): v.Any(int),
+            v.Required("y"): v.Any(int),
         }
 
         pie_chart = {
@@ -56,6 +57,7 @@ class PieChart(Base):
             v.Required("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
             v.Optional("datasource"): v.All(str),
+            v.Optional("gridPos"): v.All(grid_pos),
         }
         pie_chart.update(self.base)
         return v.Schema(pie_chart)
