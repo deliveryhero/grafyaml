@@ -153,6 +153,7 @@ class Base(object):
                 "table",
                 "bargauge",
                 "timeseries",
+                "piechart",
             ),
             v.Optional("id"): int,
             v.Optional("format"): v.Any(self.formats, v.Length(min=1)),

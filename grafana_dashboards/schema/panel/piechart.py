@@ -25,16 +25,13 @@ class PieChart(Base):
             v.Required("fields", default=""): v.Any(str),
         }
 
-        thresholds = {
-            v.Required("steps"): v.All(list),
-            v.Required("mode", default="absolute"): v.Any(str),
+        color = {
+            v.Required("fixedColor", default="dark-red"): v.Any(str),
+            v.Required("mode", default="palette-classic"): v.Any(str),
         }
 
         defaults = {
-            v.Required("unit", default="short"): Base.formats,
-            v.Required("NoneValueMode", default="connected"): v.Any(str),
-            v.Required("thresholds"): v.All(thresholds),
-            v.Optional("decimals"): v.All(int),
+            v.Optional("color"): v.All(color),
         }
 
         fieldConfig = {
