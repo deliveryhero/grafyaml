@@ -24,7 +24,6 @@ from grafana_dashboards.schema.panel import Panel
 
 class Dashboard(object):
     def get_schema(self):
-
         dashboard = {
             v.Required("timezone", default="utc"): v.Any("browser", "utc"),
             v.Required("title"): v.All(str, v.Length(min=1)),

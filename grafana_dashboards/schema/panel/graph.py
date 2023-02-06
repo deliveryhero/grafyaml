@@ -21,7 +21,6 @@ from grafana_dashboards.schema.panel.base import Base
 
 class Graph(Base):
     def get_schema(self):
-
         alert_format = {
             # could enforce "evaulator"/"operator"/"query" on this...
             v.Required("conditions"): v.All(list),

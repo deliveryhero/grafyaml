@@ -67,7 +67,7 @@ class Timeseries(Base):
         v.Optional("axisSoftMax"): v.Number(),
         v.Optional("axisGridShow"): bool,
         v.Optional("scaleDistribution"): {
-            v.Required("type"): v.Any("linear", "log", "ordinal"),
+            v.Required("type"): v.Any("linear", "log", "symlog"),
             v.Optional("log"): v.Number(),
         },
     }
