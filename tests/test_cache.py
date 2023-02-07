@@ -17,7 +17,6 @@ from tests.base import TestCase
 
 
 class TestCaseCache(TestCase):
-
     dashboard = {
         "hello-world": "2095312189753de6ad47dfe20cbe97ec",
     }

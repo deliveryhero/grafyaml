@@ -18,7 +18,6 @@ from grafana_dashboards.schema.template.base import Base
 
 
 class Datasource(Base):
-
     current = {
         v.Required("text"): v.All(str, v.Length(min=1)),
         v.Required("value"): v.All(str, v.Length(min=1)),
