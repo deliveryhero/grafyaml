@@ -20,6 +20,7 @@ from grafana_dashboards.schema.template.custom import Custom
 from grafana_dashboards.schema.template.datasource import Datasource
 from grafana_dashboards.schema.template.interval import Interval
 from grafana_dashboards.schema.template.query import Query
+from grafana_dashboards.schema.template.textbox import Textbox
 
 
 class Template(object):
@@ -52,6 +53,8 @@ class Template(object):
                     schema = Datasource().get_schema()
                 if template["type"] == "adhoc":
                     schema = Adhoc().get_schema()
+                if template["type"] == "textbox":
+                    schema = Textbox().get_schema()
 
                 res["list"].append(schema(template))
 
