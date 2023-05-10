@@ -66,7 +66,7 @@ class Base(object):
         self.base = {
             v.Required("name"): v.All(str, v.Length(min=1)),
             v.Required("type"): v.Any(
-                "query", "interval", "custom", "datasource", "adhoc", "constant"
+                "query", "interval", "custom", "datasource", "adhoc", "constant", "textbox"
             ),
             v.Optional("description"): v.All(str),
         }
