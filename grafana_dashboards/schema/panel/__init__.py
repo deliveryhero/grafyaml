@@ -25,6 +25,7 @@ from grafana_dashboards.schema.panel.table import Table
 from grafana_dashboards.schema.panel.bargauge import Bargauge
 from grafana_dashboards.schema.panel.timeseries import Timeseries
 from grafana_dashboards.schema.panel.piechart import PieChart
+from grafana_dashboards.schema.panel.statetimeline import StateTimeline
 
 
 class Panel(object):
@@ -55,6 +56,8 @@ class Panel(object):
             schema = Timeseries().get_schema()
         elif panel["type"] == "piechart":
             schema = PieChart().get_schema()
+        elif panel["type"] == "state-timeline":
+            schema = StateTimeline().get_schema()
 
         return schema(panel)
 
