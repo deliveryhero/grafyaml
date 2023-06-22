@@ -91,6 +91,7 @@ class Base(object):
         "pressurehg",
         "pressurepsi",
         "reqps",
+        "reqpm",
         "dtdurations",
     )
 
