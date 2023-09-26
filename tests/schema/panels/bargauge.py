@@ -14,9 +14,17 @@ class TestCaseBargauge(TestCase):
             "type": "bargauge",
             "title": "test bargauge",
             "fieldConfig": {
-                "defaults": {},
+                "defaults": {
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": {{"color": "green", "value": "null"}},
+                    },
+                    "mappings": [],
+                },
                 "overrides": [],
-                "color": {}
+                "color": {"mode": "palette-classic"},
+                "noValue": "0",
+                "unit": "none",
             },
             "gridPos": {
                 "w": 8,

@@ -27,13 +27,12 @@ class Bargauge(Base):
 
         fieldConfigDefaults = {
             v.Optional("mappings", default=[]): v.All(list),
-            v.Optional("thresholds"): v.All({
-                v.Required("mode"): v.Any(str),
-                v.Required("steps"): v.Any(list)
-            }),
-            v.Optional("color"): v.All({
-                v.Required("mode", default="palette-classic"): v.Any(str)
-            }),
+            v.Optional("thresholds"): v.All(
+                {v.Required("mode"): v.Any(str), v.Required("steps"): v.Any(list)}
+            ),
+            v.Optional("color"): v.All(
+                {v.Required("mode", default="palette-classic"): v.Any(str)}
+            ),
             v.Optional("noValue", default="0"): v.Any(str),
             v.Optional("unit"): v.Any(str),
             v.Optional("links"): v.Any(list),
