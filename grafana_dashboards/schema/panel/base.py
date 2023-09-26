@@ -91,6 +91,7 @@ class Base(object):
         "pressurehg",
         "pressurepsi",
         "reqps",
+        "reqpm",
         "dtdurations",
     )
 
@@ -124,6 +125,7 @@ class Base(object):
             v.Required("placement"): v.Any("bottom", "right"),
             v.Optional("asTable"): bool,
             v.Optional("isVisible"): bool,
+            v.Optional("showLegend"): bool,
             v.Optional("sortBy"): str,
             v.Optional("sortDesc"): bool,
             v.Required("calcs", default=[]): [str],
@@ -154,6 +156,7 @@ class Base(object):
                 "bargauge",
                 "timeseries",
                 "piechart",
+                "state-timeline",
             ),
             v.Optional("id"): int,
             v.Optional("format"): v.Any(self.formats, v.Length(min=1)),

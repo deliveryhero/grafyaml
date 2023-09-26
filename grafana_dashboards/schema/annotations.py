@@ -29,6 +29,7 @@ class Annotations(object):
             v.Optional("textFormat"): v.All(str),
             v.Optional("type"): v.All(str),
             v.Optional("iconColor"): v.All(str),
+            v.Optional("useValueForTime"): v.All(str),
         }
 
         schema = v.Schema(
