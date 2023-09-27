@@ -25,8 +25,22 @@ class Bargauge(Base):
             v.Required("fields", default=""): v.Any(str),
         }
 
+        fieldConfigDefaults = {
+            v.Optional("mappings", default=[]): v.All(list),
+            v.Optional("thresholds"): v.All(
+                {v.Required("mode"): v.Any(str), v.Required("steps"): v.Any(list)}
+            ),
+            v.Optional("color"): v.All(
+                {v.Required("mode", default="palette-classic"): v.Any(str)}
+            ),
+            v.Optional("noValue", default="0"): v.Any(str),
+            v.Optional("unit"): v.Any(str),
+            v.Optional("links"): v.Any(list),
+        }
+
         fieldConfig = {
             v.Required("overrides", default=[]): v.All(list),
+            v.Optional("defaults"): v.All(fieldConfigDefaults),
         }
 
         options = {
@@ -34,6 +48,10 @@ class Bargauge(Base):
             v.Required("displayMode"): v.Any(str),
             v.Optional("reduceOptions"): v.All(reduceOptions),
             v.Optional("showUnfilled", default=True): v.All(bool),
+            v.Optional("valueMode", default="color"): v.Any(str),
+            v.Optional("minVizWidth"): v.Any(str),
+            v.Optional("minVizHeight", default="color"): v.Any(str),
+            v.Optional("text"): v.Any(dict),
         }
 
         bargauge = {
