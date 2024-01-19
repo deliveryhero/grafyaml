@@ -60,8 +60,23 @@ class Logs(Base):
         }
 
         null_point_modes = v.Any("connected", "null", "null as zero")
-        value_types = v.Any("individual", "cumulative")
 
+        options = {
+            v.Optional("dedupStrategy", default="none"): v.All(
+                str, "none", "exact", "numbers", "signature"
+            ),
+            v.Optional("enableLogDetails", default=True): v.All(bool),
+            v.Optional("prettifyLogMessage", default=False): v.All(bool),
+            v.Optional("showCommonLabels", default=False): v.All(bool),
+            v.Optional("showLabels", default=False): v.All(bool),
+            v.Optional("showTime", default=False): v.All(bool),
+            v.Optional("sortOrder", default="Descending"): v.All(
+                str, "Ascending", "Descending"
+            ),
+            v.Optional("wrapLogMessage", default=False): v.All(bool),
+        }
+
+        value_types = v.Any("individual", "cumulative")
         tooltip = {
             v.Required("query_as_alias", default=True): v.All(bool),
             v.Required("shared", default=True): v.All(bool),
@@ -102,6 +117,7 @@ class Logs(Base):
             v.Required("linewidth", default=2): v.All(int),
             v.Optional("minSpan"): v.All(int, v.Range(min=0, max=12)),
             v.Optional("nullPointMode"): v.All(null_point_modes),
+            v.Optional("options", default={}): v.All(options),
             v.Required("percentage", default=False): v.All(bool),
             v.Required("pointradius", default=5): v.All(int),
             v.Required("points", default=False): v.All(bool),
