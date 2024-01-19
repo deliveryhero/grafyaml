@@ -14,7 +14,7 @@
 
 import os
 
-import mock
+from unittest import mock
 
 from grafana_dashboards import builder
 from tests.base import TestCase

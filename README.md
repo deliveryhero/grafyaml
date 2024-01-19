@@ -47,6 +47,7 @@ grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-exa
 ## Build and install from source
 
 ```
+python3 -m pip install wheel
 python3 setup.py bdist_wheel
 python3 -m pip install --force-reinstall dist/grafyaml-1.0-py3-none-any.whl
 ```
