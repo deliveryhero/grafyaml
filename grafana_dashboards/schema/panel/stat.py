@@ -35,6 +35,8 @@ class Stat(Base):
             v.Required("NoneValueMode", default="connected"): v.Any(str),
             v.Required("thresholds"): v.All(thresholds),
             v.Optional("decimals"): v.All(int),
+            v.Optional("mappings", default=[]): v.All(list),
+            v.Optional("color"): v.All(dict),
         }
 
         fieldConfig = {
@@ -51,6 +53,13 @@ class Stat(Base):
             v.Optional("reduceOptions"): v.All(reduceOptions),
         }
 
+        grid_pos = {
+            v.Required("h"): v.Any(int),
+            v.Required("w"): v.Any(int),
+            v.Required("x"): v.Any(int),
+            v.Required("y"): v.Any(int),
+        }
+
         stat = {
             v.Required("targets", default=[]): v.All(list),
             v.Required("fieldConfig"): v.All(fieldConfig),
@@ -60,6 +69,7 @@ class Stat(Base):
             v.Optional("timeShift"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
             v.Optional("maxDataPoints"): v.All(int),
             v.Optional("hideTimeOverride"): v.All(bool),
+            v.Optional("gridPos"): v.All(grid_pos),
         }
         stat.update(self.base)
-        return v.Schema(stat)
+        return v.Schema(stat, extra=True)
