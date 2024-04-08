@@ -11,7 +11,7 @@ class TestCaseStat(TestCase):
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            'editable': True,
+            "editable": True,
             "error": False,
             "title": "test",
             "type": "stat",
@@ -23,37 +23,25 @@ class TestCaseStat(TestCase):
                     "unit": "short",
                     "thresholds": {
                         "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": "null"
-                            }
-                        ]
-                    }
+                        "steps": [{"color": "green", "value": "null"}],
+                    },
                 },
-                "overrides": []
+                "overrides": [],
             },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 31
-            },
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 31},
             "options": {
                 "colorMode": "background",
                 "graphMode": "none",
                 "justifyMode": "auto",
                 "orientation": "auto",
                 "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
+                    "calcs": ["lastNotNull"],
                     "fields": "",
-                    "values": False
+                    "values": False,
                 },
-                "textMode": "auto"
+                "textMode": "auto",
             },
             "span": 12,
-            "targets": []
+            "targets": [],
         }
         self.assertEqual(self.schema(defaults), defaults)
