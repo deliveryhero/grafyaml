@@ -1,0 +1,14 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "panels": [],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard",
+            "uid": "5595ba3b79da8231212104e8c27dd321"
+        }
+    }
+}
