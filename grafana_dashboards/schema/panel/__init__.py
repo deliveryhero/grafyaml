@@ -22,6 +22,7 @@ from grafana_dashboards.schema.panel.singlestat import Singlestat
 from grafana_dashboards.schema.panel.stat import Stat
 from grafana_dashboards.schema.panel.text import Text
 from grafana_dashboards.schema.panel.table import Table
+from grafana_dashboards.schema.panel.gauge import Gauge
 from grafana_dashboards.schema.panel.bargauge import Bargauge
 from grafana_dashboards.schema.panel.timeseries import Timeseries
 from grafana_dashboards.schema.panel.piechart import PieChart
@@ -50,6 +51,8 @@ class Panel(object):
             schema = Text(usingNewSchema=self.usingNewSchema).get_schema()
         elif panel["type"] == "table":
             schema = Table(usingNewSchema=self.usingNewSchema).get_schema()
+        elif panel["type"] == "gauge":
+            schema = Gauge(usingNewSchema=self.usingNewSchema).get_schema()
         elif panel["type"] == "bargauge":
             schema = Bargauge(usingNewSchema=self.usingNewSchema).get_schema()
         elif panel["type"] == "timeseries":
