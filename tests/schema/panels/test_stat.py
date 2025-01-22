@@ -40,6 +40,7 @@ class TestCaseStat(TestCase):
                     "values": False,
                 },
                 "textMode": "auto",
+                "showPercentChange": False,
             },
             "span": 12,
             "targets": [],

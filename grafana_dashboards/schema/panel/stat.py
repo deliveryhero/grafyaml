@@ -50,6 +50,7 @@ class Stat(Base):
             v.Required("colorMode"): v.Any(str),
             v.Required("graphMode"): v.Any(str),
             v.Required("justifyMode"): v.Any(str),
+            v.Optional("showPercentChange", default=False): v.Any(bool),
             v.Optional("reduceOptions"): v.All(reduceOptions),
         }
 
