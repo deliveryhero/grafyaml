@@ -153,6 +153,7 @@ class Base(object):
                 "text",
                 "stat",
                 "table",
+                "gauge",
                 "bargauge",
                 "timeseries",
                 "piechart",
