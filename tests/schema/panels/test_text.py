@@ -22,15 +22,45 @@ class TestCaseText(TestCase):
         super(TestCaseText, self).setUp()
         self.schema = Text().get_schema()
 
+    def test_minimum(self):
+        # Ensure minimum values get parsed correctly and default mode gets set
+        defaults = {
+            "type": "text",
+            "title": "Panel Title",
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 0,
+            },
+            "options": {
+                "content": "# Title\n\nFor markdown syntax help: [commonmark.org/help](https://commonmark.org/help/)",
+            },
+        }
+        observed = self.schema(defaults)
+        expected = defaults
+        expected["options"]["mode"] = "markdown"
+        self.assertEqual(expected, observed)
+
     def test_defaults(self):
         # Ensure default values get parsed correctly.
         defaults = {
-            "content": "junk",
-            "editable": True,
-            "error": False,
-            "mode": "markdown",
-            "span": 12,
-            "title": "foobar",
             "type": "text",
+            "title": "Panel Title",
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 0,
+            },
+            "options": {
+                "mode": "markdown",
+                "code": {
+                    "language": "plaintext",
+                    "showLineNumbers": False,
+                    "showMiniMap": False,
+                },
+                "content": "# Title\n\nFor markdown syntax help: [commonmark.org/help](https://commonmark.org/help/)",
+            },
         }
         self.assertEqual(self.schema(defaults), defaults)

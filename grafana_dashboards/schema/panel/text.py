@@ -18,11 +18,32 @@ from grafana_dashboards.schema.panel.base import Base
 
 
 class Text(Base):
+    def __init__(self):
+        super().__init__(True)
+
     def get_schema(self):
         text = {
-            v.Required("content"): v.All(str),
-            v.Required("mode", default="markdown"): v.Any("html", "markdown", "text"),
-            v.Optional("style"): dict(),
+            v.Required("options"): {
+                v.Required("content"): v.All(str),
+                v.Required("mode", default="markdown"): v.Any(
+                    "html", "markdown", "text"
+                ),
+                v.Optional("code"): {
+                    v.Optional("showLineNumbers", default=False): bool,
+                    v.Optional("showMiniMap", default=False): bool,
+                    v.Optional("language", default="plaintext"): v.Any(
+                        "go",
+                        "html",
+                        "json",
+                        "markdown",
+                        "plaintext",
+                        "sql",
+                        "typescript",
+                        "xml",
+                        "yaml",
+                    ),
+                },
+            },
         }
         text.update(self.base)
         return v.Schema(text)
