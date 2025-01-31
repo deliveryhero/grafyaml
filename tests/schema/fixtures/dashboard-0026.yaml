@@ -17,7 +17,17 @@ dashboard:
     - title: New row
       height: 250px
       panels:
-          - title: no title (click here)
+          - title: Panel Title
             type: text
-            mode: markdown
-            content: Some example text is required.
+            gridPos:
+              h: 8
+              w: 8
+              x: 0
+              y: 0
+            options:
+              mode: markdown
+              content: "# Title\n\nFor markdown syntax help: [commonmark.org/help](https://commonmark.org/help/)"
+              code:
+                language: plaintext
+                showLineNumbers: false
+                showMiniMap: false

@@ -48,7 +48,7 @@ class Panel(object):
         elif panel["type"] == "stat":
             schema = Stat(usingNewSchema=self.usingNewSchema).get_schema()
         elif panel["type"] == "text":
-            schema = Text(usingNewSchema=self.usingNewSchema).get_schema()
+            schema = Text().get_schema()
         elif panel["type"] == "table":
             schema = Table(usingNewSchema=self.usingNewSchema).get_schema()
         elif panel["type"] == "gauge":

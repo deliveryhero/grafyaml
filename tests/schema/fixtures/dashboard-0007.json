@@ -28,13 +28,23 @@
                     "height": "250px",
                     "panels": [
                         {
-                            "content": "Some example text is required.",
-                            "editable": true,
-                            "error": false,
-                            "mode": "markdown",
-                            "span": 12,
-                            "title": "no title (click here)",
-                            "type": "text"
+                            "type": "text",
+                            "title": "Panel Title",
+                            "gridPos": {
+                                "h": 8,
+                                "w": 8,
+                                "x": 0,
+                                "y": 0
+                            },
+                            "options": {
+                                "mode": "markdown",
+                                "code": {
+                                    "language": "plaintext",
+                                    "showLineNumbers": false,
+                                    "showMiniMap": false
+                                },
+                                "content": "# Title\n\nFor markdown syntax help: [commonmark.org/help](https://commonmark.org/help/)"
+                            }
                         }
                     ],
                     "showTitle": false,
