@@ -13,6 +13,7 @@
 # under the License.
 
 import json
+import uuid
 
 from requests import exceptions
 
@@ -40,6 +41,16 @@ class Dashboard(object):
         :raises Exception: if dashboard already exists
 
         """
+        # Only set uid if it's not already present
+        if "uid" not in data:
+            # Generate deterministic UUID v5 using DNS namespace
+            # Using grafana.com as the namespace
+            namespace_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, "grafana.com")
+            # Generate a UUID v5 from the name in this namespace
+            dashboard_uuid = uuid.uuid5(namespace_uuid, name)
+            # Use first 8 characters of the UUID as Grafana prefers shorter UIDs
+            data["uid"] = str(dashboard_uuid)
+
         dashboard = {
             "dashboard": data,
             "folderId": folder_id,
