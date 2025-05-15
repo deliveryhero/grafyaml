@@ -16,13 +16,13 @@ import json
 import uuid
 from requests import exceptions
 from grafana_dashboards.grafana import utils
-from tuple import List, Dict
+from typing import List, Dict
 
 
 class Dashboard(object):
-    def __init__(self, url: str, session):
-        self.base_url = utils.urljoin(url, "api/dashboards")
-        self.url = utils.urljoin(self.base_url, "db/")
+    def __init__(self, base_url: str, session):
+        self.url = utils.urljoin(base_url, "api/dashboards/db/")
+        self.search_url = utils.urljoin(base_url, "api/search?type=dash-db")
         self.session = session
 
     def create(self, name: str, data: Dict, overwrite: bool=False, folder_id: int=0)-> None:
@@ -41,17 +41,18 @@ class Dashboard(object):
         :raises Exception: if dashboard already exists
 
         """
-        dashboards = self.find_dashboards_by_title(name, folder_id)
+        title = data.get('title')
+        dashboards = self.find_dashboards_by_title(title, folder_id)
 
         if len(dashboards) > 1 and overwrite:
             uids = [d.get('uid') for d in dashboards]
-            error_msg = f"Found {len(dashboards)} dashboards with name '{name}' in folder {folder_id}."\
+            error_msg = f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_id}. "\
                 f"Cannot overwrite. UIDs: {uids}"
             raise ValueError(error_msg)
 
         # If there is already a dashboard with the same name in the same folder, use its UID
         if dashboards and overwrite:
-            uid = dashboards[0].get('id')
+            uid = dashboards[0].get('uid')
             data['uid'] = uid
 
         dashboard = {
@@ -79,9 +80,9 @@ class Dashboard(object):
         except exceptions.HTTPError:
             return None
 
-    def get_dashboard(self, uid: str) -> Dict:
-        """Get a dashboard by its UID"""
-        response = self.session.get(utils.urljoin(self.base_url, "uid", uid))
+    def list_dashboards(self) -> Dict:
+        """Get a list of all dashboards"""
+        response = self.session.get(self.search_url)
         response.raise_for_status()
         return response.json()
 
@@ -95,10 +96,8 @@ class Dashboard(object):
         Returns:
             List of dashboard objects that match the criteria
         """
-        dashboards = self.get_dashboards()
+        dashboards = self.list_dashboards()
 
-        dashboards = list(
-            filter(lambda x: x.get('title') == title and x.get('folderId') == folder_id, dashboards)
-        )
+        dashboards = list(filter(lambda x: x.get('title') == title and x.get('folderId') == folder_id, dashboards))
 
         return dashboards
