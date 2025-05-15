@@ -1,0 +1,75 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [
+                        {
+                            "bars": false,
+                            "datasource": "graphite",
+                            "editable": true,
+                            "error": false,
+                            "fill": 1,
+                            "legend": {
+                                "alignAsTable": true,
+                                "avg": true,
+                                "current": true,
+                                "max": true,
+                                "min": true,
+                                "rightSide": true,
+                                "show": true,
+                                "sortDesc": false,
+                                "total": false,
+                                "values": true,
+                                "width": 350
+                            },
+                            "lines": true,
+                            "linewidth": 1,
+                            "minSpan": 4,
+                            "percentage": false,
+                            "pointradius": 5,
+                            "points": false,
+                            "repeat": "$hostname",
+                            "span": 12,
+                            "stack": false,
+                            "steppedLine": false,
+                            "targets": [
+                                {
+                                    "target": "$hostname.Cpu.cpu_prct_used"
+                                }
+                            ],
+                            "thresholds": [],
+                            "title": "no title (click here)",
+                            "type": "graph",
+                            "x-axis": true,
+                            "y-axis": true
+                        }
+                    ],
+                    "showTitle": false,
+                    "title": "New row"
+                }
+            ],
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "datasource": "graphite",
+                        "hide": 0,
+                        "includeAll": false,
+                        "label": "",
+                        "multi": false,
+                        "name": "hostname",
+                        "query": "node*",
+                        "refresh": 1,
+                        "type": "query"
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
