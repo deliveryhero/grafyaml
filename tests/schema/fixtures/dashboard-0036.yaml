@@ -1,0 +1,32 @@
+dashboard:
+  templating:
+    - name: hostname
+      type: query
+      datasource: graphite
+      query: node*
+      refresh: 1
+      hide: 0
+  title: New dashboard
+  rows:
+    - title: New row
+      height: 250px
+      panels:
+          - title: no title (click here)
+            type: graph
+            datasource: graphite
+            minSpan: 4
+            repeat: $hostname
+            targets:
+              - target: $hostname.Cpu.cpu_prct_used
+            options:
+              legend:
+                alignAsTable: true
+                avg: true
+                current: true
+                max: true
+                min: true
+                rightSide: true
+                show: true
+                total: false
+                values: true
+                width: 350
