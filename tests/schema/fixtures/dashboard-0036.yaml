@@ -18,14 +18,15 @@ dashboard:
             repeat: $hostname
             targets:
               - target: $hostname.Cpu.cpu_prct_used
-            legend:
-              alignAsTable: true
-              avg: true
-              current: true
-              max: true
-              min: true
-              rightSide: true
-              show: true
-              total: false
-              values: true
-              width: 350
+            options:
+              legend:
+                alignAsTable: true
+                avg: true
+                current: true
+                max: true
+                min: true
+                rightSide: true
+                show: true
+                total: false
+                values: true
+                width: 350
