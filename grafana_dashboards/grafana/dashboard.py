@@ -14,18 +14,18 @@
 
 import json
 import uuid
-
 from requests import exceptions
-
 from grafana_dashboards.grafana import utils
+from tuple import List, Dict
 
 
 class Dashboard(object):
-    def __init__(self, url, session):
-        self.url = utils.urljoin(url, "api/dashboards/db/")
+    def __init__(self, url: str, session):
+        self.base_url = utils.urljoin(url, "api/dashboards")
+        self.url = utils.urljoin(self.base_url, "db/")
         self.session = session
 
-    def create(self, name, data, overwrite=False, folder_id=0):
+    def create(self, name: str, data: Dict, overwrite: bool=False, folder_id: int=0)-> None:
         """Create a new dashboard
 
         :param name: URL friendly title of the dashboard
@@ -41,15 +41,18 @@ class Dashboard(object):
         :raises Exception: if dashboard already exists
 
         """
-        # Only set uid if it's not already present
-        if "uid" not in data:
-            # Generate deterministic UUID v5 using DNS namespace
-            # Using grafana.com as the namespace
-            namespace_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, "grafana.com")
-            # Generate a UUID v5 from the name in this namespace
-            dashboard_uuid = uuid.uuid5(namespace_uuid, name)
-            # Use first 8 characters of the UUID as Grafana prefers shorter UIDs
-            data["uid"] = str(dashboard_uuid)
+        dashboards = self.find_dashboards_by_title(name, folder_id)
+
+        if len(dashboards) > 1 and overwrite:
+            uids = [d.get('uid') for d in dashboards]
+            error_msg = f"Found {len(dashboards)} dashboards with name '{name}' in folder {folder_id}."\
+                f"Cannot overwrite. UIDs: {uids}"
+            raise ValueError(error_msg)
+
+        # If there is already a dashboard with the same name in the same folder, use its UID
+        if dashboards and overwrite:
+            uid = dashboards[0].get('id')
+            data['uid'] = uid
 
         dashboard = {
             "dashboard": data,
@@ -75,3 +78,27 @@ class Dashboard(object):
             res.raise_for_status()
         except exceptions.HTTPError:
             return None
+
+    def get_dashboard(self, uid: str) -> Dict:
+        """Get a dashboard by its UID"""
+        response = self.session.get(utils.urljoin(self.base_url, "uid", uid))
+        response.raise_for_status()
+        return response.json()
+
+    def find_dashboards_by_title(self, title: str, folder_id: int = None) -> List[Dict]:
+        """Find all dashboards with a specific title and optionally in a specific folder
+
+        Args:
+            title: The title of the dashboards to find
+            folder_id: Optional folder ID to limit the search to
+
+        Returns:
+            List of dashboard objects that match the criteria
+        """
+        dashboards = self.get_dashboards()
+
+        dashboards = list(
+            filter(lambda x: x.get('title') == title and x.get('folderId') == folder_id, dashboards)
+        )
+
+        return dashboards

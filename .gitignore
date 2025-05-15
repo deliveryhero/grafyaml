@@ -18,4 +18,5 @@ __pycache__
 examples/advanced/rendered_dashboards/*.yaml
 
 /venv3
-.venv/
+*venv/
+*vscode
