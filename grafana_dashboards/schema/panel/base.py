@@ -129,6 +129,7 @@ class Base(object):
             v.Optional("sortBy"): str,
             v.Optional("sortDesc"): bool,
             v.Required("calcs", default=[]): [str],
+            v.Optional("width"): int,
         },
     }
 
