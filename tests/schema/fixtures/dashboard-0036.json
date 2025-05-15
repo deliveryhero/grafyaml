@@ -13,18 +13,20 @@
                             "editable": true,
                             "error": false,
                             "fill": 1,
-                            "legend": {
-                                "alignAsTable": true,
-                                "avg": true,
-                                "current": true,
-                                "max": true,
-                                "min": true,
-                                "rightSide": true,
-                                "show": true,
-                                "sortDesc": false,
-                                "total": false,
-                                "values": true,
-                                "width": 350
+                            "options": {
+                                "legend": {
+                                    "alignAsTable": true,
+                                    "avg": true,
+                                    "current": true,
+                                    "max": true,
+                                    "min": true,
+                                    "rightSide": true,
+                                    "show": true,
+                                    "sortDesc": false,
+                                    "total": false,
+                                    "values": true,
+                                    "width": 350
+                                }
                             },
                             "lines": true,
                             "linewidth": 1,
