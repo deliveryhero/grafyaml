@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import json
 import requests_mock
 from testtools import TestCase
 
@@ -52,37 +53,79 @@ class TestCaseGrafana(TestCase):
 
     @requests_mock.Mocker()
     def test_create_dashboard_new(self, mock_requests):
-        def post_callback(request, context):
-            mock_requests.get(
-                "/api/dashboards/db/new-dashboard", json=CREATE_NEW_DASHBOARD
-            )
-            return True
+        # Mock the search endpoint
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[],  # No existing dashboards
+        )
 
-        mock_requests.post("/api/dashboards/db/", json=post_callback)
+        # Mock the create dashboard endpoint
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"message": "Dashboard created"},
+        )
+
         data = {
             "dashboard": {
-                "title": "New dashboard",
+                "title": "Test Dashboard",
+                "rows": [],
+                "id": None,
+                "version": 0,
+                "uid": None,
             },
-            "slug": "new-dashboard",
+            "slug": "test-dashboard",
         }
-        self.grafana.dashboard.create(name=data["slug"], data=data["dashboard"])
-        self.assertEqual(mock_requests.call_count, 1)
+
+        self.grafana.dashboard.create(data=data["dashboard"])
+        self.assertEqual(mock_requests.call_count, 2)
+
+        # Verify the request body
+        last_request = mock_requests.last_request
+        request_data = json.loads(last_request.body)
+        self.assertEqual(request_data["dashboard"], data["dashboard"])
+        self.assertFalse(request_data["overwrite"])
+        self.assertEqual(request_data["folderId"], 0)
 
     @requests_mock.Mocker()
     def test_create_dashboard_overwrite(self, mock_requests):
-        mock_requests.post("/api/dashboards/db/")
+        # Mock existing dashboard
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[
+                {
+                    "title": "Test Dashboard",
+                    "uid": "existing-uid",
+                    "folderId": 0,
+                    "id": 1,
+                }
+            ],
+        )
+
+        # Mock the create dashboard endpoint
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"message": "Dashboard created"},
+        )
+
         data = {
             "dashboard": {
-                "title": "New dashboard",
+                "title": "Test Dashboard",
+                "rows": [],
+                "id": 1,
+                "version": 0,
+                "uid": "existing-uid",
             },
-            "slug": "new-dashboard",
+            "slug": "test-dashboard",
         }
-        self.grafana.dashboard.create(
-            name=data["slug"], data=data["dashboard"], overwrite=True
-        )
-        self.assertEqual(mock_requests.call_count, 1)
+
+        self.grafana.dashboard.create(data=data["dashboard"], overwrite=True)
+        self.assertEqual(mock_requests.call_count, 2)
 
     @requests_mock.Mocker()
     def test_delete_dashboard(self, mock_requests):
-        mock_requests.delete("/api/dashboards/db/new-dashboard")
+        mock_requests.delete("/api/dashboards/db/new-dashboard", status_code=200)
         self.grafana.dashboard.delete("new-dashboard")

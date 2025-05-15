@@ -13,7 +13,6 @@
 # under the License.
 
 import json
-import uuid
 from requests import exceptions
 from grafana_dashboards.grafana import utils
 from typing import List, Dict
@@ -25,11 +24,9 @@ class Dashboard(object):
         self.search_url = utils.urljoin(base_url, "api/search?type=dash-db")
         self.session = session
 
-    def create(self, name: str, data: Dict, overwrite: bool=False, folder_id: int=0)-> None:
+    def create(self, data: Dict, overwrite: bool = False, folder_id: int = 0) -> None:
         """Create a new dashboard
 
-        :param name: URL friendly title of the dashboard
-        :type name: str
         :param data: Dashboard model
         :type data: dict
         :param overwrite: Overwrite existing dashboard with newer version or
@@ -41,19 +38,21 @@ class Dashboard(object):
         :raises Exception: if dashboard already exists
 
         """
-        title = data.get('title')
+        title = str(data.get("title"))
         dashboards = self.find_dashboards_by_title(title, folder_id)
 
         if len(dashboards) > 1 and overwrite:
-            uids = [d.get('uid') for d in dashboards]
-            error_msg = f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_id}. "\
+            uids = [d.get("uid") for d in dashboards]
+            error_msg = (
+                f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_id}. "
                 f"Cannot overwrite. UIDs: {uids}"
+            )
             raise ValueError(error_msg)
 
         # If there is already a dashboard with the same name in the same folder, use its UID
         if dashboards and overwrite:
-            uid = dashboards[0].get('uid')
-            data['uid'] = uid
+            uid = dashboards[0].get("uid")
+            data["uid"] = uid
 
         dashboard = {
             "dashboard": data,
@@ -86,7 +85,7 @@ class Dashboard(object):
         response.raise_for_status()
         return response.json()
 
-    def find_dashboards_by_title(self, title: str, folder_id: int = None) -> List[Dict]:
+    def find_dashboards_by_title(self, title: str, folder_id: int = 0) -> List[Dict]:
         """Find all dashboards with a specific title and optionally in a specific folder
 
         Args:
@@ -98,6 +97,11 @@ class Dashboard(object):
         """
         dashboards = self.list_dashboards()
 
-        dashboards = list(filter(lambda x: x.get('title') == title and x.get('folderId') == folder_id, dashboards))
+        dashboards = list(
+            filter(
+                lambda x: x.get("title") == title and x.get("folderId") == folder_id,
+                dashboards,
+            )
+        )
 
         return dashboards
