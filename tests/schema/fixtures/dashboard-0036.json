@@ -22,7 +22,6 @@
                                     "min": true,
                                     "rightSide": true,
                                     "show": true,
-                                    "sortDesc": false,
                                     "total": false,
                                     "values": true,
                                     "width": 350
