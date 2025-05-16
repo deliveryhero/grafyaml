@@ -14,11 +14,10 @@ jobs:
         uses: transferwise/actions-pr-checker@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_TITLE_CONTAINS_PATTERN: '^(chore|fix|feat): (?:(?:#\d+[, ]*)+(?:: ))?.*'
+          PR_TITLE_CONTAINS_PATTERN: "^(chore|fix|feat): .*"
           SUCCESS_COMMENT: Now that's a good PR!
           PR_COMMENT: |
             The title of your PR does not match the expected format. It **must** always contain the following types: chore, fix, feat, docs, style, refactor or test.
-            Note: 'hotfix' can be used without a ticket, but the proper reason is needed.
 
             ✅ Correct examples:
             * chore: my cool PR
