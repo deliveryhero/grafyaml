@@ -80,10 +80,9 @@ class Client(object):
             help="show " "program's version number and exit",
         )
         parser.add_argument(
-            "--overwrite",
+            "--disable-overwrite",
             dest="overwrite",
-            action="store_true",
-            default=os.getenv("GRAFANA_API_KEY", False),
+            action="store_false",
             help="allow overwriting dashboards",
         )
 
@@ -130,9 +129,8 @@ class Client(object):
         if self.args.grafana_folderid:
             self.config.set("grafana", "folderid", self.args.grafana_folderid)
             LOG.debug("Grafana Folderid overridden")
-        if self.args.overwrite:
-            self.config.set("grafana", "overwrite", self.args.overwrite)
-            LOG.debug("Grafana overwrite overridden")
+
+        self.config.set("grafana", "overwrite", str(self.args.overwrite))
 
     def setup_logging(self):
         if self.args.debug:
@@ -143,7 +141,11 @@ class Client(object):
     def update(self):
         LOG.info("Updating schema in %s", self.args.path)
         builder = Builder(self.config)
-        builder.update(self.args.path)
+        try:
+            builder.update(self.args.path)
+        except ValueError as e:
+            LOG.info(f"Error: {e}")
+            sys.exit(1)
 
     def validate(self):
         LOG.info("Validating schema in %s", self.args.path)
