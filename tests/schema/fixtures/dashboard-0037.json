@@ -1,16 +1,14 @@
 {
     "dashboard": {
         "new-dashboard": {
-            "rows": [
+            "panels": [
                 {
-                    "collapse": false,
-                    "editable": true,
-                    "height": "250px",
+                    "collapsed": true,
                     "panels": [],
-                    "showTitle": false,
-                    "title": "New row",
                     "repeat": "variable",
-                    "repeatDirection": "h"
+                    "repeatDirection": "h",
+                    "title": "New row",
+                    "type": "row"
                 }
             ],
             "templating": {
