@@ -24,6 +24,8 @@ class Row(Base):
             v.Required("title"): v.All(str, v.Length(min=1)),
             v.Required("type", default="row"): "row",
             v.Required("collapsed", default=True): bool,
+            v.Optional("repeat"): v.All(str, v.Length(min=1)),
+            v.Optional("repeatDirection"): v.All(str, v.Length(min=1)),
         }
         panel = Panel(usingNewSchema=True).get_schema()
         row.update(panel.schema)

@@ -1,0 +1,22 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "panels": [
+                {
+                    "collapsed": true,
+                    "panels": [],
+                    "repeat": "variable",
+                    "repeatDirection": "h",
+                    "title": "New row",
+                    "type": "row"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
