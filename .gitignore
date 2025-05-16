@@ -20,3 +20,4 @@ examples/advanced/rendered_dashboards/*.yaml
 /venv3
 *venv/
 *vscode
+*conf
