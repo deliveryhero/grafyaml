@@ -1,0 +1,24 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "rows": [
+                {
+                    "collapse": false,
+                    "editable": true,
+                    "height": "250px",
+                    "panels": [],
+                    "showTitle": false,
+                    "title": "New row",
+                    "repeat": "variable",
+                    "repeatDirection": "h"
+                }
+            ],
+            "templating": {
+                "enabled": false,
+                "list": []
+            },
+            "timezone": "utc",
+            "title": "New dashboard"
+        }
+    }
+}
