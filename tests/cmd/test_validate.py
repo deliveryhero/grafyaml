@@ -109,8 +109,8 @@ class TestCaseValidate(TestCase):
 
     def test_validate_without_path(self):
         required = [
-            r".*?^usage: grafana-dashboards validate \[-h\] path",
-            r".*?^grafana-dashboards validate: error: (too few arguments|the "
+            r".*?^usage: grafyaml validate \[-h\] path",
+            r".*?^grafyaml validate: error: (too few arguments|the "
             r"following arguments are required: path)",
         ]
         stdout, stderr = self.shell("validate", exitcodes=[2])

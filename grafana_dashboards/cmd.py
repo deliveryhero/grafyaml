@@ -40,7 +40,7 @@ class Client(object):
     def parse_arguments(self):
         parser = argparse.ArgumentParser(
             prog="grafyaml",
-            description="A tool for managing Grafana dashboards as YAML."
+            description="A tool for managing Grafana dashboards as YAML.",
         )
         parser.add_argument(
             "--config-file",

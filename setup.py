@@ -16,8 +16,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "grafana-dashboard=grafana_dashboards.cmd:main",
-            "grafyaml=grafana_dashboards.cmd:main"
+            "grafana-dashboard=grafana_dashboards.cmd:main",  # backward compatibility
+            "grafyaml=grafana_dashboards.cmd:main",
         ],
     },
     install_requires=[
