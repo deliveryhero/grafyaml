@@ -27,3 +27,4 @@ class Config(ConfigParser.ConfigParser):
         self.set("grafana", "apikey", "")
         self.set("grafana", "url", "http://localhost:8080")
         self.set("grafana", "folderid", "0")
+        self.set("grafana", "overwrite", "false")
