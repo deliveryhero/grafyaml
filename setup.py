@@ -15,7 +15,10 @@ setup(
         "grafana_dashboards/schema/template",
     ],
     entry_points={
-        "console_scripts": ["grafana-dashboard=grafana_dashboards.cmd:main"],
+        "console_scripts": [
+            "grafana-dashboard=grafana_dashboards.cmd:main",
+            "grafyaml=grafana_dashboards.cmd:main"
+        ],
     },
     install_requires=[
         "dogpile.cache",

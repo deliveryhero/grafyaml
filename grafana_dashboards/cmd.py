@@ -38,7 +38,10 @@ class Client(object):
         self.args.func()
 
     def parse_arguments(self):
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(
+            prog="grafyaml",
+            description="A tool for managing Grafana dashboards as YAML."
+        )
         parser.add_argument(
             "--config-file",
             dest="config",
@@ -76,6 +79,13 @@ class Client(object):
             version=__version__,
             help="show " "program's version number and exit",
         )
+        parser.add_argument(
+            "--overwrite",
+            dest="overwrite",
+            action="store_true",
+            default=os.getenv("GRAFANA_API_KEY", False),
+            help="allow overwriting dashboards",
+        )
 
         subparsers = parser.add_subparsers(title="commands")
         subparsers.required = True
@@ -98,6 +108,10 @@ class Client(object):
         )
         parser_validate.set_defaults(func=self.validate)
 
+        if len(sys.argv) == 1:
+            parser.print_help()
+            sys.exit(0)
+
         self.args = parser.parse_args()
 
     def read_config(self):
@@ -116,6 +130,9 @@ class Client(object):
         if self.args.grafana_folderid:
             self.config.set("grafana", "folderid", self.args.grafana_folderid)
             LOG.debug("Grafana Folderid overridden")
+        if self.args.overwrite:
+            self.config.set("grafana", "overwrite", self.args.overwrite)
+            LOG.debug("Grafana overwrite overridden")
 
     def setup_logging(self):
         if self.args.debug:
