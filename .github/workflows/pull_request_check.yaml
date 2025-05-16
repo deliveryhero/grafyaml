@@ -1,0 +1,31 @@
+name: PR checker
+
+on:
+  pull_request:
+    branches: [master, main]
+    types: [opened, edited, labeled, unlabeled, synchronize]
+
+jobs:
+  pr-checker:
+    name: Validate pull request
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Run check
+        uses: transferwise/actions-pr-checker@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE_CONTAINS_PATTERN: "^(chore|fix|feat): .*"
+          PR_COMMENT: |
+            The title of your PR does not match the expected format. It **must** always contain the following types: chore, fix, feat, docs, style, refactor or test.
+
+            ✅ Correct examples:
+            * chore: my cool PR
+            * chore: #1234, #1234: chore with issue number
+            * fix: my cool bugfix
+            * fix: #1234, #1234: fix with issue number
+            * feat: my cool bugfix
+            * feat: #1234, #1234: with issue number
+
+            ❌ Wrong examples:
+            * My cool feature
+            * WAL-0 my cool feature

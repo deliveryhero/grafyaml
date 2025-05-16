@@ -22,8 +22,8 @@ from tests.cmd.base import TestCase
 class TestCaseUpdate(TestCase):
     def test_update_without_path(self):
         required = [
-            r".*?^usage: grafana-dashboards update \[-h\] path",
-            r".*?^grafana-dashboards update: error: (too few arguments|the "
+            r".*?^usage: grafyaml update \[-h\] path",
+            r".*?^grafyaml update: error: (too few arguments|the "
             r"following arguments are required: path)",
         ]
         stdout, stderr = self.shell("update", exitcodes=[2])
