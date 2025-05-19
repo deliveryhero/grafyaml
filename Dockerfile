@@ -28,4 +28,4 @@ RUN /output/install-from-bindep
 # may optionally supply GRAFANA_APIKEY.
 # Mount the dashboards at /grafana.
 
-ENTRYPOINT /usr/local/bin/grafana-dashboard --debug --grafana-url="${GRAFANA_URL}" ${GRAFANA_APIKEY:+--grafana-apikey "$GRAFANA_APIKEY"} update /grafana
+ENTRYPOINT /usr/local/bin/grafyaml --debug --grafana-url="${GRAFANA_URL}" ${GRAFANA_APIKEY:+--grafana-apikey "$GRAFANA_APIKEY"} update /grafana

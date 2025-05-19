@@ -32,7 +32,7 @@ class TestCase(TestCase):
             sys.stdout = six.StringIO()
             sys.stderr = six.StringIO()
             argv = [
-                "grafana-dashboards",
+                "grafyaml",
                 "--config-file=%s" % self.configfile,
             ]
             argv += argstr.split()

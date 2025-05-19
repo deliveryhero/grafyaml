@@ -32,6 +32,7 @@ class Builder(object):
             url=config.get("grafana", "url"), key=config.get("grafana", "apikey")
         )
         self.parser = YamlParser()
+        self.overwrite = config.getboolean("grafana", "overwrite")
 
     def delete(self, path):
         self.load_files(path)
@@ -92,7 +93,7 @@ class Builder(object):
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):
                 self.grafana.dashboard.create(
-                    name, data, overwrite=True, folder_id=self.folder_id
+                    data=data, overwrite=self.overwrite, folder_id=self.folder_id
                 )
                 self.cache.set(name, md5)
             else:
