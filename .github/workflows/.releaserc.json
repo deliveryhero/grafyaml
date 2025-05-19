@@ -1,5 +1,4 @@
 {
-  "verifyConditions": ["@semantic-release/changelog", "@semantic-release/git"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
