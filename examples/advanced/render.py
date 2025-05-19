@@ -10,12 +10,13 @@ from typing import Dict, Any, List, Tuple, Optional
 row_templates_cache: Dict[str, Optional[Dict[str, Any]]] = {}
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def read_configs(
-    apps_file: str,
-    base_template_name: str,
-    template_dir: str
+    apps_file: str, base_template_name: str, template_dir: str
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
     Reads and loads the applications configuration and the base dashboard template.
@@ -34,18 +35,22 @@ def read_configs(
         yaml.YAMLError: If there's an error parsing the YAML files.
         ValueError: If the loaded YAML does not have the expected top-level structure.
     """
-    logging.info(f"Reading configuration from '{apps_file}' and base template from '{base_template_name}' in '{template_dir}'")
+    logging.info(
+        f"Reading configuration from '{apps_file}' and base template from '{base_template_name}' in '{template_dir}'"
+    )
 
     # Load applications configuration
     try:
-        with open(apps_file, 'r') as f:
+        with open(apps_file, "r") as f:
             parsed_input = yaml.safe_load(f) or {}
         if not isinstance(parsed_input, dict):
             raise ValueError(
                 f"Input file '{apps_file}' does not contain a dictionary at the top level. "
                 f"Found {type(parsed_input).__name__}."
             )
-        logging.info(f"Successfully loaded applications config from '{apps_file}'. Found {len(parsed_input)} applications.")
+        logging.info(
+            f"Successfully loaded applications config from '{apps_file}'. Found {len(parsed_input)} applications."
+        )
     except FileNotFoundError:
         logging.error(f"Applications config file not found: '{apps_file}'")
         raise
@@ -56,22 +61,29 @@ def read_configs(
     # Load base dashboard template
     base_dashboard_path = os.path.join(template_dir, base_template_name)
     try:
-        with open(base_dashboard_path, 'r') as f:
+        with open(base_dashboard_path, "r") as f:
             base_dashboard_template = yaml.safe_load(f) or {}
         if not isinstance(base_dashboard_template, dict):
-             raise ValueError(
+            raise ValueError(
                 f"Base dashboard template '{base_dashboard_path}' does not contain a dictionary at the top level. "
                 f"Found {type(base_dashboard_template).__name__}."
             )
-        logging.info(f"Successfully loaded base dashboard template from '{base_dashboard_path}'.")
+        logging.info(
+            f"Successfully loaded base dashboard template from '{base_dashboard_path}'."
+        )
     except FileNotFoundError:
-        logging.error(f"Base dashboard template file not found: '{base_dashboard_path}'")
+        logging.error(
+            f"Base dashboard template file not found: '{base_dashboard_path}'"
+        )
         raise
     except yaml.YAMLError:
-        logging.error(f"Error parsing base dashboard template file: '{base_dashboard_path}'")
+        logging.error(
+            f"Error parsing base dashboard template file: '{base_dashboard_path}'"
+        )
         raise
 
     return parsed_input, base_dashboard_template
+
 
 def build_app_rows(
     app_name: str,
@@ -94,11 +106,11 @@ def build_app_rows(
     app_rows_list: List[Dict[str, Any]] = []
 
     if not isinstance(row_names, list):
-         logging.warning(
-             f"App '{app_name}' has invalid 'rows' structure. Expected list, "
-             f"got {type(row_names).__name__}. No rows will be added from config."
-         )
-         return [] # Return empty list early
+        logging.warning(
+            f"App '{app_name}' has invalid 'rows' structure. Expected list, "
+            f"got {type(row_names).__name__}. No rows will be added from config."
+        )
+        return []  # Return empty list early
 
     logging.info(f"Processing {len(row_names)} row(s) for app '{app_name}'...")
 
@@ -115,7 +127,7 @@ def build_app_rows(
         if row_name not in row_templates_cache:
             row_template_path = os.path.join(template_dir, f"{row_name}.yaml")
             try:
-                with open(row_template_path, 'r') as f:
+                with open(row_template_path, "r") as f:
                     loaded_data = yaml.safe_load(f)
                     # Cache the loaded data (could be None if file was empty)
                     if "rows" in loaded_data and isinstance(loaded_data, dict):
@@ -124,40 +136,46 @@ def build_app_rows(
                         logging.error(
                             f"Row {row_name} is missing top level key rows, skipping"
                         )
-                logging.debug(f"Successfully loaded template '{row_name}.yaml' into cache.")
+                logging.debug(
+                    f"Successfully loaded template '{row_name}.yaml' into cache."
+                )
             except FileNotFoundError:
                 logging.warning(
                     f"Row template file '{row_template_path}' not found for app '{app_name}'. "
                     f"Skipping this row."
                 )
-                row_templates_cache[row_name] = None # Cache None to prevent re-attempting load
+                row_templates_cache[row_name] = (
+                    None  # Cache None to prevent re-attempting load
+                )
             except yaml.YAMLError as e:
                 logging.warning(
                     f"Error parsing row template file '{row_template_path}' for app '{app_name}': {e}. "
                     f"Skipping this row."
                 )
-                row_templates_cache[row_name] = None # Cache None on error
+                row_templates_cache[row_name] = None  # Cache None on error
             except Exception as e:
                 logging.warning(
                     f"An unexpected error occurred loading row template '{row_template_path}' for app '{app_name}': {e}. "
                     f"Skipping this row."
                 )
-                row_templates_cache[row_name] = None # Cache None on error
+                row_templates_cache[row_name] = None  # Cache None on error
 
         # --- Get the loaded template data from cache ---
         # Check if loading previously failed (cache value is None)
         row_data = row_templates_cache.get(row_name)
         if row_data is None:
-             # Warning already printed during loading, just continue
-             continue
+            # Warning already printed during loading, just continue
+            continue
 
         # --- Validate the loaded data is a dictionary and looks like a row (has 'panels' list) ---
         # This check assumes a valid single-row template MUST be a dictionary
         # AND contain a 'panels' key which is a list. Adjust validation if needed.
         if isinstance(row_data, dict) and isinstance(row_data.get("panels"), list):
-             # Append the single valid row dictionary to the list
+            # Append the single valid row dictionary to the list
             app_rows_list.append(row_data)
-            logging.debug(f"Appended row from template '{row_name}.yaml' for app '{app_name}'.")
+            logging.debug(
+                f"Appended row from template '{row_name}.yaml' for app '{app_name}'."
+            )
         else:
             logging.warning(
                 f"Row template '{row_name}.yaml' for app '{app_name}' has invalid structure. "
@@ -166,10 +184,9 @@ def build_app_rows(
 
     return app_rows_list
 
+
 def process_templating_section(
-    dashboard_data: Dict[str, Any],
-    app_config: Dict[str, Any],
-    app_name: str
+    dashboard_data: Dict[str, Any], app_config: Dict[str, Any], app_name: str
 ) -> Dict[str, Any]:
     """
     Processes and merges templating configurations from the base dashboard
@@ -186,22 +203,23 @@ def process_templating_section(
     # Use a dictionary for base templates for faster lookups/updates
     base_templates_list = dashboard_data.get("templating", [])
     if not isinstance(base_templates_list, list):
-         logging.warning(
+        logging.warning(
             f"Base dashboard template has invalid 'templating' structure for app '{app_name}'. "
             f"Expected list. Using empty list."
-         )
-         base_templates_list = []
+        )
+        base_templates_list = []
 
     base_templates_dict = {
         tmpl.get("name"): tmpl
-        for tmpl in base_templates_list if isinstance(tmpl, dict) and tmpl.get("name")
+        for tmpl in base_templates_list
+        if isinstance(tmpl, dict) and tmpl.get("name")
     }
 
     # Add/Update 'app' template (ensuring it exists)
     app_template_config = base_templates_dict.get("app")
     if not isinstance(app_template_config, dict):
         app_template_config = {"name": "app", "type": "constant", "hide": 0}
-        base_templates_dict["app"] = app_template_config # Add/replace in dict
+        base_templates_dict["app"] = app_template_config  # Add/replace in dict
 
     # Safely update the 'app' template values
     app_template_config["query"] = str(app_name)
@@ -217,12 +235,16 @@ def process_templating_section(
             f"App '{app_name}' has invalid 'templating' structure. Expected list, "
             f"got {type(app_templates_list).__name__}. No app-specific templates will be added."
         )
-        app_templates_list = [] # Use empty list
+        app_templates_list = []  # Use empty list
 
     for template in app_templates_list:
         if isinstance(template, dict) and template.get("name"):
-            base_templates_dict[template["name"]] = template # Add or overwrite using name as key
-            logging.debug(f"Added/Overrode template '{template.get('name')}' for '{app_name}'.")
+            base_templates_dict[template["name"]] = (
+                template  # Add or overwrite using name as key
+            )
+            logging.debug(
+                f"Added/Overrode template '{template.get('name')}' for '{app_name}'."
+            )
         else:
             logging.warning(
                 f"App '{app_name}' contains an invalid template definition: {template}. "
@@ -235,10 +257,9 @@ def process_templating_section(
 
     return dashboard_data
 
+
 def write_dashboard_file(
-    app_name: str,
-    output_dir: str,
-    dashboard_data: Dict[str, Any]
+    app_name: str, output_dir: str, dashboard_data: Dict[str, Any]
 ) -> None:
     """
     Writes the generated dashboard dictionary to a YAML file.
@@ -258,7 +279,9 @@ def write_dashboard_file(
     except (IOError, yaml.YAMLError) as e:
         logging.error(f"Error writing output file '{output_file_path}': {e}")
     except Exception as e:
-        logging.error(f"An unexpected error occurred while writing output file '{output_file_path}': {e}")
+        logging.error(
+            f"An unexpected error occurred while writing output file '{output_file_path}': {e}"
+        )
 
 
 def main():
@@ -279,7 +302,7 @@ def main():
         logging.info(f"Ensured output directory '{output_dir}' exists.")
     except OSError as e:
         logging.error(f"Failed to create output directory '{output_dir}': {e}")
-        return # Cannot proceed if output directory cannot be created
+        return  # Cannot proceed if output directory cannot be created
 
     # --- Speed & Safety: Load base configuration and templates once ---
     try:
@@ -288,12 +311,13 @@ def main():
         )
     except (FileNotFoundError, yaml.YAMLError, ValueError) as e:
         logging.error(f"Failed to load initial configuration files. Exiting. {e}")
-        return # Critical error, cannot proceed
-
+        return  # Critical error, cannot proceed
 
     # --- Process each application ---
     if not apps_config:
-        logging.warning("No applications found in the input configuration. Nothing to generate.")
+        logging.warning(
+            "No applications found in the input configuration. Nothing to generate."
+        )
 
     for app_name, app_config in apps_config.items():
         # Ensure app_config is a dictionary and app_name is usable
@@ -325,10 +349,12 @@ def main():
         logging.debug(f"Set dashboard title to '{app_name}'.")
 
         # --- Process Templating ---
-        dashboard_data = process_templating_section(dashboard_data, app_config, app_name)
+        dashboard_data = process_templating_section(
+            dashboard_data, app_config, app_name
+        )
 
         # --- Build and Assign Rows ---
-        rows_config = app_config.get("rows", []) # Get rows list safely from app config
+        rows_config = app_config.get("rows", [])  # Get rows list safely from app config
 
         dashboard_data["panels"] = build_app_rows(
             app_name,
@@ -338,16 +364,17 @@ def main():
 
         # --- Override Tags if specified ---
         app_tags = app_config.get("tags")
-        if app_tags is not None: # Allows setting tags to None/empty list in input
-            if isinstance(app_tags, list) or app_tags is None: # Ensure it's a list or None
-               dashboard_data["tags"] = app_tags
-               logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
+        if app_tags is not None:  # Allows setting tags to None/empty list in input
+            if (
+                isinstance(app_tags, list) or app_tags is None
+            ):  # Ensure it's a list or None
+                dashboard_data["tags"] = app_tags
+                logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
             else:
-               logging.warning(
-                   f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
-                   f"Expected list or null. Skipping tag override."
+                logging.warning(
+                    f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
+                    f"Expected list or null. Skipping tag override."
                 )
-
 
         # --- Write Output File ---
         # Pass the dictionary that represents the content *under* the top-level 'dashboard' key

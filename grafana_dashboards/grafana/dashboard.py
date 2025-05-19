@@ -16,7 +16,6 @@ import json
 from requests import exceptions
 from grafana_dashboards.grafana import utils
 from typing import List, Dict
-from sys import exit
 
 
 class Dashboard(object):
@@ -80,19 +79,22 @@ class Dashboard(object):
         except exceptions.HTTPError:
             return None
 
-    def search_dashboards(self, title: str, limit:int = 1000) -> List[Dict]:
-        """Get a list of all dashboards"""
+    def search_dashboards(self, title: str, limit: int = 1000) -> List[Dict]:
+        """Search all dashboards with specific title
+
+        Args:
+            title: The title of the dashboards to find
+            limit: Max Number of dashboards per page
+
+        Returns:
+            List of dashboard objects that match the criteria
+
+        """
         dashboards = []
         page = 1
 
         while True:
-            params = {
-                "type":
-                "dash-db",
-                "query": title,
-                "limit": limit,
-                "page": page,
-            }
+            params = {"type": "dash-db", "query": title, "limit": limit, "page": page}
 
             response = self.session.get(self.search_url, params=params)
             response.raise_for_status()
@@ -110,10 +112,12 @@ class Dashboard(object):
             if limit is None or len(data) < limit:
                 break
 
+            page += 1
+
         return dashboards
 
     def find_dashboards_by_title(self, title: str, folder_id: int = 0) -> List[Dict]:
-        """Find all dashboards with a specific title and optionally in a specific folder
+        """Find all dashboards with a specific title and in a specific folder
 
         Args:
             title: The title of the dashboards to find
