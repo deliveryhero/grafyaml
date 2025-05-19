@@ -21,5 +21,6 @@ class TestCaseVersion(TestCase):
     def test_version(self):
         stdout, stderr = self.shell("--version")
         self.assertThat(
-            (stdout + stderr), matchers.MatchesRegex(r".*?^(\d+)\.(\d+)\.(\d+)")
+            (stdout + stderr),
+            matchers.MatchesRegex(r"^(\d+)\.(\d+)\.(\d+)(?:[^\s]*)?$"),
         )
