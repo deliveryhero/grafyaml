@@ -1,0 +1,8 @@
+dashboard:
+  title: New dashboard
+  panels:
+    - title: New row
+      type: row
+      repeat: variable
+      repeatDirection: h
+      panels: []
