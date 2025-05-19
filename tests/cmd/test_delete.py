@@ -22,8 +22,8 @@ from tests.cmd.base import TestCase
 class TestCaseDelete(TestCase):
     def test_delete_without_path(self):
         required = [
-            r".*?^usage: grafana-dashboards delete \[-h\] path",
-            r".*?^grafana-dashboards delete: error: (too few arguments|the "
+            r".*?^usage: grafyaml delete \[-h\] path",
+            r".*?^grafyaml delete: error: (too few arguments|the "
             r"following arguments are required: path)",
         ]
         stdout, stderr = self.shell("delete", exitcodes=[2])

@@ -35,7 +35,7 @@ Sync it to Grafana:
 
 ```
 export GRAFANA_API_KEY="API_KEY_HERE"
-grafana-dashboard --grafana-url https://my-grafana-host.domain.com update my-example-dashboard.yaml
+grafyaml --grafana-url https://my-grafana-host.domain.com update my-example-dashboard.yaml
 ```
 
 ## More examples
