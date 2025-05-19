@@ -16,11 +16,12 @@ import json
 from requests import exceptions
 from grafana_dashboards.grafana import utils
 from typing import List, Dict
+from sys import exit
 
 
 class Dashboard(object):
     def __init__(self, base_url: str, session):
-        self.url = utils.urljoin(base_url, "api/dashboards/db/")
+        self.db_url = utils.urljoin(base_url, "api/dashboards/db/")
         self.search_url = utils.urljoin(base_url, "api/search?type=dash-db")
         self.session = session
 
@@ -60,7 +61,7 @@ class Dashboard(object):
             "overwrite": overwrite,
         }
 
-        res = self.session.post(self.url, data=json.dumps(dashboard))
+        res = self.session.post(self.db_url, data=json.dumps(dashboard))
         res.raise_for_status()
 
     def delete(self, name):
@@ -72,18 +73,44 @@ class Dashboard(object):
         :raises Exception: if dashboard failed to delete
 
         """
-        url = utils.urljoin(self.url, name)
+        url = utils.urljoin(self.db_url, name)
         try:
             res = self.session.delete(url)
             res.raise_for_status()
         except exceptions.HTTPError:
             return None
 
-    def list_dashboards(self) -> Dict:
+    def search_dashboards(self, title: str, limit:int = 1000) -> List[Dict]:
         """Get a list of all dashboards"""
-        response = self.session.get(self.search_url)
-        response.raise_for_status()
-        return response.json()
+        dashboards = []
+        page = 1
+
+        while True:
+            params = {
+                "type":
+                "dash-db",
+                "query": title,
+                "limit": limit,
+                "page": page,
+            }
+
+            response = self.session.get(self.search_url, params=params)
+            response.raise_for_status()
+
+            data = response.json()
+
+            if not isinstance(data, list):
+                raise ValueError(f"Unexpected response format on page {page}: {data}")
+
+            if not data:
+                break
+
+            dashboards.extend(data)
+
+            if limit is None or len(data) < limit:
+                break
+
+        return dashboards
 
     def find_dashboards_by_title(self, title: str, folder_id: int = 0) -> List[Dict]:
         """Find all dashboards with a specific title and optionally in a specific folder
@@ -95,7 +122,7 @@ class Dashboard(object):
         Returns:
             List of dashboard objects that match the criteria
         """
-        dashboards = self.list_dashboards()
+        dashboards = self.search_dashboards(title)
 
         dashboards = list(
             filter(
