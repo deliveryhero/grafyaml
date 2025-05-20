@@ -34,23 +34,3 @@ steps:
         cp -r .github/release/. .
         npm i --silent
         npx semantic-release
-
----
-kind: pipeline
-type: docker
-name: release
-features:
-  docker-daemon@v1:
-    enabled: true
-trigger:
-  event:
-    - tag
-steps:
-  - name: release
-    image: plugins/github-release
-    settings:
-      title: grafyaml
-      api_key:
-        from_secret: GH_READ_TOKEN
-      note: /drone/src/CHANGELOG.md
-      overwrite: true
