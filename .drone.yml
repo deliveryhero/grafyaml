@@ -1,0 +1,56 @@
+---
+kind: pipeline
+type: docker
+name: versioning
+trigger:
+  paths:
+    exclude:
+      - ".github/*"
+      - "docs/*"
+      - "tests/*"
+  branch:
+    - master
+  event:
+    - push
+steps:
+  - name: versioning
+    image: node:16.17-alpine
+    environment:
+      GH_TOKEN:
+        from_secret: GH_READ_TOKEN
+    commands:
+      - |
+        apk add git
+        echo "Overriding default git credentials ..."
+        ## remove credentials
+        rm /root/.netrc
+        ## reset committer and author names (populated from the commit metadata where this pipeline is defined on)
+        export GIT_COMMITTER_NAME="deliveryhero-bot"
+        export GIT_COMMITTER_EMAIL="bot.cicd.ext@deliveryhero.com"
+        export GIT_AUTHOR_NAME="deliveryhero-bot"
+        export GIT_AUTHOR_EMAIL="bot.cicd.ext@deliveryhero.com"
+        ## setting credential helper based on GH TOKEN
+        git config credential.helper '!f() { echo username=deliveryhero-bot; echo "password=$GITHUB_TOKEN"; };f'
+        cp -r .github/release/. .
+        npm i --silent
+        npx semantic-release
+
+---
+kind: pipeline
+type: docker
+name: release
+features:
+  docker-daemon@v1:
+    enabled: true
+trigger:
+  event:
+    - tag
+steps:
+  - name: release
+    image: plugins/github-release
+    settings:
+      title: grafyaml
+      api_key:
+        from_secret: GH_READ_TOKEN
+      note: /drone/src/CHANGELOG.md
+      overwrite: true

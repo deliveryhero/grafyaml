@@ -63,6 +63,10 @@ pip install black
 black .
 ```
 
+## Release
+
+The release process is automated using Drone CI. See [drone.yml](.drone.yml) for details. We use [semantic-release](https://github.com/semantic-release/semantic-release) for versioning and tagging.To trigger a release create a release PR following the semantic release commit message format.
+
 ## License, history and contributors
 
 [The LICENSE](LICENSE) is Apache License 2.0. Most of the code in this repository was initially written at [opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml) before being forked to here.
