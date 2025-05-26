@@ -12,5 +12,6 @@
       "assets": ["CHANGELOG.md"],
       "message": "release: ${nextRelease.version} [ci skip]"
     }
-  ]
+  ],
+  "publish": false
 }
