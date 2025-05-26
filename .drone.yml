@@ -23,7 +23,7 @@ steps:
         apk add git
         echo "Overriding default git credentials ..."
         ## remove credentials
-        rm /root/.netrc
+        ## rm /root/.netrc
         ## reset committer and author names (populated from the commit metadata where this pipeline is defined on)
         export GIT_COMMITTER_NAME="deliveryhero-bot"
         export GIT_COMMITTER_EMAIL="bot.cicd.ext@deliveryhero.com"
