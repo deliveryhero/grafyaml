@@ -58,21 +58,25 @@ class YamlParser(object):
             self.data["dashboard"][slug] = data
         else:
             result = self.validate(data)
-            for item in result.items():
-                group = self.data.get(item[0], {})
+            for section, item in result.items():
+                group = self.data.get(section, {})
                 # Create slug to make it easier to find dashboards.
-                if item[0] == "dashboard":
-                    name = item[1]["title"]
+                if section == "dashboard":
+                    name = item.get("title")
+                elif section == "datasource":
+                    name = item.get("name")
+                elif section == "permissions":
+                    name = result["dashboard"].get("title")
                 else:
-                    name = item[1]["name"]
+                    raise Exception("Unknown section: %s" % section)
                 slug = slugify(name)
                 if slug in group:
                     raise Exception(
                         "Duplicate {0} found in '{1}: '{2}' "
-                        "already defined".format(item[0], fp.name, name)
+                        "already defined".format(section, fp.name, name)
                     )
-                group[slug] = item[1]
-                self.data[item[0]] = group
+                group[slug] = item
+                self.data[section] = group
 
     def validate(self, data):
         schema = Schema()
