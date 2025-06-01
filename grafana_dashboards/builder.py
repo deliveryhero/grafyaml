@@ -97,7 +97,8 @@ class Builder(object):
                     data=data, overwrite=self.overwrite, folder_id=self.folder_id
                 )
                 if uid and perms:
-                    self.grafana.permissions.update(uid, perms)
+                    LOG.debug("Updating permissions for dashboard UID %s", uid)
+                    self.grafana.permissions.update(uid, perms.get("grants"), perms.get("strategy"))
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)

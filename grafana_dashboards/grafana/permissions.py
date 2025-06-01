@@ -16,17 +16,12 @@ cache = make_region(name="team_user_cache").configure(
 
 
 class Permissions:
-    def __init__(
-        self,
-        url: str,
-        session: requests.Session,
-        overwrite: bool = False,
-    ):
+    def __init__(self, url: str, session: requests.Session):
         self.session: requests.Session = session
         self.config: configparser.ConfigParser = configparser.ConfigParser()
         self.permission_levels: Dict[str, int] = {"view": 1, "edit": 2, "admin": 4}
         self.base_url: str = url
-        self.overwrite: bool = overwrite
+        self.overwrite: bool = False
 
     def get_dashboard_permissions(self, uid: str) -> Optional[List[Dict[str, Any]]]:
         """Fetches the current permissions for a given dashboard UID."""
@@ -53,14 +48,14 @@ class Permissions:
         # Add all existing permissions to the map first
         if not self.overwrite:
             for perm in current_permissions:
-                for entity_key in ["teamId", "userId", "role"]:
-                    if entity_key:
-                        entity_id = perm.get(entity_key)
-                        if entity_id not in [0, ""]:
-                            reconciled_permissions_map[(entity_key, entity_id)] = perm
+                for subject_key in ["teamId", "userId", "role"]:
+                    if subject_key:
+                        subject_id = perm.get(subject_key)
+                        if subject_id not in [0, ""]:
+                            reconciled_permissions_map[(subject_key, subject_id)] = perm
                     else:
                         logging.warning(
-                            f"Unknown entity type found in existing permission for dashboard {dashboard_uid}: {perm}"
+                            f"Unknown subject type found in existing permission for dashboard {dashboard_uid}: {perm}"
                         )
                         reconciled_permissions_map[
                             ("unknown", hash(json.dumps(perm)))
@@ -68,50 +63,48 @@ class Permissions:
 
         for permission_str in permissions_strings:
 
-            entity_type, entity_name_or_id, perm_role = self._parse_permission_string(
+            subject, identifier, perm = self._parse_permission_string(
                 permission_str
             )
 
-            entity_api_type, entity_id = self._get_entity_id(
-                entity_type, entity_name_or_id
-            )
+            subject_key, subject_id = self._get_subject_id(subject,identifier)
 
-            if entity_id is None:
+            if subject_id is None:
                 raise Exception(
-                    f"Could not resolve entity '{entity_name_or_id}' of type '{entity_type}'"
+                    f"Could not resolve subject '{identifier}' of type '{subject}'"
                 )
 
-            permission_level = self.permission_levels.get(perm_role.lower())
+            permission_level = self.permission_levels.get(perm.lower())
             if permission_level is None:
                 raise Exception(
-                    f"Invalid permission role '{perm_role}' specified. Valid roles are: {', '.join(self.permission_levels.keys())}"
+                    f"Invalid permission role '{perm}' specified. Valid roles are: {', '.join(self.permission_levels.keys())}"
                 )
 
             permission_item = {
-                entity_api_type: entity_id,
+                subject_key: subject_id,
                 "permission": permission_level,
             }
 
-            entity_map_key = (entity_api_type, entity_id)
+            subject_map_key = (subject_key, subject_id)
 
-            # Check if this entity already has a permission in the map
-            if entity_map_key in reconciled_permissions_map:
-                existing_perm = reconciled_permissions_map[entity_map_key]
+            # Check if this subject already has a permission in the map
+            if subject_map_key in reconciled_permissions_map:
+                existing_perm = reconciled_permissions_map[subject_map_key]
                 if existing_perm.get("permission") != permission_level:
                     LOG.debug(
-                        f"Updating existing permission for {entity_type} '{entity_name_or_id}' on dashboard {dashboard_uid} "
+                        f"Updating existing permission for {subject} '{identifier}' on dashboard {dashboard_uid} "
                         f"from {existing_perm.get('permission')} to {permission_level}."
                     )
-                    reconciled_permissions_map[entity_map_key] = permission_item
+                    reconciled_permissions_map[subject_map_key] = permission_item
                 else:
                     LOG.debug(
-                        f"{entity_type} '{entity_name_or_id}' already has permission {permission_level} on dashboard {dashboard_uid}. No change needed."
+                        f"{subject} '{identifier}' already has permission {permission_level} on dashboard {dashboard_uid}. No change needed."
                     )
             else:
                 LOG.debug(
-                    f"Adding new permission for {entity_type} '{entity_name_or_id}' (level {permission_level}) to dashboard {dashboard_uid}."
+                    f"Adding new permission for {subject} '{identifier}' (level {permission_level}) to dashboard {dashboard_uid}."
                 )
-                reconciled_permissions_map[entity_map_key] = permission_item
+                reconciled_permissions_map[subject_map_key] = permission_item
 
         return list(reconciled_permissions_map.values())
 
@@ -133,13 +126,27 @@ class Permissions:
         LOG.debug(f"Successfully updated permissions for dashboard UID: {uid}")
         return response.json()
 
-    def update(self, dashboard_uid: str, permissions_strings: List[str]):
+    def update(
+        self,
+        dashboard_uid: str,
+        permissions_strings: List[str],
+        permissions_strategy: str,
+    ):
         """
         Main method to update permissions for a single dashboard based on a list of desired permission strings.
         """
         LOG.debug(
             f"Updating permissions for dashboard {dashboard_uid}: {json.dumps(permissions_strings, indent=2)}"
         )
+
+        if permissions_strategy == "merge":
+            self.overwrite = False
+        elif permissions_strategy == "replace":
+            self.overwrite = True
+        else:
+            raise Exception(
+                f"Invalid permissions strategy '{permissions_strategy}'. Valid strategies are 'merge' and 'replace'."
+            )
 
         self._get_teams()
 
@@ -149,7 +156,7 @@ class Permissions:
 
         if not reconciled_permissions:
             LOG.warning(
-                f"No valid permissions to apply for dashboard '{dashboard_uid}'. Check logs for parsing or entity resolution errors."
+                f"No valid permissions to apply for dashboard '{dashboard_uid}'. Check logs for parsing or subject resolution errors."
             )
             return
 
@@ -203,38 +210,38 @@ class Permissions:
             team_key = team_name.replace(" ", "_").lower()
             self.config.set("teams", team_key, team_name)
 
-    def _get_entity_id(
-        self, entity_type: str, entity_name_or_id: str
+    def _get_subject_id(
+        self, subject: str, subject_identifier: str
     ) -> Tuple[str, Optional[Any]]:
-        """Resolves the entity type and ID based on the provided type and name/ID."""
-        if entity_type.lower() == "team":
+        """Resolves the subject type and ID based on the provided type and name/ID."""
+        if subject.lower() == "team":
             actual_grafana_name = self.config.get(
                 section="teams",
-                option=entity_name_or_id.lower(),
-                fallback=entity_name_or_id,
+                option=subject_identifier.lower(),
+                fallback=subject_identifier,
             )
-            entity_id = self._get_team_id(actual_grafana_name)
-            return "teamId", entity_id
-        elif entity_type.lower() == "user":
-            entity_id = self._get_user_id(entity_name_or_id)
-            return "userId", entity_id
-        elif entity_type.lower() == "role":
-            return "role", entity_name_or_id
+            subject_id = self._get_team_id(actual_grafana_name)
+            return "teamId", subject_id
+        elif subject.lower() == "user":
+            subject_id = self._get_user_id(subject_identifier)
+            return "userId", subject_id
+        elif subject.lower() == "role":
+            return "role", subject_identifier
         else:
             raise ValueError(
-                f"Unknown entity type '{entity_type}'. Supported types are 'team','user' and role."
+                f"Unknown subject type '{subject}'. Supported types are 'team','user' and role."
             )
 
-    def _parse_permission_string(self, entity_string: str) -> Tuple[str, str, str]:
+    def _parse_permission_string(self, permission_string: str) -> Tuple[str, str, str]:
         """
-        Parses a string like "entity_type:entity_identifier:permission_level"
-        into three separate strings (entity_type, entity_identifier, permission_level).
+        Parses a string like "subject:identifier:permission"
+        into three separate strings (subject,identifier, permission).
         Raises ValueError if the format is incorrect.
         """
-        parts = entity_string.split(":")
+        parts = permission_string.split(":")
         if len(parts) == 3:
             return parts[0], parts[1], parts[2]
         else:
             raise ValueError(
-                f"Permission string must be in format 'type:identifier:level'. Got: '{entity_string}'"
+                f"Permission string must be in format 'type:identifier:level'. Got: '{permission_string}'"
             )

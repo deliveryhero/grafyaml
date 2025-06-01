@@ -130,6 +130,10 @@ class Dashboard(object):
         """
         dashboards = self.search_dashboards(title)
 
+        # If folder_id is 0, return all dashboards
+        if folder_id == 0:
+            return dashboards
+
         dashboards = list(
             filter(
                 lambda x: x.get("title") == title and x.get("folderId") == folder_id,

@@ -166,7 +166,9 @@ class TestCaseGrafana(TestCase):
         permissions = ["team:admins:admin", "team:developers:edit"]
 
         items = self.grafana.permissions.update(
-            dashboard_uid="existing-uid", permissions_strings=permissions
+            dashboard_uid="existing-uid",
+            permissions_strings=permissions,
+            permissions_strategy="merge",
         )
 
         self.assertEqual(mock_requests.call_count, 5)

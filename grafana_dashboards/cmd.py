@@ -143,7 +143,7 @@ class Client(object):
         builder = Builder(self.config)
         try:
             builder.update(self.args.path)
-        except ValueError as e:
+        except Exception as e:
             LOG.info(f"Error: {e}")
             sys.exit(1)
 
