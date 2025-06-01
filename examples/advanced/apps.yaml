@@ -1,4 +1,8 @@
 app1:
+  permissions:
+    strategy: merge
+    grants:
+      - team:admins:admin
   templating:
     - name: dynamodb_name
       query: dynamodb_name
