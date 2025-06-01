@@ -21,6 +21,7 @@ import yaml
 from slugify import slugify
 
 from grafana_dashboards.schema import Schema
+from typing import Dict, Any, Tuple
 
 LOG = logging.getLogger(__name__)
 
@@ -36,12 +37,17 @@ class YamlParser(object):
 
         return data, md5
 
-    def get_datasource(self, slug):
+    def get_datasource(self, slug: str) -> Tuple[Dict[str, Any], str]:
         data = self.data.get("datasource", {}).get(slug, None)
         md5 = self._generate_md5(data)
         LOG.debug("Datasource %s: %s" % (slug, md5))
 
         return data, md5
+
+    def get_permissions(self, slug: str) -> Dict[str, Any]:
+        data = self.data.get("permissions", {}).get(slug, None)
+        LOG.debug("Datasource %s" % (slug))
+        return data
 
     def parse(self, fn):
         with io.open(fn, "r", encoding="utf-8") as fp:
@@ -78,11 +84,11 @@ class YamlParser(object):
                 group[slug] = item
                 self.data[section] = group
 
-    def validate(self, data):
+    def validate(self, data: Dict[str, Any]) -> Dict[str, Any]:
         schema = Schema()
         return schema.validate(data)
 
-    def _generate_md5(self, data):
+    def _generate_md5(self, data) -> str:
         md5 = None
         if data:
             # Sort json keys to help our md5 hash are constant.

@@ -27,6 +27,7 @@ class Schema(object):
             {
                 v.Optional("dashboard"): dashboard,
                 v.Optional("datasource"): datasource,
+                v.Optional("permissions"): v.All(list),
             }
         )
 
