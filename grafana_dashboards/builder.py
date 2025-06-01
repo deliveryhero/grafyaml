@@ -92,9 +92,12 @@ class Builder(object):
         for name in data:
             data, md5 = self.parser.get_dashboard(name)
             if self.cache.has_changed(name, md5):
-                self.grafana.dashboard.create(
+                perms = self.parser.get_permissions(name)
+                uid = self.grafana.dashboard.create(
                     data=data, overwrite=self.overwrite, folder_id=self.folder_id
                 )
+                if uid and perms:
+                    self.grafana.permissions.update(uid, perms)
                 self.cache.set(name, md5)
             else:
                 LOG.debug("'%s' has not changed" % name)
