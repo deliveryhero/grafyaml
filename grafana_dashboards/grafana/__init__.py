@@ -16,6 +16,7 @@ import requests
 
 from grafana_dashboards.grafana.dashboard import Dashboard
 from grafana_dashboards.grafana.datasource import Datasource
+from grafana_dashboards.grafana.permissions import Permissions
 
 
 class Grafana(object):
@@ -45,3 +46,4 @@ class Grafana(object):
 
         self.dashboard = Dashboard(self.server, session)
         self.datasource = Datasource(self.server, session)
+        self.permissions = Permissions(self.server, session)

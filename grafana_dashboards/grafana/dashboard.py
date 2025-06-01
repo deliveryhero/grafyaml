@@ -24,7 +24,7 @@ class Dashboard(object):
         self.search_url = utils.urljoin(base_url, "api/search?type=dash-db")
         self.session = session
 
-    def create(self, data: Dict, overwrite: bool = False, folder_id: int = 0) -> None:
+    def create(self, data: Dict, overwrite: bool = False, folder_id: int = 0) -> str:
         """Create a new dashboard
 
         :param data: Dashboard model
@@ -62,6 +62,8 @@ class Dashboard(object):
 
         res = self.session.post(self.db_url, data=json.dumps(dashboard))
         res.raise_for_status()
+
+        return res.json().get("uid")
 
     def delete(self, name):
         """Delete a dashboard

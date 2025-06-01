@@ -108,7 +108,12 @@ class TestCaseGrafana(TestCase):
         mock_requests.post(
             "http://localhost/api/dashboards/db/",
             status_code=200,
-            json={"message": "Dashboard created"},
+            json={
+                "title": "Test Dashboard",
+                "uid": "existing-uid",
+                "folderId": 0,
+                "id": 1,
+            },
         )
 
         data = {
@@ -122,8 +127,54 @@ class TestCaseGrafana(TestCase):
             "slug": "test-dashboard",
         }
 
-        self.grafana.dashboard.create(data=data["dashboard"], overwrite=True)
+        uid = self.grafana.dashboard.create(data=data["dashboard"], overwrite=True)
         self.assertEqual(mock_requests.call_count, 2)
+        self.assertEqual(uid, "existing-uid")
+
+    @requests_mock.Mocker()
+    def test_update_permissions(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/teams/search",
+            status_code=200,
+            json={
+                "teams": [
+                    {
+                        "id": 1,
+                        "name": "Team 1",
+                    }
+                ]
+            },
+        )
+
+        mock_requests.get(
+            "http://localhost/api/dashboards/uid/existing-uid/permissions",
+            status_code=200,
+            json=[],
+        )
+
+        mock_requests.post(
+            "http://localhost/api/dashboards/uid/existing-uid/permissions",
+            status_code=200,
+            json={
+                "items": [
+                    {"teamId": 1, "permission": 4},
+                    {"teamId": 2, "permission": 2},
+                ]
+            },
+        )
+
+        permissions = ["team:admins:admin", "team:developers:edit"]
+
+        items = self.grafana.permissions.update(
+            dashboard_uid="existing-uid", permissions_strings=permissions
+        )
+
+        self.assertEqual(mock_requests.call_count, 5)
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0]["teamId"], 1)
+        self.assertEqual(items[0]["permission"], 4)
+        self.assertEqual(items[1]["teamId"], 2)
+        self.assertEqual(items[1]["permission"], 2)
 
     @requests_mock.Mocker()
     def test_delete_dashboard(self, mock_requests):
