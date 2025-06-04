@@ -63,7 +63,12 @@ class Builder(object):
                 files_to_process.append(path)
 
         for fn in files_to_process:
-            self.parser.parse(fn)
+            try:
+                self.parser.parse(fn)
+            except Exception as e:
+                LOG.error("Error parsing %s: %s", fn, e)
+                raise e
+
 
     def update(self, path):
         self.load_files(path)

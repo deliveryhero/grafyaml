@@ -30,12 +30,16 @@ class Client(object):
         builder = Builder(self.config)
         builder.delete(self.args.path)
 
-    def main(self):
+    def main(self)-> int:
         self.parse_arguments()
         self.setup_logging()
         self.read_config()
-
-        self.args.func()
+        try:
+            self.args.func()
+        except Exception as e:
+            LOG.error("%s: ERROR: %s" % (self.args.path, e))
+            return 1
+        return 0
 
     def parse_arguments(self):
         parser = argparse.ArgumentParser(
@@ -164,5 +168,4 @@ class Client(object):
 
 def main():
     client = Client()
-    client.main()
-    sys.exit(0)
+    sys.exit(client.main())
