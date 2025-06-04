@@ -30,7 +30,7 @@ class Client(object):
         builder = Builder(self.config)
         builder.delete(self.args.path)
 
-    def main(self)-> int:
+    def main(self) -> int:
         self.parse_arguments()
         self.setup_logging()
         self.read_config()

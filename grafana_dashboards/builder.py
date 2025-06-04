@@ -69,7 +69,6 @@ class Builder(object):
                 LOG.error("Error parsing %s: %s", fn, e)
                 raise e
 
-
     def update(self, path):
         self.load_files(path)
         datasources = self.parser.data.get("datasource", {})
