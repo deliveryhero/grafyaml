@@ -163,12 +163,14 @@ class TestCaseGrafana(TestCase):
             },
         )
 
-        permissions = ["team:admins:admin", "team:developers:edit"]
+        permissions = {
+            "strategy": "merge",
+            "grants": ["team:admins:admin", "team:developers:edit"],
+        }
 
         items = self.grafana.permissions.update(
             dashboard_uid="existing-uid",
-            permissions_strings=permissions,
-            permissions_strategy="merge",
+            permissions=permissions,
         )
 
         self.assertEqual(mock_requests.call_count, 5)

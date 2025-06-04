@@ -63,11 +63,9 @@ class Permissions:
 
         for permission_str in permissions_strings:
 
-            subject, identifier, perm = self._parse_permission_string(
-                permission_str
-            )
+            subject, identifier, perm = self._parse_permission_string(permission_str)
 
-            subject_key, subject_id = self._get_subject_id(subject,identifier)
+            subject_key, subject_id = self._get_subject_id(subject, identifier)
 
             if subject_id is None:
                 raise Exception(
@@ -129,23 +127,26 @@ class Permissions:
     def update(
         self,
         dashboard_uid: str,
-        permissions_strings: List[str],
-        permissions_strategy: str,
+        permissions: Dict[str, Any],
     ):
         """
         Main method to update permissions for a single dashboard based on a list of desired permission strings.
         """
+
+        strategy = permissions.get("strategy", "")
+        permissions_strings = permissions.get("grants", [])
+
         LOG.debug(
             f"Updating permissions for dashboard {dashboard_uid}: {json.dumps(permissions_strings, indent=2)}"
         )
 
-        if permissions_strategy == "merge":
+        if strategy == "merge":
             self.overwrite = False
-        elif permissions_strategy == "replace":
+        elif strategy == "replace":
             self.overwrite = True
         else:
             raise Exception(
-                f"Invalid permissions strategy '{permissions_strategy}'. Valid strategies are 'merge' and 'replace'."
+                f"Invalid permissions strategy '{strategy}'. Valid strategies are 'merge' and 'replace'."
             )
 
         self._get_teams()

@@ -13,6 +13,7 @@
 # under the License.
 
 import os
+import json
 
 from testtools import TestCase
 
@@ -119,11 +120,14 @@ class TestCaseParser(TestCase):
         )
         self.parser.parse(path)
 
-        permissions = [
-            "team:developers:edit",
-            "user:user@org.com:view",
-            "role:viewer:view",
-        ]
+        permissions = {
+            "strategy": "merge",
+            "grants": [
+                "team:developers:edit",
+                "user:user@org.com:view",
+                "role:viewer:view",
+            ],
+        }
 
         res = self.parser.get_permissions("new-dashboard")
         self.assertEqual(res, permissions)

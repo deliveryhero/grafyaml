@@ -364,17 +364,14 @@ def main():
 
         # --- Override Tags if specified ---
         app_tags = app_config.get("tags")
-        if app_tags is not None:  # Allows setting tags to None/empty list in input
-            if (
-                isinstance(app_tags, list) or app_tags is None
-            ):  # Ensure it's a list or None
-                dashboard_data["tags"] = app_tags
-                logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
-            else:
-                logging.warning(
-                    f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
-                    f"Expected list or null. Skipping tag override."
-                )
+        if app_tags and isinstance(app_tags, list):
+            dashboard_data["tags"] = app_tags
+            logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
+        else:
+            logging.warning(
+                f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
+                f"Expected list or null. Skipping tag override."
+            )
 
         if "permissions" in app_config:
             dashboard_full_structure["permissions"] = app_config.get("permissions", [])
@@ -382,7 +379,9 @@ def main():
         # --- Write Output File ---
         # Pass the dictionary that represents the content *under* the top-level 'dashboard' key
         write_dashboard_file(
-            app_name=app_name, output_dir=output_dir, dashboard_data=dashboard_full_structure
+            app_name=app_name,
+            output_dir=output_dir,
+            dashboard_data=dashboard_full_structure,
         )
 
     logging.info("Dashboard generation process completed.")
