@@ -13,6 +13,7 @@
 # under the License.
 
 import os
+import json
 
 from testtools import TestCase
 
@@ -112,3 +113,21 @@ class TestCaseParser(TestCase):
         # Get parsed dashboard
         res, md5 = self.parser.get_dashboard("test-json")
         self.assertEqual(res["title"], "test json")
+
+    def test_parse_multiple(self):
+        path = os.path.join(
+            os.path.dirname(__file__), "fixtures/parser/dashboard-0001.yaml"
+        )
+        self.parser.parse(path)
+
+        permissions = {
+            "strategy": "merge",
+            "grants": [
+                "team:developers:edit",
+                "user:user@org.com:view",
+                "role:viewer:view",
+            ],
+        }
+
+        res = self.parser.get_permissions("new-dashboard")
+        self.assertEqual(res, permissions)

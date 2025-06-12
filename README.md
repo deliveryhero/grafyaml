@@ -8,12 +8,11 @@
 - Template panels and use them in multiple dashboards
 - Mass update many dashboards quickly and easily
 
-
 ## Install and quick start
 
 Install `grafyaml`:
 
-```
+```console
 pip3 install https://github.com/deliveryhero/grafyaml/archive/master.zip
 ```
 
@@ -33,10 +32,40 @@ dashboard:
 
 Sync it to Grafana:
 
-```
+```console
 export GRAFANA_API_KEY="API_KEY_HERE"
 grafyaml --grafana-url https://my-grafana-host.domain.com update my-example-dashboard.yaml
 ```
+
+## Permissions
+
+Grafyaml supports permissions for dashboards. The permissions are defined in the same file as dashboard under `permissions` root key. The permissions are applied to the dashboard as a whole, not to individual panels.
+
+```yaml
+
+permissions:
+  strategy: replace # merge or overwrite
+  grants:
+    # subject:identifier:permission
+    - team:admins:admin
+dashboard:
+  title: My Dashboard
+  panels:
+  - title: Container metrics
+    panels:
+    - title: Container CPU usage
+      targets:
+      - expr: rate(container_cpu_user_seconds_total[30s]) * 100
+      type: timeseries
+```
+
+Grants are structured as a triplet: `subject:identifier:permission`.
+
+- Subject: Specifies the entity to which the permission applies. Valid subjects include team, user, role, or serviceAccount. (serviceAccount is not yet supported)
+- Identifier: The specific name or unique identifier of the subject.
+- Permission: Defines the level of access granted. Permissible values are view, edit, admin, or none.
+
+Example: To grant edit permission for the developers team on a resource named my-dashboard, the grant would be defined as team:developers:edit.
 
 ## More examples
 

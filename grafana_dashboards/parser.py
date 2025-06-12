@@ -21,6 +21,7 @@ import yaml
 from slugify import slugify
 
 from grafana_dashboards.schema import Schema
+from typing import Dict, Any, Tuple
 
 LOG = logging.getLogger(__name__)
 
@@ -36,12 +37,17 @@ class YamlParser(object):
 
         return data, md5
 
-    def get_datasource(self, slug):
+    def get_datasource(self, slug: str) -> Tuple[Dict[str, Any], str]:
         data = self.data.get("datasource", {}).get(slug, None)
         md5 = self._generate_md5(data)
         LOG.debug("Datasource %s: %s" % (slug, md5))
 
         return data, md5
+
+    def get_permissions(self, slug: str) -> Dict[str, Any]:
+        data = self.data.get("permissions", {}).get(slug, None)
+        LOG.debug("Datasource %s" % (slug))
+        return data
 
     def parse(self, fn):
         with io.open(fn, "r", encoding="utf-8") as fp:
@@ -58,27 +64,31 @@ class YamlParser(object):
             self.data["dashboard"][slug] = data
         else:
             result = self.validate(data)
-            for item in result.items():
-                group = self.data.get(item[0], {})
+            for section, item in result.items():
+                group = self.data.get(section, {})
                 # Create slug to make it easier to find dashboards.
-                if item[0] == "dashboard":
-                    name = item[1]["title"]
+                if section == "dashboard":
+                    name = item.get("title")
+                elif section == "datasource":
+                    name = item.get("name")
+                elif section == "permissions":
+                    name = result["dashboard"].get("title")
                 else:
-                    name = item[1]["name"]
+                    raise Exception("Unknown section: %s" % section)
                 slug = slugify(name)
                 if slug in group:
                     raise Exception(
                         "Duplicate {0} found in '{1}: '{2}' "
-                        "already defined".format(item[0], fp.name, name)
+                        "already defined".format(section, fp.name, name)
                     )
-                group[slug] = item[1]
-                self.data[item[0]] = group
+                group[slug] = item
+                self.data[section] = group
 
-    def validate(self, data):
+    def validate(self, data: Dict[str, Any]) -> Dict[str, Any]:
         schema = Schema()
         return schema.validate(data)
 
-    def _generate_md5(self, data):
+    def _generate_md5(self, data) -> str:
         md5 = None
         if data:
             # Sort json keys to help our md5 hash are constant.

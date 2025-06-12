@@ -16,17 +16,19 @@ import voluptuous as v
 
 from grafana_dashboards.schema.dashboard import Dashboard
 from grafana_dashboards.schema.datasource import Datasource
+from grafana_dashboards.schema.permissions import Permissions
 
 
 class Schema(object):
     def validate(self, data):
         dashboard = Dashboard().get_schema()
         datasource = Datasource().get_schema()
-
+        permissions = Permissions().get_schema()
         schema = v.Schema(
             {
                 v.Optional("dashboard"): dashboard,
                 v.Optional("datasource"): datasource,
+                v.Optional("permissions"): permissions,
             }
         )
 
