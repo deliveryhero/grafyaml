@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/deliveryhero/grafyaml/compare/v1.5.1...v1.5.2) (2025-06-04)
+
+
+### Bug Fixes
+
+* improve error handling when parsing files ([#59](https://github.com/deliveryhero/grafyaml/issues/59)) ([c6f388f](https://github.com/deliveryhero/grafyaml/commit/c6f388fae390d4ee84d319f1584ea5568c368d5c))
+
 ## [1.5.1](https://github.com/deliveryhero/grafyaml/compare/v1.5.0...v1.5.1) (2025-05-26)
 
 
