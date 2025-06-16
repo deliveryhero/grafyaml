@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/deliveryhero/grafyaml/compare/v1.5.2...v1.6.0) (2025-06-16)
+
+
+### Features
+
+* permissions ([#60](https://github.com/deliveryhero/grafyaml/issues/60)) ([5ac5000](https://github.com/deliveryhero/grafyaml/commit/5ac5000ec040f2e17e655752db24267da8d40142))
+
 ## [1.5.2](https://github.com/deliveryhero/grafyaml/compare/v1.5.1...v1.5.2) (2025-06-04)
 
 
