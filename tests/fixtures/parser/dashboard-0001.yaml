@@ -1,2 +1,7 @@
+permissions:
+  grants:
+    - team:developers:edit
+    - user:user@org.com:view
+    - role:viewer:view
 dashboard:
   title: New dashboard

@@ -274,7 +274,7 @@ def write_dashboard_file(
     try:
         with open(output_file_path, "w") as f:
             # Use default_flow_style=False for a more human-readable output
-            yaml.dump({"dashboard": dashboard_data}, f, default_flow_style=False)
+            yaml.dump(dashboard_data, f, default_flow_style=False)
         logging.info(f"Successfully generated '{output_file_path}'")
     except (IOError, yaml.YAMLError) as e:
         logging.error(f"Error writing output file '{output_file_path}': {e}")
@@ -364,21 +364,25 @@ def main():
 
         # --- Override Tags if specified ---
         app_tags = app_config.get("tags")
-        if app_tags is not None:  # Allows setting tags to None/empty list in input
-            if (
-                isinstance(app_tags, list) or app_tags is None
-            ):  # Ensure it's a list or None
-                dashboard_data["tags"] = app_tags
-                logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
-            else:
-                logging.warning(
-                    f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
-                    f"Expected list or null. Skipping tag override."
-                )
+        if app_tags and isinstance(app_tags, list):
+            dashboard_data["tags"] = app_tags
+            logging.debug(f"Overrode tags for '{app_name}': {app_tags}")
+        else:
+            logging.warning(
+                f"App '{app_name}' has invalid 'tags' structure: {app_tags}. "
+                f"Expected list or null. Skipping tag override."
+            )
+
+        if "permissions" in app_config:
+            dashboard_full_structure["permissions"] = app_config.get("permissions", [])
 
         # --- Write Output File ---
         # Pass the dictionary that represents the content *under* the top-level 'dashboard' key
-        write_dashboard_file(app_name, output_dir, dashboard_data)
+        write_dashboard_file(
+            app_name=app_name,
+            output_dir=output_dir,
+            dashboard_data=dashboard_full_structure,
+        )
 
     logging.info("Dashboard generation process completed.")
 
