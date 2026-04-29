@@ -1,5 +1,6 @@
 import testtools.matchers
 from testtools import TestCase
+import voluptuous as v
 
 from grafana_dashboards.schema.panel.timeseries import Timeseries
 
@@ -46,3 +47,23 @@ class TestCaseTimeseries(TestCase):
             "repeatDirection": "h",
         }
         self.assertThat(self.schema(panel), testtools.matchers.Equals(panel))
+
+    def test_repeat_direction_invalid(self):
+        panel = {
+            "type": "timeseries",
+            "title": "test timeseries ($var)",
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": [],
+            },
+            "gridPos": {
+                "w": 12,
+                "h": 8,
+                "x": 0,
+                "y": 0,
+            },
+            "options": {},
+            "repeat": "my_variable",
+            "repeatDirection": "x",
+        }
+        self.assertRaises(v.Invalid, self.schema, panel)
