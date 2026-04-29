@@ -26,3 +26,23 @@ class TestCaseTimeseries(TestCase):
             "options": {},
         }
         self.assertThat(self.schema(defaults), testtools.matchers.Equals(defaults))
+
+    def test_repeat(self):
+        panel = {
+            "type": "timeseries",
+            "title": "test timeseries ($var)",
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": [],
+            },
+            "gridPos": {
+                "w": 12,
+                "h": 8,
+                "x": 0,
+                "y": 0,
+            },
+            "options": {},
+            "repeat": "my_variable",
+            "repeatDirection": "h",
+        }
+        self.assertThat(self.schema(panel), testtools.matchers.Equals(panel))
