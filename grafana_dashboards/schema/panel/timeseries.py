@@ -153,6 +153,8 @@ class Timeseries(Base):
                 **Base.options_with_tooltip,
                 **Base.options_with_text_formatting,
             },
+            v.Optional("repeat"): str,
+            v.Optional("repeatDirection"): v.Any("h", "v"),
             # TODO: Grafana hasn't defined a proper schema yet
             # See https://github.com/grafana/grafana/blob/v8.5.0/packages/grafana-schema/src/scuemata/dashboard/dashboard.cue#L164
             v.Optional("targets"): list,
