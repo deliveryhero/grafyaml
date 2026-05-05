@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/deliveryhero/grafyaml/compare/v1.6.0...v1.6.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* Minor fixes to schemas ([#62](https://github.com/deliveryhero/grafyaml/issues/62)) ([e092826](https://github.com/deliveryhero/grafyaml/commit/e092826e6f0851520c38baf3ef68fb4dcb4481f1))
+
 # [1.6.0](https://github.com/deliveryhero/grafyaml/compare/v1.5.2...v1.6.0) (2025-06-16)
 
 
