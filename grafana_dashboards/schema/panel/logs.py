@@ -107,7 +107,9 @@ class Logs(Base):
         logs = {
             v.Optional("alert"): v.All(alert_format),
             v.Required("bars", default=False): v.All(bool),
-            v.Optional("datasource"): v.Any(str, {v.Optional("type"): str, v.Optional("uid"): str}),
+            v.Optional("datasource"): v.Any(
+                str, {v.Optional("type"): str, v.Optional("uid"): str}
+            ),
             v.Optional("decimals"): v.All(int),
             v.Required("fill", default=1): v.All(int),
             v.Optional("hideTimeOverride"): v.All(bool),
