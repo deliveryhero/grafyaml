@@ -64,7 +64,7 @@ class Gauge(Base):
             v.Required("targets", default=[]): v.All(list),
             v.Optional("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
-            v.Optional("datasource"): v.Any(str, dict),
+            v.Optional("datasource"): v.Any(str, {v.Optional("type"): str, v.Optional("uid"): str}),
             v.Optional("gridPos"): v.All(gridPos),
         }
         bargauge.update(self.base)

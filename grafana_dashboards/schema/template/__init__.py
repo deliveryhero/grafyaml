@@ -34,7 +34,7 @@ class Template(object):
 
     def _validate(self):
         def f(data):
-            res = self.defaults
+            res = {"enabled": False, "list": []}
             if not isinstance(data, list):
                 raise v.Invalid("Should be a list")
 
