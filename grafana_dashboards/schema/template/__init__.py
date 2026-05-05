@@ -40,20 +40,20 @@ class Template(object):
 
             for template in data:
                 res["enabled"] = True
-                validate = Base().get_schema()
-                validate(template)
+                schema = Base().get_schema()
+                schema(template)
 
                 if template["type"] == "query":
                     schema = Query().get_schema()
-                if template["type"] == "interval":
+                elif template["type"] == "interval":
                     schema = Interval().get_schema()
-                if template["type"] == "custom":
+                elif template["type"] == "custom":
                     schema = Custom().get_schema()
-                if template["type"] == "datasource":
+                elif template["type"] == "datasource":
                     schema = Datasource().get_schema()
-                if template["type"] == "adhoc":
+                elif template["type"] == "adhoc":
                     schema = Adhoc().get_schema()
-                if template["type"] == "textbox":
+                elif template["type"] == "textbox":
                     schema = Textbox().get_schema()
 
                 res["list"].append(schema(template))

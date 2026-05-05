@@ -58,7 +58,7 @@ class Bargauge(Base):
             v.Required("targets", default=[]): v.All(list),
             v.Optional("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
-            v.Optional("datasource"): v.All(str),
+            v.Optional("datasource"): v.Any(str, dict),
             v.Optional("timeFrom"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
             v.Optional("timeShift"): v.All(v.Match(r"[1-9]+[0-9]*[smhdw]")),
             v.Optional("maxDataPoints"): v.All(int),
