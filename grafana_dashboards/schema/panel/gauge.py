@@ -35,8 +35,8 @@ class Gauge(Base):
                     v.Required("palette", default="cool"): v.Any(str),
                 }
             ),
-            v.Optional("min", default="0"): v.Any(int),
-            v.Optional("max", default="0"): v.Any(int),
+            v.Optional("min"): v.Number(),
+            v.Optional("max"): v.Number(),
             v.Optional("unit"): v.Any(str),
             v.Optional("links"): v.Any(list),
             v.Optional("decimal", default=2): v.Any(int),
@@ -64,7 +64,9 @@ class Gauge(Base):
             v.Required("targets", default=[]): v.All(list),
             v.Optional("fieldConfig"): v.All(fieldConfig),
             v.Optional("options"): v.All(options),
-            v.Optional("datasource"): v.All(str),
+            v.Optional("datasource"): v.Any(
+                str, {v.Optional("type"): str, v.Optional("uid"): str}
+            ),
             v.Optional("gridPos"): v.All(gridPos),
         }
         bargauge.update(self.base)

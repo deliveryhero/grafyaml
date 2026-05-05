@@ -1,0 +1,26 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "title": "New dashboard",
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "name": "myqueue",
+                        "type": "query",
+                        "datasource": {
+                            "uid": "logistics-inhouse-prom"
+                        },
+                        "query": "label_values(metric{label=~\".*\"}, label)",
+                        "includeAll": true,
+                        "multi": true,
+                        "label": "",
+                        "refresh": 1
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "panels": []
+        }
+    }
+}

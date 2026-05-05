@@ -1,0 +1,36 @@
+{
+    "dashboard": {
+        "new-dashboard": {
+            "title": "New dashboard",
+            "templating": {
+                "enabled": true,
+                "list": [
+                    {
+                        "name": "hpa_component",
+                        "type": "custom",
+                        "query": "api,messaging",
+                        "includeAll": false,
+                        "multi": true,
+                        "current": {
+                            "text": "api + messaging",
+                            "value": [
+                                "api",
+                                "messaging"
+                            ]
+                        },
+                        "options": [],
+                        "label": ""
+                    },
+                    {
+                        "name": "app_filter",
+                        "type": "constant",
+                        "query": "myapp",
+                        "hide": 2
+                    }
+                ]
+            },
+            "timezone": "utc",
+            "panels": []
+        }
+    }
+}

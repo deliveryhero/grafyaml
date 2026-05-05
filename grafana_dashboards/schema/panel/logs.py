@@ -62,16 +62,16 @@ class Logs(Base):
         null_point_modes = v.Any("connected", "null", "null as zero")
 
         options = {
-            v.Optional("dedupStrategy", default="none"): v.All(
-                str, "none", "exact", "numbers", "signature"
+            v.Optional("dedupStrategy", default="none"): v.Any(
+                "none", "exact", "numbers", "signature"
             ),
             v.Optional("enableLogDetails", default=True): v.All(bool),
             v.Optional("prettifyLogMessage", default=False): v.All(bool),
             v.Optional("showCommonLabels", default=False): v.All(bool),
             v.Optional("showLabels", default=False): v.All(bool),
             v.Optional("showTime", default=False): v.All(bool),
-            v.Optional("sortOrder", default="Descending"): v.All(
-                str, "Ascending", "Descending"
+            v.Optional("sortOrder", default="Descending"): v.Any(
+                "Ascending", "Descending"
             ),
             v.Optional("wrapLogMessage", default=False): v.All(bool),
         }
@@ -107,7 +107,9 @@ class Logs(Base):
         logs = {
             v.Optional("alert"): v.All(alert_format),
             v.Required("bars", default=False): v.All(bool),
-            v.Optional("datasource"): v.All(str),
+            v.Optional("datasource"): v.Any(
+                str, {v.Optional("type"): str, v.Optional("uid"): str}
+            ),
             v.Optional("decimals"): v.All(int),
             v.Required("fill", default=1): v.All(int),
             v.Optional("hideTimeOverride"): v.All(bool),

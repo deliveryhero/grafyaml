@@ -1,0 +1,17 @@
+dashboard:
+  title: New dashboard
+  templating:
+    - name: hpa_component
+      type: custom
+      query: "api,messaging"
+      includeAll: false
+      multi: true
+      current:
+        text: api + messaging
+        value:
+          - api
+          - messaging
+    - name: app_filter
+      type: constant
+      query: "myapp"
+      hide: 2
