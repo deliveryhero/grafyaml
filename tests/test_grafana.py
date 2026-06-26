@@ -225,6 +225,34 @@ class TestCaseGrafana(TestCase):
         self.assertNotIn("folderUid", request_data)
 
     @requests_mock.Mocker()
+    def test_create_dashboard_deduplicates_by_yaml_uid(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[
+                {"title": "My Dashboard", "uid": "real-uid", "folderUid": "folder-abc"},
+                {
+                    "title": "My Dashboard",
+                    "uid": "sreal-uid",
+                    "folderUid": "folder-abc",
+                },
+            ],
+        )
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"uid": "real-uid"},
+        )
+
+        data = {"title": "My Dashboard", "uid": "real-uid", "rows": []}
+        uid = self.grafana.dashboard.create(
+            data=data, overwrite=True, folder_uid="folder-abc"
+        )
+        self.assertEqual(uid, "real-uid")
+        request_data = json.loads(mock_requests.last_request.body)
+        self.assertEqual(request_data["dashboard"]["uid"], "real-uid")
+
+    @requests_mock.Mocker()
     def test_find_dashboards_by_folder_uid(self, mock_requests):
         mock_requests.get(
             "http://localhost/api/search?type=dash-db",

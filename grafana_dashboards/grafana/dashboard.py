@@ -50,13 +50,25 @@ class Dashboard(object):
         dashboards = self.find_dashboards_by_title(title, folder_id, folder_uid)
 
         if len(dashboards) > 1 and overwrite:
-            uids = [d.get("uid") for d in dashboards]
-            folder_ref = folder_uid or folder_id
-            error_msg = (
-                f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_ref}. "
-                f"Cannot overwrite. UIDs: {uids}"
-            )
-            raise ValueError(error_msg)
+            yaml_uid = data.get("uid")
+            if yaml_uid:
+                exact = [d for d in dashboards if d.get("uid") == yaml_uid]
+                if len(exact) == 1:
+                    dashboards = exact
+                else:
+                    uids = [d.get("uid") for d in dashboards]
+                    folder_ref = folder_uid or folder_id
+                    raise ValueError(
+                        f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_ref}. "
+                        f"Cannot overwrite. UIDs: {uids}"
+                    )
+            else:
+                uids = [d.get("uid") for d in dashboards]
+                folder_ref = folder_uid or folder_id
+                raise ValueError(
+                    f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_ref}. "
+                    f"Cannot overwrite. UIDs: {uids}"
+                )
 
         # If there is already a dashboard with the same name in the same folder, use its UID
         if dashboards and overwrite:
