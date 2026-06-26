@@ -51,17 +51,11 @@ class Dashboard(object):
 
         if len(dashboards) > 1 and overwrite:
             yaml_uid = data.get("uid")
-            if yaml_uid:
-                exact = [d for d in dashboards if d.get("uid") == yaml_uid]
-                if len(exact) == 1:
-                    dashboards = exact
-                else:
-                    uids = [d.get("uid") for d in dashboards]
-                    folder_ref = folder_uid or folder_id
-                    raise ValueError(
-                        f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_ref}. "
-                        f"Cannot overwrite. UIDs: {uids}"
-                    )
+            exact = (
+                [d for d in dashboards if d.get("uid") == yaml_uid] if yaml_uid else []
+            )
+            if len(exact) == 1:
+                dashboards = exact
             else:
                 uids = [d.get("uid") for d in dashboards]
                 folder_ref = folder_uid or folder_id
@@ -157,20 +151,17 @@ class Dashboard(object):
         dashboards = self.search_dashboards(title)
 
         if folder_uid:
-            return list(
-                filter(
-                    lambda x: x.get("title") == title
-                    and x.get("folderUid") == folder_uid,
-                    dashboards,
-                )
-            )
+            return [
+                d
+                for d in dashboards
+                if d.get("title") == title and d.get("folderUid") == folder_uid
+            ]
 
         if folder_id == 0:
             return dashboards
 
-        return list(
-            filter(
-                lambda x: x.get("title") == title and x.get("folderId") == folder_id,
-                dashboards,
-            )
-        )
+        return [
+            d
+            for d in dashboards
+            if d.get("title") == title and d.get("folderId") == folder_id
+        ]
