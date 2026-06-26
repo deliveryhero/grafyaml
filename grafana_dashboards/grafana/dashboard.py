@@ -24,7 +24,13 @@ class Dashboard(object):
         self.search_url = utils.urljoin(base_url, "api/search?type=dash-db")
         self.session = session
 
-    def create(self, data: Dict, overwrite: bool = False, folder_id: int = 0) -> str:
+    def create(
+        self,
+        data: Dict,
+        overwrite: bool = False,
+        folder_id: int = 0,
+        folder_uid: str = "",
+    ) -> str:
         """Create a new dashboard
 
         :param data: Dashboard model
@@ -32,19 +38,22 @@ class Dashboard(object):
         :param overwrite: Overwrite existing dashboard with newer version or
                           with the same dashboard title
         :type overwrite: bool
-        :param folder_id: The id of the folder to save the dashboard in.
+        :param folder_id: The numeric id of the folder to save the dashboard in (deprecated in Grafana 10+).
         :type folder_id: int
+        :param folder_uid: The UID of the folder to save the dashboard in. Takes precedence on Grafana 10+.
+        :type folder_uid: str
 
         :raises Exception: if dashboard already exists
 
         """
         title = str(data.get("title"))
-        dashboards = self.find_dashboards_by_title(title, folder_id)
+        dashboards = self.find_dashboards_by_title(title, folder_id, folder_uid)
 
         if len(dashboards) > 1 and overwrite:
             uids = [d.get("uid") for d in dashboards]
+            folder_ref = folder_uid or folder_id
             error_msg = (
-                f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_id}. "
+                f"Found {len(dashboards)} dashboards with name '{title}' in folder {folder_ref}. "
                 f"Cannot overwrite. UIDs: {uids}"
             )
             raise ValueError(error_msg)
@@ -59,6 +68,8 @@ class Dashboard(object):
             "folderId": folder_id,
             "overwrite": overwrite,
         }
+        if folder_uid:
+            dashboard["folderUid"] = folder_uid
 
         res = self.session.post(self.db_url, data=json.dumps(dashboard))
         res.raise_for_status()
@@ -118,27 +129,36 @@ class Dashboard(object):
 
         return dashboards
 
-    def find_dashboards_by_title(self, title: str, folder_id: int = 0) -> List[Dict]:
+    def find_dashboards_by_title(
+        self, title: str, folder_id: int = 0, folder_uid: str = ""
+    ) -> List[Dict]:
         """Find all dashboards with a specific title and in a specific folder
 
         Args:
             title: The title of the dashboards to find
-            folder_id: Optional folder ID to limit the search to
+            folder_id: Optional numeric folder ID to limit the search to (deprecated in Grafana 10+)
+            folder_uid: Optional folder UID to limit the search to. Takes precedence over folder_id on Grafana 10+.
 
         Returns:
             List of dashboard objects that match the criteria
         """
         dashboards = self.search_dashboards(title)
 
-        # If folder_id is 0, return all dashboards
+        if folder_uid:
+            return list(
+                filter(
+                    lambda x: x.get("title") == title
+                    and x.get("folderUid") == folder_uid,
+                    dashboards,
+                )
+            )
+
         if folder_id == 0:
             return dashboards
 
-        dashboards = list(
+        return list(
             filter(
                 lambda x: x.get("title") == title and x.get("folderId") == folder_id,
                 dashboards,
             )
         )
-
-        return dashboards

@@ -26,4 +26,5 @@ class TestCaseConfig(TestCase):
         self.assertEqual(self.config.get("cache", "cachedir"), "~/.cache/grafyaml")
         self.assertEqual(self.config.get("grafana", "apikey"), "")
         self.assertEqual(self.config.get("grafana", "folderid"), "0")
+        self.assertEqual(self.config.get("grafana", "folderuid"), "")
         self.assertEqual(self.config.get("grafana", "url"), "http://localhost:8080")

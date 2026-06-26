@@ -77,6 +77,11 @@ class Client(object):
             help="The id of the folder to save the dashboard in.",
         )
         parser.add_argument(
+            "--grafana-folderuid",
+            dest="grafana_folderuid",
+            help="The UID of the folder to save the dashboard in. Takes precedence over --grafana-folderid on Grafana 10+.",
+        )
+        parser.add_argument(
             "--version",
             dest="version",
             action="version",
@@ -133,6 +138,9 @@ class Client(object):
         if self.args.grafana_folderid:
             self.config.set("grafana", "folderid", self.args.grafana_folderid)
             LOG.debug("Grafana Folderid overridden")
+        if self.args.grafana_folderuid:
+            self.config.set("grafana", "folderuid", self.args.grafana_folderuid)
+            LOG.debug("Grafana Folderuid overridden")
 
         self.config.set("grafana", "overwrite", str(self.args.overwrite))
 

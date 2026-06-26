@@ -28,6 +28,7 @@ class Builder(object):
             config.get("cache", "cachedir"), config.getboolean("cache", "enabled")
         )
         self.folder_id = config.getint("grafana", "folderid")
+        self.folder_uid = config.get("grafana", "folderuid")
         self.grafana = Grafana(
             url=config.get("grafana", "url"), key=config.get("grafana", "apikey")
         )
@@ -98,7 +99,10 @@ class Builder(object):
             if self.cache.has_changed(name, md5):
                 permissions = self.parser.get_permissions(name)
                 uid = self.grafana.dashboard.create(
-                    data=data, overwrite=self.overwrite, folder_id=self.folder_id
+                    data=data,
+                    overwrite=self.overwrite,
+                    folder_id=self.folder_id,
+                    folder_uid=self.folder_uid,
                 )
                 if uid and permissions:
                     LOG.debug("Updating permissions for dashboard UID %s", uid)

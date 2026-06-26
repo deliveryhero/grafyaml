@@ -7,7 +7,6 @@ import json
 from dogpile.cache.region import make_region
 from typing import Dict, Optional, List, Dict, Any, Tuple
 
-
 LOG = logging.getLogger(__name__)
 
 cache = make_region(name="team_user_cache").configure(
