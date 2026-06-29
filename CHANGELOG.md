@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/deliveryhero/grafyaml/compare/v1.6.1...v1.7.0) (2026-06-29)
+
+
+### Features
+
+* add folderUid support ([#63](https://github.com/deliveryhero/grafyaml/issues/63)) ([414878d](https://github.com/deliveryhero/grafyaml/commit/414878d0e527ac7b76ec5df3a9b1b5747c28413b))
+
 ## [1.6.1](https://github.com/deliveryhero/grafyaml/compare/v1.6.0...v1.6.1) (2026-05-05)
 
 
