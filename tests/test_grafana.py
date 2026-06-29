@@ -181,6 +181,122 @@ class TestCaseGrafana(TestCase):
         self.assertEqual(items[1]["permission"], 2)
 
     @requests_mock.Mocker()
+    def test_create_dashboard_with_folder_uid(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[],
+        )
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"uid": "new-uid"},
+        )
+
+        data = {"title": "Test Dashboard", "rows": [], "id": None, "version": 0}
+        self.grafana.dashboard.create(
+            data=data, folder_id=123, folder_uid="abc-folder-uid"
+        )
+
+        last_request = mock_requests.last_request
+        request_data = json.loads(last_request.body)
+        self.assertEqual(request_data["folderId"], 123)
+        self.assertEqual(request_data["folderUid"], "abc-folder-uid")
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_folder_uid_omitted_when_not_set(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[],
+        )
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"uid": "new-uid"},
+        )
+
+        data = {"title": "Test Dashboard", "rows": [], "id": None, "version": 0}
+        self.grafana.dashboard.create(data=data, folder_id=123)
+
+        last_request = mock_requests.last_request
+        request_data = json.loads(last_request.body)
+        self.assertEqual(request_data["folderId"], 123)
+        self.assertNotIn("folderUid", request_data)
+
+    @requests_mock.Mocker()
+    def test_create_dashboard_deduplicates_by_yaml_uid(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[
+                {"title": "My Dashboard", "uid": "real-uid", "folderUid": "folder-abc"},
+                {
+                    "title": "My Dashboard",
+                    "uid": "sreal-uid",
+                    "folderUid": "folder-abc",
+                },
+            ],
+        )
+        mock_requests.post(
+            "http://localhost/api/dashboards/db/",
+            status_code=200,
+            json={"uid": "real-uid"},
+        )
+
+        data = {"title": "My Dashboard", "uid": "real-uid", "rows": []}
+        uid = self.grafana.dashboard.create(
+            data=data, overwrite=True, folder_uid="folder-abc"
+        )
+        self.assertEqual(uid, "real-uid")
+        request_data = json.loads(mock_requests.last_request.body)
+        self.assertEqual(request_data["dashboard"]["uid"], "real-uid")
+
+    @requests_mock.Mocker()
+    def test_find_dashboards_by_folder_uid(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[
+                {
+                    "title": "My Dashboard",
+                    "uid": "uid-1",
+                    "folderUid": "folder-abc",
+                    "folderId": 42,
+                },
+                {
+                    "title": "My Dashboard",
+                    "uid": "uid-2",
+                    "folderUid": "folder-xyz",
+                    "folderId": 99,
+                },
+            ],
+        )
+
+        result = self.grafana.dashboard.find_dashboards_by_title(
+            "My Dashboard", folder_uid="folder-abc"
+        )
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["uid"], "uid-1")
+
+    @requests_mock.Mocker()
+    def test_find_dashboards_by_folder_id_backward_compat(self, mock_requests):
+        mock_requests.get(
+            "http://localhost/api/search?type=dash-db",
+            status_code=200,
+            json=[
+                {"title": "My Dashboard", "uid": "uid-1", "folderId": 42},
+                {"title": "My Dashboard", "uid": "uid-2", "folderId": 99},
+            ],
+        )
+
+        result = self.grafana.dashboard.find_dashboards_by_title(
+            "My Dashboard", folder_id=42
+        )
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["uid"], "uid-1")
+
+    @requests_mock.Mocker()
     def test_delete_dashboard(self, mock_requests):
         mock_requests.delete("/api/dashboards/db/new-dashboard", status_code=200)
         self.grafana.dashboard.delete("new-dashboard")

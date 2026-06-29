@@ -14,7 +14,6 @@
 
 import voluptuous as v
 
-
 AUTO_INTERVAL = "$__auto_interval"
 ALL_CUSTOM = "$__all"
 
