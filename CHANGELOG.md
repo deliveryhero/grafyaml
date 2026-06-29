@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/deliveryhero/grafyaml/compare/v1.7.0...v1.7.1) (2026-06-29)
+
+
+### Bug Fixes
+
+* pin setuptools_scm<8 in pyproject.toml to fix install on Python 3.8 ([#64](https://github.com/deliveryhero/grafyaml/issues/64)) ([7fc7476](https://github.com/deliveryhero/grafyaml/commit/7fc74768dd17f150bf06ec70ca5125423060949e))
+
 # [1.7.0](https://github.com/deliveryhero/grafyaml/compare/v1.6.1...v1.7.0) (2026-06-29)
 
 
