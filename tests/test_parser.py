@@ -36,6 +36,7 @@ class TestCaseParser(TestCase):
         dashboard = {
             "foobar": {
                 "panels": [],
+                "schemaVersion": 42,
                 "templating": {
                     "enabled": False,
                     "list": [],
@@ -45,6 +46,7 @@ class TestCaseParser(TestCase):
             },
             "new-dashboard": {
                 "panels": [],
+                "schemaVersion": 42,
                 "templating": {
                     "enabled": False,
                     "list": [],
@@ -82,6 +84,7 @@ class TestCaseParser(TestCase):
         dashboard = {
             "new-dashboard": {
                 "panels": [],
+                "schemaVersion": 42,
                 "templating": {
                     "enabled": False,
                     "list": [],

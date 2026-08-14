@@ -1,6 +1,7 @@
 {
     "dashboard": {
         "new-dashboard": {
+            "schemaVersion": 42,
             "panels": [],
             "templating": {
                 "enabled": true,

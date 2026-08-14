@@ -1,6 +1,7 @@
 {
     "dashboard": {
         "rooster-api-clone": {
+            "schemaVersion": 42,
             "panels": [
                 {
                     "type": "row",
