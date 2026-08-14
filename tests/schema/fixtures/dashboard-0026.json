@@ -1,6 +1,7 @@
 {
     "dashboard": {
         "dashboard-with-links": {
+            "schemaVersion": 42,
             "links": [
                 {
                     "asDropdown": true,

@@ -1,6 +1,7 @@
 {
     "dashboard": {
         "new-dashboard": {
+            "schemaVersion": 42,
             "rows": [
                 {
                     "collapse": false,
