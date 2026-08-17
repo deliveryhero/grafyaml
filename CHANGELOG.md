@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/deliveryhero/grafyaml/compare/v1.7.1...v1.7.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* Adds dashboard schema version property defaulting to 42 ([#65](https://github.com/deliveryhero/grafyaml/issues/65)) ([b24a9b2](https://github.com/deliveryhero/grafyaml/commit/b24a9b21a4c731b41b820b3531e1966744a16363))
+
 ## [1.7.1](https://github.com/deliveryhero/grafyaml/compare/v1.7.0...v1.7.1) (2026-06-29)
 
 
