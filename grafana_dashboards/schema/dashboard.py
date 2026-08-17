@@ -25,6 +25,12 @@ from grafana_dashboards.schema.panel import Panel
 class Dashboard(object):
     def get_schema(self):
         dashboard = {
+            # NOTE: Grafana's frontend defaults a missing schemaVersion to 0,
+            # which makes it run every legacy migration on load - including
+            # one that clobbers any truthy templating variable "refresh"
+            # value (e.g. 2, "on time range change") down to 1 ("on
+            # dashboard load"). Stamping a current version avoids that.
+            v.Required("schemaVersion", default=42): int,
             v.Required("timezone", default="utc"): v.Any("browser", "utc"),
             v.Required("title"): v.All(str, v.Length(min=1)),
             v.Optional("id"): int,
