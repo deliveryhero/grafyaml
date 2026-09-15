@@ -18,7 +18,9 @@ import voluptuous as v
 class Annotations(object):
     def get_schema(self):
         list = {
-            v.Required("datasource"): v.All(str),
+            v.Required("datasource"): v.Any(
+                str, {v.Optional("type"): str, v.Optional("uid"): str}
+            ),
             v.Required("enable"): v.All(bool),
             v.Required("expr"): v.All(str),
             v.Required("hide"): v.All(bool),
