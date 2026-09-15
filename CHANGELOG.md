@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/deliveryhero/grafyaml/compare/v1.7.2...v1.7.3) (2026-09-15)
+
+
+### Bug Fixes
+
+* allow datasource as a type/uid object in dashboard annotations ([#66](https://github.com/deliveryhero/grafyaml/issues/66)) ([66c8b28](https://github.com/deliveryhero/grafyaml/commit/66c8b28646c24e7b9e7516954d0355614e1d605e))
+
 ## [1.7.2](https://github.com/deliveryhero/grafyaml/compare/v1.7.1...v1.7.2) (2026-08-17)
 
 
